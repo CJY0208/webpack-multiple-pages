@@ -5,23 +5,26 @@ const webpack = require('webpack')
 const {
   optimize: {
     CommonsChunkPlugin,
-  UglifyJsPlugin
+    UglifyJsPlugin
   } = {},
-  DllReferencePlugin
+  DllReferencePlugin, 
+  NamedChunksPlugin
 } = webpack
 
 module.exports = {
+  // watch: true,
   entry: {
     pageA: path.resolve(__dirname, './src/module', './pageA'),
     pageB: path.resolve(__dirname, './src/module', './pageB'),
+    common: path.resolve(__dirname, './src/common'),
     common2: path.resolve(__dirname, './src/common/index2')
   },
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: './asset/',
-    filename: '[name].[chunkhash:8].js'
+    filename: '[name].[chunkhash:6].js'
   },
-  devtool: 'cheap-module-source-map',
+  devtool: false, //'cheap-module-source-map',
   module: {
     rules: [
       {
@@ -39,21 +42,33 @@ module.exports = {
       context: path.resolve(__dirname, './webpack/dll'),
       manifest: require(`./webpack/dll/manifest/${dll}.json`)
     })),
+    new NamedChunksPlugin(),
     new CommonsChunkPlugin({
-      name: ['common', 'common2']
+      name: [
+        // 'vendor', 
+        'common', 'common2'
+      ],
+      filename: '[name].[chunkhash:6].js',
+      minChunks: Infinity
     }),
-    new CommonsChunkPlugin({ name: 'manifest' }),
-    new UglifyJsPlugin({
-      compress: {
-        warnings: false
-      },
-      beautify: true,
-      output: {
-        comments: false
-      },
-      sourceMap: false
+    new CommonsChunkPlugin({
+      name: 'runtime',
+      filename: 'runtime.[hash:6].js'
     }),
-    new CleanWebpackPlugin([ 'dist/*.js' ], {
+    // new UglifyJsPlugin({
+    //   compress: {
+    //     warnings: false
+    //   },
+    //   beautify: true,
+    //   output: {
+    //     comments: false
+    //   },
+    //   sourceMap: false
+    // }),
+    new CleanWebpackPlugin([
+      'dist/*.js',
+      'dist/*.map'
+    ], {
       beforeEmit: true
     })
   ]

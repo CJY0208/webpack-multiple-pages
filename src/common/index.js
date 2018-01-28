@@ -11,8 +11,8 @@ export const fn3 = () => {
   console.log('common fn3')
 }
 
-export class Test {
-  test() {
-    console.log('common Test class')
-  }
-}
+// export class Test {
+//   test() {
+//     console.log('common Test class')
+//   }
+// }
