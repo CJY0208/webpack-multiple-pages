@@ -12,9 +12,9 @@ const {
 
 module.exports = {
   entry: {
-    pageA: path.resolve(__dirname, './src/module', './pageA/index.js'),
-    pageB: path.resolve(__dirname, './src/module', './pageB/index.js'),
-    common2: path.resolve(__dirname, './src/common/index2.js')
+    pageA: path.resolve(__dirname, './src/module', './pageA'),
+    pageB: path.resolve(__dirname, './src/module', './pageB'),
+    common2: path.resolve(__dirname, './src/common/index2')
   },
   output: {
     path: path.resolve(__dirname, './dist'),
@@ -47,7 +47,7 @@ module.exports = {
       compress: {
         warnings: false
       },
-      beautify: false,
+      beautify: true,
       output: {
         comments: false
       },
