@@ -5,10 +5,11 @@ const webpack = require('webpack')
 const {
   optimize: {
     CommonsChunkPlugin,
-    UglifyJsPlugin
+  UglifyJsPlugin
   } = {},
-  DllReferencePlugin, 
-  NamedChunksPlugin
+  DllReferencePlugin,
+  NamedChunksPlugin,
+  HashedModuleIdsPlugin
 } = webpack
 
 module.exports = {
@@ -43,33 +44,34 @@ module.exports = {
       manifest: require(`./webpack/dll/manifest/${dll}.json`)
     })),
     new NamedChunksPlugin(),
+    new HashedModuleIdsPlugin(),
     new CommonsChunkPlugin({
       name: [
         // 'vendor', 
         'common', 'common2'
       ],
-      filename: '[name].[chunkhash:6].js',
+      // filename: '[name].[chunkhash:6].js',
       minChunks: Infinity
     }),
     new CommonsChunkPlugin({
       name: 'runtime',
-      filename: 'runtime.[hash:6].js'
+      // filename: 'runtime.[chunkhash:6].js'
     }),
-    // new UglifyJsPlugin({
-    //   compress: {
-    //     warnings: false
-    //   },
-    //   beautify: true,
-    //   output: {
-    //     comments: false
-    //   },
-    //   sourceMap: false
-    // }),
+    new UglifyJsPlugin({
+      compress: {
+        warnings: false
+      },
+      beautify: true,
+      output: {
+        comments: false
+      },
+      sourceMap: false
+    }),
     new CleanWebpackPlugin([
       'dist/*.js',
       'dist/*.map'
     ], {
-      beforeEmit: true
-    })
+        beforeEmit: true
+      })
   ]
 }

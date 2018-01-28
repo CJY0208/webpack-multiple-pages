@@ -10,6 +10,8 @@
     "react"
   ],
   "plugins": [
-    "syntax-dynamic-import"
+    "syntax-dynamic-import",
+    "transform-decorators-legacy",
+    "transform-async-functions"
   ]
 }
