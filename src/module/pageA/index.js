@@ -8,7 +8,7 @@ import { fn1, fn2 } from '../../common'
 import { fnA } from '../../common/index2'
 // import { test } from './test'
 
-// import(/* webpackChunkName: "my-test" */ './test').then(a => console.log(a))
+import(/* webpackChunkName: "my-test" */ './test').then(a => console.log(a))
 
 const App = () => (
   <div className="test">test</div>
