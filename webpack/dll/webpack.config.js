@@ -1,21 +1,36 @@
 const path = require('path')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 const {
   optimize: {
     UglifyJsPlugin
   } = {},
-  DllPlugin
+  DllPlugin, DefinePlugin, IgnorePlugin
 } = require('webpack')
 
 module.exports = {
   entry: require('./entry'),
   output: {
-    path: path.resolve(__dirname, `../../dist/lib`),
-    filename: `[name].[chunkhash:8].js`,
+    path: path.resolve(__dirname, '../../dist/lib'),
+    filename: '[name].[chunkhash:8].js',
     library: '[name]_[chunkhash:8]'
   },
   plugins: [
+    new CleanWebpackPlugin([
+      'manifest',
+      path.resolve(__dirname, '../../dist/lib')
+    ], {
+      allowExternal: true
+    }),
+    // 忽略国际化部分以减小 moment.js 体积
+    new IgnorePlugin(/^\.\/locale$/, /moment$/),
+    // 环境变量设置为生产模式以减小 react 体积
+    new DefinePlugin({
+      'process.env': {
+          NODE_ENV: JSON.stringify('production'),
+      }
+    }),
     new DllPlugin({
-      path: path.resolve(__dirname, `./manifest/[name].json`),
+      path: path.resolve(__dirname, './manifest/[name].json'),
       name: '[name]_[chunkhash:8]',
       context: __dirname,
     }),
