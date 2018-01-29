@@ -1,1 +1,3 @@
-export const test = 'test 2'
+import { commonB } from './pageA.common'
+
+export const test = 'commonB'

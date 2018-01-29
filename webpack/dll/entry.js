@@ -1,7 +1,7 @@
 module.exports = {
-  polyfill: ['core-js'],
-  react: ['react', 'react-dom'],
-  utils: ['moment', 'md5']
+  polyfill: ['core-js', 'regenerator-runtime'],
+  react: ['react', 'react-dom']
+  // utils: ['moment', 'md5']
   // react: ['react'],
   // 'react_dom': ['react-dom'],
   // moment: ['moment'],

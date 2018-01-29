@@ -1,4 +1,5 @@
 import 'core-js'
+import 'regenerator-runtime'
 
 export const fn1 = () => {
   console.log('common fn1')
