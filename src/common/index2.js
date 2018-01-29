@@ -1,4 +1,3 @@
-
 export const fnA = () => {
   console.log('common2 fnA')
 }

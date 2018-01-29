@@ -7,9 +7,7 @@ import { fnA } from '../../common/index2'
 import { test } from './test'
 import(/* webpackChunkName: "my-test" */ './test2').then(a => console.log(a))
 
-const App = () => (
-  <div className="test">test</div>
-)
+const App = () => <div className="test">test</div>
 
 const testFn = () => 'pageA 3'
 

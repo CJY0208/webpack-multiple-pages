@@ -1,2 +1,1 @@
-
 export const test = 'test'

@@ -3,10 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const webpack = require('webpack')
 const {
-  optimize: {
-    CommonsChunkPlugin,
-  UglifyJsPlugin
-  } = {},
+  optimize: { CommonsChunkPlugin, UglifyJsPlugin } = {},
   DllReferencePlugin,
   NamedChunksPlugin,
   HashedModuleIdsPlugin
@@ -22,6 +19,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, './dist'),
+
     publicPath: './asset/',
     filename: '[name].[chunkhash:6].js'
   },
@@ -31,30 +29,32 @@ module.exports = {
       {
         test: /.js$/,
         exclude: /node_modules/,
-        use: [
-          'babel-loader'
-        ]
+        use: ['babel-loader']
       }
     ]
   },
   plugins: [
     // new HtmlWebpackPlugin(),
-    ...Object.keys(require('./webpack/dll/entry')).map(dll => new DllReferencePlugin({
-      context: path.resolve(__dirname, './webpack/dll'),
-      manifest: require(`./webpack/dll/manifest/${dll}.json`)
-    })),
+    ...Object.keys(require('./webpack/dll/entry')).map(
+      dll =>
+        new DllReferencePlugin({
+          context: path.resolve(__dirname, './webpack/dll'),
+          manifest: require(`./webpack/dll/manifest/${dll}.json`)
+        })
+    ),
     new NamedChunksPlugin(),
     new HashedModuleIdsPlugin(),
     new CommonsChunkPlugin({
       name: [
-        // 'vendor', 
-        'common', 'common2'
+        // 'vendor',
+        'common',
+        'common2'
       ],
       // filename: '[name].[chunkhash:6].js',
       minChunks: Infinity
     }),
     new CommonsChunkPlugin({
-      name: 'runtime',
+      name: 'runtime'
       // filename: 'runtime.[chunkhash:6].js'
     }),
     new UglifyJsPlugin({
@@ -67,11 +67,8 @@ module.exports = {
       },
       sourceMap: false
     }),
-    new CleanWebpackPlugin([
-      'dist/*.js',
-      'dist/*.map'
-    ], {
-        beforeEmit: true
-      })
+    new CleanWebpackPlugin(['dist/*.js', 'dist/*.map'], {
+      beforeEmit: true
+    })
   ]
 }

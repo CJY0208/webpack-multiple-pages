@@ -7,7 +7,6 @@ import { fnB } from '../../common/index2'
 import { test as test1 } from './test'
 // import { test as test2 } from '../pageA/test'
 
-
 console.log('pageB')
 
 fn1()
