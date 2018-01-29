@@ -10,11 +10,17 @@
     "babel-preset-react": "^6.24.1",
     "clean-webpack-plugin": "^0.1.18",
     "html-webpack-plugin": "^2.30.1",
+    "prettier": "^1.10.2",
     "webpack": "^3.10.0"
   },
   "scripts": {
     "build": "webpack",
-    "dll": "webpack --config ./webpack/dll/webpack.config.js && webpack"
+    "dll": "webpack --config ./webpack/dll/webpack.config.js && webpack",
+    "format": "prettier --config .prettierrc --write \"./**/*.js\"",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,json}": ["prettier --write", "git add"]
   },
   "dependencies": {
     "core-js": "^2.5.3",

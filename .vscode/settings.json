@@ -1,4 +1,6 @@
 {
   "editor.tabSize": 2,
-  "javascript.format.enable": true,
+  "[javascript]": {
+    "editor.formatOnSave": false
+  }
 }
