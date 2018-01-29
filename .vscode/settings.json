@@ -2,7 +2,9 @@
   "editor.tabSize": 2,
   "files.exclude": {
     "**/.vscode": true,
-    "yarn.lock": true
+    // "node_modules": true,
+    "yarn.lock": true,
+    "package-lock.json": true
   }
   // "[javascript]": {
   //   "editor.formatOnSave": false

@@ -14,6 +14,6 @@ module.exports = Object.assign(
   ),
   {
     // moment: ['moment'],
-    // utils: ['md5', 'axios']
+    utils: ['md5', 'axios']
   }
 )
