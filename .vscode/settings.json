@@ -4,4 +4,7 @@
     "**/.vscode": true,
     "yarn.lock": true
   }
+  // "[javascript]": {
+  //   "editor.formatOnSave": false
+  // }
 }

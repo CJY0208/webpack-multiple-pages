@@ -1,4 +1,5 @@
 const path = require('path')
+const glob = require('glob')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HasOutput = require('webpack-plugin-hash-output')
@@ -10,16 +11,23 @@ const {
   HashedModuleIdsPlugin
 } = webpack
 
+const common_entries = require('./webpack/common_entries')
+
 module.exports = {
   // watch: true,
-  entry: {
-    pageA: path.resolve(__dirname, './src/module', './pageA'),
-    pageB: path.resolve(__dirname, './src/module', './pageB'),
-    common: path.resolve(__dirname, './src/common'),
-    common2: path.resolve(__dirname, './src/common/index2')
-    // moment: ['moment'],
-    // utils: ['md5', 'axios']
-  },
+  entry: Object.assign(
+    glob.sync(path.resolve(__dirname, './src/module/**/* #/')).reduce(
+      (entries, filepath) =>
+        Object.assign(entries, {
+          [filepath
+            .split('/')
+            .pop()
+            .replace(' #', '')]: filepath
+        }),
+      {}
+    ),
+    common_entries
+  ),
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: './asset/',
@@ -41,10 +49,15 @@ module.exports = {
     ]
   },
   resolve: {
-    alias: {
-      '@common': path.resolve(__dirname, './src/common'),
-      '@common2': path.resolve(__dirname, './src/common/index2')
-    }
+    alias: Object.entries(common_entries).reduce(
+      (alias, [key, value]) =>
+        typeof value !== 'string'
+          ? alias
+          : Object.assign(alias, {
+              [`@${key}`]: value
+            }),
+      {}
+    )
   },
   plugins: [
     // new HtmlWebpackPlugin(),
@@ -64,13 +77,7 @@ module.exports = {
      * 官方资料（中文版）：https://doc.webpack-china.org/guides/caching#-extracting-boilerplate-
      */
     new CommonsChunkPlugin({
-      names: [
-        // 'vendor',
-        'common',
-        'common2'
-        // 'utils',
-        // 'moment'
-      ],
+      names: Object.keys(common_entries),
       filename: '[name].[chunkhash:6].js',
       minChunks: Infinity
     }),
@@ -83,7 +90,7 @@ module.exports = {
      * Webpack Dll 功能：预编译第三方模块以提升业务代码打包速度
      * 民间资料：https://segmentfault.com/a/1190000005969643
      */
-    ...Object.keys(require('./webpack/dll/entry')).map(
+    ...Object.keys(require('./webpack/dll/entries')).map(
       dll =>
         new DllReferencePlugin({
           context: path.resolve(__dirname, './webpack/dll'),
