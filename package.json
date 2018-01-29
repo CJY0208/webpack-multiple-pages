@@ -22,7 +22,7 @@
     "precommit": "lint-staged"
   },
   "lint-staged": {
-    "*.{js,json}": ["prettier --write", "git add"]
+    "*.{js,json}": ["npm run format", "git add"]
   },
   "dependencies": {
     "core-js": "^2.5.3",
