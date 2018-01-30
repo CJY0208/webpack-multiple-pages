@@ -10,7 +10,7 @@ const {
 } = require('webpack')
 
 module.exports = {
-  entry: require('./entries'),
+  entry: require('../entries').dll,
   output: {
     path: path.resolve(__dirname, '../../dist/lib'),
     filename: '[name].[chunkhash:6].js',
