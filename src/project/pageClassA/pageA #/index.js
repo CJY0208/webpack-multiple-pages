@@ -6,11 +6,11 @@ import md5 from 'md5'
 import { fn1, fn2 } from '../../../common/tools #'
 // import { fnA } from '@layout'
 import { test } from './test'
-import { test as test2 } from './test2'
+// import { test as test2 } from './test2'
 
-// import(/* webpackChunkName: "my-test2" */ './test2').then(({ test }) => {
-//   console.log(test)
-// })
+import(/* webpackChunkName: "my-test2" */ './test2').then(({ test }) => {
+  console.log(test)
+})
 
 Object.assign(window, { React, ReactDom, moment })
 

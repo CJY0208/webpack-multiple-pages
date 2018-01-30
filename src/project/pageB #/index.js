@@ -7,7 +7,7 @@ import { fnB } from '@layout'
 import { test as test1 } from './test'
 // import { test as test2 } from '../pageA/test'
 
-console.log('pageB')
+console.log('pageB ')
 
 // import(/* webpackChunkName: "my-test2" */ '../pageClassA/pageA #/test2').then(({ test }) => {
 //   console.log(test)
