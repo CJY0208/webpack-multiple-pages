@@ -1,7 +1,6 @@
 const path = require('path')
 const glob = require('glob')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HasOutput = require('webpack-plugin-hash-output')
 const webpack = require('webpack')
@@ -12,62 +11,18 @@ const {
   HashedModuleIdsPlugin
 } = webpack
 
+const HtmlWebpackAutoDependenciesPlugin = require('./webpack/plugins/HtmlWebpackAutoDependenciesPlugin')
+
+const entries = require('./webpack/entries')
 const {
   project: project_entries,
   common: common_entries,
   dll: dll_entries
-} = require('./webpack/entries')
+} = entries
 const common_entry_names = Object.keys(common_entries)
 const dll_files = glob
   .sync(path.resolve(__dirname, './dist/lib/*.js'))
   .map(filepath => `${filepath.split('/dist/').pop()}`)
-
-class TestPlugins {
-  apply(compiler) {
-    compiler.plugin('after-compile', function(compilation, cb) {
-      compilation.chunks.forEach(function(chunk) {
-        if (chunk.name !== 'pageB') return
-        console.log('chunk', chunk.name)
-
-        function query(dep) {
-          var result = []
-
-          if (typeof dep.userRequest !== 'undefined') {
-            result.push(dep.userRequest)
-            // console.log(Object.keys(dep))
-            console.log(dep.request)
-          }
-
-          if (dep.module && dep.module.dependencies)
-            dep.module.dependencies.forEach(dep => {
-              result = result.concat(query(dep))
-            })
-
-          return result
-        }
-        var result = []
-        chunk.origins.forEach(dep => {
-          result = result.concat(query(dep))
-          // if (dep.module && dep.module.dependencies) dep.module.dependencies.forEach(dep => {
-          //   console.log(dep.userRequest || '')
-          //   if (dep.module && dep.module.dependencies) dep.module.dependencies.forEach(dep => {
-          //     // console.log(Object.keys(dep))
-          //     console.log(dep.userRequest || '')
-
-          //     if (dep.module && dep.module.dependencies) dep.module.dependencies.forEach(dep => {
-          //       // console.log(Object.keys(dep))
-          //       console.log(dep.userRequest || '')
-          //     })
-          //   })
-          // })
-        })
-        // console.log(result)
-      })
-
-      cb()
-    })
-  }
-}
 
 module.exports = {
   // watch: true,
@@ -106,20 +61,19 @@ module.exports = {
     ...Object.keys(project_entries).reduce(
       (plugins, project) => [
         ...plugins,
-        ...[
-          new HtmlWebpackPlugin({
-            filename: `${project}.html`,
-            chunks: [project, ...common_entry_names, '__runtime'],
-            chunksSortMode: 'dependency'
-          }),
-          new HtmlWebpackIncludeAssetsPlugin({
-            assets: dll_files,
-            append: false
-          })
-        ]
+        new HtmlWebpackPlugin({
+          filename: `${project}.html`,
+          chunks: [project, '__runtime'],
+          chunksSortMode: 'dependency'
+        })
       ],
       []
     ),
+
+    new HtmlWebpackAutoDependenciesPlugin({
+      entries,
+      dllPath: 'lib/'
+    }),
 
     /**
      * NamedChunksPlugin 和 HashedModuleIdsPlugin 保证模块 hash 不受编译顺序的影响
@@ -180,8 +134,6 @@ module.exports = {
         comments: false
       },
       sourceMap: false
-    }),
-
-    new TestPlugins()
+    })
   ]
 }

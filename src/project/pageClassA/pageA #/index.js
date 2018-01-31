@@ -2,15 +2,16 @@ import React from 'react'
 import ReactDom from 'react-dom'
 import moment from 'moment'
 import md5 from 'md5'
+import axios from 'axios'
 
-import { fn1, fn2 } from '../../../common/tools #'
+import { fn1, fn2 } from '@tools'
 // import { fnA } from '@layout'
 import { test } from './test'
 // import { test as test2 } from './test2'
 
-import(/* webpackChunkName: "my-test2" */ './test2').then(({ test }) => {
-  console.log(test)
-})
+// import(/* webpackChunkName: "my-test2" */ './test2').then(({ test }) => {
+//   console.log(test)
+// })
 
 Object.assign(window, { React, ReactDom, moment })
 
@@ -24,7 +25,7 @@ console.log(testFn())
 fn1()
 // fn2()
 
-fnA()
+// fnA()
 
 const delay = time => new Promise(resolve => setTimeout(resolve, time))
 ;(async () => {
@@ -34,10 +35,14 @@ const delay = time => new Promise(resolve => setTimeout(resolve, time))
   await delay(2000)
   console.log('after 2000 ms')
 
-  // const {
-  //   test: test2
-  // } = await import(/* webpackChunkName: "my-test2" */ './test2')
+  console.warn('1000ms 后加载 my-test2')
 
-  // console.log('异步模块 test2')
-  // console.log(test2)
+  await delay(1000)
+
+  const {
+    test: test2
+  } = await import(/* webpackChunkName: "my-test2" */ './test2')
+
+  console.log('异步模块 test2')
+  console.log(test2)
 })()
