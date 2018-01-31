@@ -4,4 +4,4 @@ export const commonA = 'common A'
 
 export const commonB = 'common B'
 
-export const commonC = 'common C '
+export const commonC = 'common C'
