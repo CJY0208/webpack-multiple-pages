@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "autodll-webpack-plugin": "^0.3.8",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
@@ -33,11 +34,10 @@
   },
   "dependencies": {
     "axios": "^0.17.1",
-    "core-js": "^2.5.3",
+    "babel-polyfill": "^6.26.0",
     "md5": "^2.2.1",
     "moment": "^2.20.1",
     "react": "^16.2.0",
-    "react-dom": "^16.2.0",
-    "regenerator-runtime": "^0.11.1"
+    "react-dom": "^16.2.0"
   }
 }

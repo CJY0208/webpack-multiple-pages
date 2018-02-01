@@ -1,6 +1,4 @@
-import 'core-js'
-import regeneratorRuntime from 'regenerator-runtime'
-Object.assign(window, { regeneratorRuntime })
+import 'babel-polyfill'
 
 export const fn1 = () => {
   console.log('common fn1')

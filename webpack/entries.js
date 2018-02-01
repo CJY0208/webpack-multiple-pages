@@ -27,7 +27,8 @@ const business_entries = glob.sync(`${srcDir}/**/* #`).reduce(
 
 module.exports = Object.assign({}, business_entries, {
   dll: {
-    polyfill: ['core-js', 'regenerator-runtime'],
+    // polyfill: ['core-js', 'regenerator-runtime'],
+    polyfill: ['babel-polyfill'],
     react: ['react', 'react-dom'],
     moment: ['moment']
     // utils: ['md5', 'moment']

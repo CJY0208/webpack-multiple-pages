@@ -3,6 +3,7 @@ const glob = require('glob')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HasOutput = require('webpack-plugin-hash-output')
+const AutoDllPlugin = require('autodll-webpack-plugin')
 const webpack = require('webpack')
 const {
   optimize: { CommonsChunkPlugin, UglifyJsPlugin } = {},
@@ -103,13 +104,20 @@ module.exports = {
      * Webpack Dll 功能：预编译第三方模块以提升业务代码打包速度
      * 民间资料：https://segmentfault.com/a/1190000005969643
      */
-    ...Object.keys(dll_entries).map(
-      dll =>
-        new DllReferencePlugin({
-          context: path.resolve(__dirname, './webpack/dll'),
-          manifest: require(`./webpack/dll/manifest/${dll}.json`)
-        })
-    ),
+    // ...Object.keys(dll_entries).map(
+    //   dll =>
+    //     new DllReferencePlugin({
+    //       context: path.resolve(__dirname, './webpack/dll'),
+    //       manifest: require(`./webpack/dll/manifest/${dll}.json`)
+    //     })
+    // ),
+
+    new AutoDllPlugin({
+      filename: '[name].[chunkhash:6].js', // No output file in ./lib
+      path: './lib',
+      entry: dll_entries,
+      plugins: require('./webpack/dll/plugins').plugins
+    }),
 
     /**
      * Webpack 任务前/后，使用此插件清除旧的编译文件
