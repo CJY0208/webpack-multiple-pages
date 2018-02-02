@@ -3,7 +3,7 @@ const glob = require('glob')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HasOutput = require('webpack-plugin-hash-output')
-const AutoDllPlugin = require('autodll-webpack-plugin')
+const AutoDllPlugin = require('./webpack/plugins/autodll-webpack-plugin')
 const webpack = require('webpack')
 const {
   optimize: { CommonsChunkPlugin, UglifyJsPlugin } = {},
@@ -35,7 +35,7 @@ module.exports = {
      * chunkFilename 只用来打包 require.ensure 或 import() 方法中引入的异步模块，若无异步模块则不会生成任何 chunk 块文件
      * 民间资料：https://www.cnblogs.com/toward-the-sun/p/6147324.html?utm_source=itdadao&utm_medium=referral
      */
-    chunkFilename: 'chunk/[name].[chunkhash:6].js'
+    chunkFilename: 'async/[name].[chunkhash:6].js'
   },
   devtool: false, //'cheap-module-source-map',
   module: {
@@ -59,16 +59,23 @@ module.exports = {
     )
   },
   plugins: [
-    ...Object.keys(project_entries).reduce(
-      (plugins, project) => [
-        ...plugins,
+    ...Object.keys(project_entries).map(
+      project =>
         new HtmlWebpackPlugin({
+          inject: false,
           filename: `${project}.html`,
+          template: 'template.html',
           chunks: [project, '__runtime'],
-          chunksSortMode: 'dependency'
+          chunksSortMode: 'dependency',
+          /**
+           * html-minifier DOC: https://github.com/kangax/html-minifier
+           */
+          minify: {
+            minifyCSS: true,
+            minifyJS: true
+            // collapseWhitespace: true
+          }
         })
-      ],
-      []
     ),
 
     new HtmlWebpackAutoDependenciesPlugin({
@@ -113,8 +120,9 @@ module.exports = {
     // ),
 
     new AutoDllPlugin({
-      filename: '[name].[chunkhash:6].js', // No output file in ./lib
-      path: './lib',
+      // inject: true,
+      filename: '[name].[chunkhash].js', // No output file in ./lib
+      path: 'lib',
       entry: dll_entries,
       plugins: require('./webpack/dll/plugins').plugins
     }),
@@ -123,7 +131,11 @@ module.exports = {
      * Webpack 任务前/后，使用此插件清除旧的编译文件
      */
     new CleanWebpackPlugin(
-      ['dist/*.js', 'dist/*.html', 'dist/asset', 'dist/common', 'dist/chunk'],
+      [
+        // 'dist/*.js', 'dist/*.html', 'dist/asset', 'dist/common', 'dist/chunk'
+        'dist',
+        '!dist/lib'
+      ],
       {
         verbose: false, // 不输出 log
         beforeEmit: true // 在 Webpack 工作完成、输出文件前夕执行清除操作

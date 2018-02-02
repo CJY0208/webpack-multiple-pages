@@ -95,8 +95,10 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
         // console.log(chunkFilesMap)
         // console.log(JSON.stringify(this.__record, null, '  '))
         Object.entries(this.__record).forEach(([key, value]) => {
+          this.__record[key].assetsDll = [
+            ...value.dll.map(dll => `${this.__dllPath}${dll}`)
+          ]
           this.__record[key].assets = [
-            ...value.dll.map(dll => `${this.__dllPath}${dll}`),
             ...value.third.map(third => chunkFilesMap[third]),
             ...value.common.map(common => chunkFilesMap[common])
           ]
@@ -119,6 +121,10 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
             0,
             ...this.__record[htmlPluginData.outputName].assets
           )
+          htmlPluginData.assets.js = [
+            ...this.__record[htmlPluginData.outputName].assetsDll,
+            ...htmlPluginData.assets.js
+          ]
           // return htmlPluginData
           cb(null, htmlPluginData)
         }
