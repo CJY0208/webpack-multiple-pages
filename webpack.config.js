@@ -17,17 +17,17 @@ const HtmlWebpackAutoDependenciesPlugin = require('./webpack/plugins/HtmlWebpack
 const entries = require('./webpack/entries')
 const {
   project: project_entries,
-  common: common_entries,
+  vendor: vendor_entries,
   dll: dll_entries
 } = entries
-const common_entry_names = Object.keys(common_entries)
+const vendor_entry_names = Object.keys(vendor_entries)
 const dll_files = glob
   .sync(path.resolve(__dirname, './dist/lib/*.js'))
   .map(filepath => `${filepath.split('/dist/').pop()}`)
 
 module.exports = {
   // watch: true,
-  entry: Object.assign({}, project_entries, common_entries),
+  entry: Object.assign({}, project_entries, vendor_entries),
   output: {
     path: path.resolve(__dirname, './dist'),
     filename: 'asset/[name].[chunkhash:6].js',
@@ -48,7 +48,7 @@ module.exports = {
     ]
   },
   resolve: {
-    alias: Object.entries(common_entries).reduce(
+    alias: Object.entries(vendor_entries).reduce(
       (alias, [key, value]) =>
         typeof value !== 'string'
           ? alias
@@ -98,13 +98,13 @@ module.exports = {
      * 官方资料（中文版）：https://doc.webpack-china.org/guides/caching#-extracting-boilerplate-
      */
     new CommonsChunkPlugin({
-      names: common_entry_names,
-      filename: 'common/[name].[chunkhash:6].js',
+      names: vendor_entry_names,
+      filename: 'vendor/[name].[chunkhash:6].js',
       minChunks: Infinity
     }),
     new CommonsChunkPlugin({
       name: '__runtime',
-      filename: 'common/__runtime.[chunkhash:6].js'
+      filename: '__runtime.[chunkhash:6].js'
     }),
 
     /**

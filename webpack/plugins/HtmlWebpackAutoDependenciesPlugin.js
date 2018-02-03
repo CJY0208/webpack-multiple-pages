@@ -16,14 +16,14 @@ const queryDependencies = dep => {
 }
 const isDll = value => /^dll-reference/.test(value)
 const isThird = (third, value) => value in third
-const isCommon = value => /^@/.test(value)
+const isVendor = value => /^@/.test(value)
 
 module.exports = class HtmlWebpackAutoDependenciesPlugin {
   constructor({ entries, dllPath }) {
     this.__dllPath = dllPath
 
-    const { common, project, dll } = entries
-    this.__third = Object.entries(common).reduce((res, [key, value]) => {
+    const { vendor, project, dll } = entries
+    this.__third = Object.entries(vendor).reduce((res, [key, value]) => {
       if (!Array.isArray(value)) return res
       value.forEach(module =>
         Object.assign(res, {
@@ -57,7 +57,7 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
               chunk.origins
                 .reduce((res, dep) => [...res, ...queryDependencies(dep)], [])
                 .filter(
-                  dep => isThird(__third, dep) || isDll(dep) || isCommon(dep)
+                  dep => isThird(__third, dep) || isDll(dep) || isVendor(dep)
                 )
             )
           ].reduce(
@@ -70,7 +70,7 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
                     .replace('_', '.')
                     .concat('.js')
                 )
-              if (isCommon(dep)) res.common.push(dep.replace('@', ''))
+              if (isVendor(dep)) res.common.push(dep.replace('@', ''))
               if (isThird(__third, dep)) res.third.push(__third[dep])
               return res
             },

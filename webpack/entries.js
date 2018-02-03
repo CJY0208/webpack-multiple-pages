@@ -19,7 +19,7 @@ const business_entries = glob.sync(`${srcDir}/**/* #`).reduce(
   },
   {
     project: {},
-    common: {
+    vendor: {
       utils: ['md5', 'axios']
     }
   }
