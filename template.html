@@ -168,8 +168,8 @@
   </style>
   <script> 
     window.__f = function() {
-      if (this.readyState === 'interactive') {
-        var $l = this.createElement('div')
+      if (document.readyState === 'interactive') {
+        var $l = document.createElement('div')
         $l.className = 'loading show'
         $l.innerHTML = '\
           <div class="spinner">\
@@ -187,14 +187,14 @@
             </div>\
           </div>\
         '
-        this.body.appendChild($l)
-        this.removeEventListener('readystatechange', window.__f)
+        // document.body.appendChild($l)
+        document.removeEventListener('readystatechange', window.__f)
         delete window.__f
       }
     }
     document.addEventListener('readystatechange', window.__f)
   </script> 
-  <title>Loading...</title>
+  <title><%= htmlWebpackPlugin.options.title %></title>
 </head>
 <body>
   <div id="app"></div><% for (var i = 0; i < htmlWebpackPlugin.files.js.length; i++) {%>

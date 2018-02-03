@@ -37,7 +37,7 @@ module.exports = {
      */
     chunkFilename: 'async/[name].[chunkhash:6].js'
   },
-  devtool: false, //'cheap-module-source-map',
+  devtool: 'source-map',
   module: {
     rules: [
       {
@@ -65,7 +65,7 @@ module.exports = {
           inject: false,
           filename: `${project}.html`,
           template: 'template.html',
-          chunks: [project, '__runtime'],
+          chunks: ['__runtime', project],
           chunksSortMode: 'dependency',
           /**
            * html-minifier DOC: https://github.com/kangax/html-minifier
@@ -153,7 +153,7 @@ module.exports = {
       output: {
         comments: false
       },
-      sourceMap: false
+      sourceMap: true
     })
   ]
 }

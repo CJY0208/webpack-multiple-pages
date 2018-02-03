@@ -5,7 +5,7 @@ import moment from 'moment'
 import md5 from 'md5'
 import axios from 'axios'
 
-import { fn1, fn2 } from '@tools'
+import { fn1, fn2 } from '@common'
 import { fnA } from '@layout'
 import { test } from './test'
 // import { test2 } from './test2'

@@ -7,7 +7,7 @@ const business_entries = glob.sync(`${srcDir}/**/* #`).reduce(
     const type = path
       .resolve(filepath)
       .replace(srcDir, '')
-      .split('\\')[1]
+      .split(path.sep)[1]
     return Object.assign(entries, {
       [type]: Object.assign({}, entries[type], {
         [filepath
@@ -29,7 +29,8 @@ module.exports = Object.assign({}, business_entries, {
   dll: {
     // polyfill: ['core-js', 'regenerator-runtime'],
     polyfill: ['babel-polyfill'],
-    react: ['react', 'react-dom'],
+    react: ['react', 'react-dom', 'prop-types'],
+    reactRouter: ['react-router', 'react-router-dom', 'history'],
     moment: ['moment']
     // utils: ['md5', 'moment']
   }
