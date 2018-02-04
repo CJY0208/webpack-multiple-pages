@@ -20,7 +20,9 @@ const business_entries = glob.sync(`${srcDir}/**/* #`).reduce(
   {
     project: {},
     vendor: {
-      utils: ['md5', 'axios']
+      utils: ['md5', 'axios'],
+      polyfill: ['babel-polyfill'],
+      react: ['react', 'react-dom']
     }
   }
 )
@@ -29,8 +31,8 @@ module.exports = Object.assign({}, business_entries, {
   dll: {
     // polyfill: ['core-js', 'regenerator-runtime'],
     polyfill: ['babel-polyfill'],
-    react: ['react', 'react-dom', 'prop-types'],
-    reactRouter: ['react-router', 'react-router-dom', 'history'],
+
+    // reactRouter: ['react-router', 'react-router-dom', 'history'],
     moment: ['moment']
     // utils: ['md5', 'moment']
   }

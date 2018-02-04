@@ -9,7 +9,9 @@ const {
   optimize: { CommonsChunkPlugin, UglifyJsPlugin } = {},
   DllReferencePlugin,
   NamedChunksPlugin,
-  HashedModuleIdsPlugin
+  HashedModuleIdsPlugin,
+  DefinePlugin,
+  IgnorePlugin
 } = webpack
 
 const HtmlWebpackAutoDependenciesPlugin = require('./webpack/plugins/HtmlWebpackAutoDependenciesPlugin')
@@ -65,7 +67,7 @@ module.exports = {
           inject: false,
           filename: `${project}.html`,
           template: 'template.html',
-          chunks: ['__runtime', project],
+          chunks: ['__runtime', ...['polyfill', 'react'], project],
           chunksSortMode: 'dependency',
           /**
            * html-minifier DOC: https://github.com/kangax/html-minifier
@@ -78,10 +80,10 @@ module.exports = {
         })
     ),
 
-    new HtmlWebpackAutoDependenciesPlugin({
-      entries,
-      dllPath: 'lib/'
-    }),
+    // new HtmlWebpackAutoDependenciesPlugin({
+    //   entries,
+    //   dllPath: 'lib/'
+    // }),
 
     /**
      * NamedChunksPlugin 和 HashedModuleIdsPlugin 保证模块 hash 不受编译顺序的影响
@@ -119,12 +121,26 @@ module.exports = {
     //     })
     // ),
 
-    new AutoDllPlugin({
-      // inject: true,
-      filename: '[name].[chunkhash].js', // No output file in ./lib
-      path: 'lib',
-      entry: dll_entries,
-      plugins: require('./webpack/dll/plugins').plugins
+    // new AutoDllPlugin({
+    //   // inject: true,
+    //   filename: '[name].[chunkhash].js', // No output file in ./lib
+    //   path: 'lib',
+    //   entry: dll_entries,
+    //   plugins: require('./webpack/dll/plugins').plugins
+    // }),
+
+    /**
+     * 忽略国际化部分以减小 moment.js 体积，参考：https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
+     */
+    new IgnorePlugin(/^\.\/locale$/, /moment$/),
+
+    /**
+     *  环境变量设置为生产模式以减小 react 或其他第三方插件体积，参考：https://reactjs.org/docs/add-react-to-an-existing-app.html#development-and-production-versions
+     */
+    new DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('production')
+      }
     }),
 
     /**
@@ -132,11 +148,16 @@ module.exports = {
      */
     new CleanWebpackPlugin(
       [
-        // 'dist/*.js', 'dist/*.html', 'dist/asset', 'dist/common', 'dist/chunk'
-        'dist',
-        '!dist/lib'
+        'dist/*.js',
+        'dist/*.map',
+        'dist/*.html',
+        'dist/asset',
+        'dist/vendor',
+        'dist/async'
+        // 'dist'
       ],
       {
+        // exclude: ['dist/lib'],
         verbose: false, // 不输出 log
         beforeEmit: true // 在 Webpack 工作完成、输出文件前夕执行清除操作
       }
@@ -149,7 +170,7 @@ module.exports = {
       compress: {
         warnings: false
       },
-      beautify: true,
+      beautify: false,
       output: {
         comments: false
       },

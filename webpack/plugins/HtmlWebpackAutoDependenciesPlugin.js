@@ -3,6 +3,7 @@ const queryDependencies = dep => {
 
   if (typeof dep.userRequest !== 'undefined') {
     result.push(dep.userRequest)
+    // console.log(dep.userRequest)
   }
 
   if (dep.module && dep.module.dependencies) {
@@ -83,7 +84,7 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
         )
       })
 
-      // console.log(this.__record)
+      console.log(this.__record)
 
       if (typeof this.__record !== 'undefined') {
         const allChunks = compilation.getStats().toJson().chunks
