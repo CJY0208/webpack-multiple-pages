@@ -21,8 +21,11 @@ const business_entries = glob.sync(`${srcDir}/**/* #`).reduce(
     project: {},
     vendor: {
       utils: ['md5', 'axios'],
-      polyfill: ['babel-polyfill'],
-      react: ['react', 'react-dom']
+      reactRouter: ['react-router', 'react-router-dom', 'history']
+      // polyfill: ['babel-polyfill'],
+      // react: ['react', 'react-dom', 'history'],
+      // reactRouter: ['react-router', 'react-router-dom'],
+      // moment: ['moment']
     }
   }
 )
@@ -30,9 +33,9 @@ const business_entries = glob.sync(`${srcDir}/**/* #`).reduce(
 module.exports = Object.assign({}, business_entries, {
   dll: {
     // polyfill: ['core-js', 'regenerator-runtime'],
+    // utils: ['md5', 'axios'],
     polyfill: ['babel-polyfill'],
-
-    // reactRouter: ['react-router', 'react-router-dom', 'history'],
+    react: ['react', 'react-dom'],
     moment: ['moment']
     // utils: ['md5', 'moment']
   }

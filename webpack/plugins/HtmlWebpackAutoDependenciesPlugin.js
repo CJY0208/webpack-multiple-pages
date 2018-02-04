@@ -84,7 +84,7 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
         )
       })
 
-      console.log(this.__record)
+      // console.log(this.__record)
 
       if (typeof this.__record !== 'undefined') {
         const allChunks = compilation.getStats().toJson().chunks

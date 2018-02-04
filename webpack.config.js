@@ -10,6 +10,7 @@ const {
   DllReferencePlugin,
   NamedChunksPlugin,
   HashedModuleIdsPlugin,
+  NamedModulesPlugin,
   DefinePlugin,
   IgnorePlugin
 } = webpack
@@ -67,7 +68,7 @@ module.exports = {
           inject: false,
           filename: `${project}.html`,
           template: 'template.html',
-          chunks: ['__runtime', ...['polyfill', 'react'], project],
+          chunks: ['__runtime', project],
           chunksSortMode: 'dependency',
           /**
            * html-minifier DOC: https://github.com/kangax/html-minifier
@@ -80,10 +81,10 @@ module.exports = {
         })
     ),
 
-    // new HtmlWebpackAutoDependenciesPlugin({
-    //   entries,
-    //   dllPath: 'lib/'
-    // }),
+    new HtmlWebpackAutoDependenciesPlugin({
+      entries,
+      dllPath: 'lib/'
+    }),
 
     /**
      * NamedChunksPlugin 和 HashedModuleIdsPlugin 保证模块 hash 不受编译顺序的影响
@@ -93,6 +94,7 @@ module.exports = {
      */
     new NamedChunksPlugin(),
     new HashedModuleIdsPlugin(),
+    // new NamedModulesPlugin(),
 
     /**
      * 两个 CommonsChunkPlugin 的作用是分离 Webpack runtime & manifest
@@ -102,6 +104,7 @@ module.exports = {
     new CommonsChunkPlugin({
       names: vendor_entry_names,
       filename: 'vendor/[name].[chunkhash:6].js',
+      children: true,
       minChunks: Infinity
     }),
     new CommonsChunkPlugin({
@@ -121,13 +124,13 @@ module.exports = {
     //     })
     // ),
 
-    // new AutoDllPlugin({
-    //   // inject: true,
-    //   filename: '[name].[chunkhash].js', // No output file in ./lib
-    //   path: 'lib',
-    //   entry: dll_entries,
-    //   plugins: require('./webpack/dll/plugins').plugins
-    // }),
+    new AutoDllPlugin({
+      // inject: true,
+      filename: '[name].[chunkhash].js', // No output file in ./lib
+      path: 'lib',
+      entry: dll_entries,
+      plugins: require('./webpack/dll/plugins').plugins
+    }),
 
     /**
      * 忽略国际化部分以减小 moment.js 体积，参考：https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
