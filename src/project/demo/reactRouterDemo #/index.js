@@ -1,11 +1,10 @@
 import 'babel-polyfill'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Router, Route, Link } from 'react-router-dom'
-import { withRouter } from 'react-router'
+import { Router, Route, Link, withRouter } from 'react-router-dom'
 import { createHashHistory } from 'history'
 
-// console.log('done')
+console.log(withRouter)
 
 const history = createHashHistory()
 
