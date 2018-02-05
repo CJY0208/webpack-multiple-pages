@@ -25,11 +25,11 @@ const {
   dll: dll_entries
 } = entries
 const customized_vendor_entry_names = Object.keys(customized_vendor_entries)
-console.log(customized_vendor_entries)
+// console.log(customized_vendor_entries)
 const vendor_entry_names = Object.keys(vendor_entries)
-const dll_files = glob
-  .sync(path.resolve(__dirname, './dist/lib/*.js'))
-  .map(filepath => `${filepath.split('/dist/').pop()}`)
+// const dll_files = glob
+//   .sync(path.resolve(__dirname, './dist/lib/*.js'))
+//   .map(filepath => `${filepath.split('/dist/').pop()}`)
 
 module.exports = {
   // watch: true,
@@ -76,7 +76,12 @@ module.exports = {
           inject: false,
           filename: `${project}.html`,
           template: 'template.html',
-          chunks: ['__runtime', project],
+          chunks: [
+            '__runtime',
+            ...customized_vendor_entry_names,
+            ...vendor_entry_names,
+            project
+          ],
           chunksSortMode: 'dependency',
           /**
            * html-minifier DOC: https://github.com/kangax/html-minifier
@@ -120,8 +125,8 @@ module.exports = {
 
     new CommonsChunkPlugin({
       name: '__runtime',
-      filename: '__runtime.[chunkhash:6].js',
-      minChunks: Infinity
+      filename: '__runtime.[chunkhash:6].js'
+      // minChunks: Infinity
     }),
 
     /**
@@ -165,20 +170,20 @@ module.exports = {
       exclude: ['dist/lib'],
       verbose: false, // 不输出 log
       beforeEmit: true // 在 Webpack 工作完成、输出文件前夕执行清除操作
-    })
+    }),
 
     /**
      * 关于 Tree Shaking，Webpack 只标记未使用的依赖而不清除，需通过 UglifyJsPlugin 达到清除未使用代码的效果
      */
-    // new UglifyJsPlugin({
-    //   compress: {
-    //     warnings: false
-    //   },
-    //   beautify: false,
-    //   output: {
-    //     comments: false
-    //   },
-    //   sourceMap: false
-    // })
+    new UglifyJsPlugin({
+      compress: {
+        warnings: false
+      },
+      beautify: false,
+      output: {
+        comments: false
+      },
+      sourceMap: false
+    })
   ]
 }
