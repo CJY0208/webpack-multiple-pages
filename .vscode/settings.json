@@ -5,8 +5,9 @@
     // "node_modules": true,
     "yarn.lock": true,
     "package-lock.json": true
+  },
+  "[javascript]": {
+    "editor.formatOnSave": false,
+    "editor.formatOnPaste": false
   }
-  // "[javascript]": {
-  //   "editor.formatOnSave": false
-  // }
 }
