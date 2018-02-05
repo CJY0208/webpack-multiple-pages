@@ -128,10 +128,10 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
             ...value.dll.map(dll => `${this.__dllPath}${dll}`)
           ]
           this.__record[key].assets = [
-            // ...value.vendor.map(vendor => chunkFilesMap[vendor]),
-            // ...value.customizedVendor.map(
-            //   customizedVendor => chunkFilesMap[customizedVendor]
-            // )
+            ...value.vendor.map(vendor => chunkFilesMap[vendor]),
+            ...value.customizedVendor.map(
+              customizedVendor => chunkFilesMap[customizedVendor]
+            )
           ]
         })
         // console.log(this.__record)

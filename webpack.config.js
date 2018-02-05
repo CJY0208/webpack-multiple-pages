@@ -35,9 +35,9 @@ module.exports = {
   // watch: true,
   entry: Object.assign(
     {},
-    project_entries,
-    vendor_entries,
-    customized_vendor_entries
+    project_entries
+    // vendor_entries
+    // customized_vendor_entries
   ),
   output: {
     path: path.resolve(__dirname, './dist'),
@@ -78,8 +78,8 @@ module.exports = {
           template: 'template.html',
           chunks: [
             '__runtime',
-            ...customized_vendor_entry_names,
-            ...vendor_entry_names,
+            // ...customized_vendor_entry_names,
+            // ...vendor_entry_names,
             project
           ],
           chunksSortMode: 'dependency',
@@ -114,18 +114,48 @@ module.exports = {
      * 民间资料：https://segmentfault.com/a/1190000010317802
      * 官方资料（中文版）：https://doc.webpack-china.org/guides/caching#-extracting-boilerplate-
      */
-    new CommonsChunkPlugin({
-      names: [...vendor_entry_names, ...customized_vendor_entry_names],
-      filename: 'vendor/[name].[chunkhash:6].js',
-      // children: true,
-      // deepChildren: true,
-      // chunks: Object.keys(project_entries),
-      minChunks: Infinity
-    }),
+    ...Object.entries(vendor_entries).map(
+      ([key, value]) =>
+        new CommonsChunkPlugin({
+          name: key,
+          filename: 'vendor/[name].[chunkhash:6].js',
+          chunks: Object.keys(project_entries),
+          minChunks(module) {
+            // console.log()
+            return value.some(vendor =>
+              new RegExp(vendor).test(module.resource)
+            )
+          }
+        })
+    ),
+    ...Object.entries(customized_vendor_entries).map(
+      ([key, value]) =>
+        new CommonsChunkPlugin({
+          name: key,
+          filename: 'customizedVendor/[name].[chunkhash:6].js',
+          chunks: Object.keys(project_entries),
+          minChunks(module) {
+            // console.log(value)
+            // console.log(module.resource)
+            // return false
+            return new RegExp(value).test(module.resource)
+          }
+        })
+    ),
+    // new CommonsChunkPlugin({
+    //   names: [...vendor_entry_names, ...customized_vendor_entry_names],
+    //   filename: 'vendor/[name].[chunkhash:6].js',
+    //   children: false,
+    //   // async: 'children-async',
+    //   deepChildren: true,
+    //   chunks: Object.keys(project_entries),
+    //   minChunks: Infinity
+    // }),
 
     new CommonsChunkPlugin({
       name: '__runtime',
       filename: '__runtime.[chunkhash:6].js'
+      // chunks: [...vendor_entry_names, ...customized_vendor_entry_names]
       // minChunks: Infinity
     }),
 
@@ -170,20 +200,20 @@ module.exports = {
       exclude: ['dist/lib'],
       verbose: false, // 不输出 log
       beforeEmit: true // 在 Webpack 工作完成、输出文件前夕执行清除操作
-    }),
+    })
 
     /**
      * 关于 Tree Shaking，Webpack 只标记未使用的依赖而不清除，需通过 UglifyJsPlugin 达到清除未使用代码的效果
      */
-    new UglifyJsPlugin({
-      compress: {
-        warnings: false
-      },
-      beautify: false,
-      output: {
-        comments: false
-      },
-      sourceMap: false
-    })
+    // new UglifyJsPlugin({
+    //   compress: {
+    //     warnings: false
+    //   },
+    //   beautify: false,
+    //   output: {
+    //     comments: false
+    //   },
+    //   sourceMap: false
+    // })
   ]
 }
