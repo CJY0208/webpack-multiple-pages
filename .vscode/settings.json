@@ -4,7 +4,8 @@
     "**/.vscode": true,
     // "node_modules": true,
     "yarn.lock": true,
-    "package-lock.json": true
+    "package-lock.json": true,
+    "**/*.map": true
   },
   "[javascript]": {
     "editor.formatOnSave": false,

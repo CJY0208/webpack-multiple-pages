@@ -1,4 +1,5 @@
 import 'babel-polyfill'
+import path from 'path'
 
 export const fn1 = () => {
   console.log('common fn1')

@@ -1,12 +1,12 @@
-// import 'babel-polyfill'
+import 'babel-polyfill'
 import React from 'react'
 import ReactDom from 'react-dom'
 import moment from 'moment'
-import md5 from 'md5'
-import axios from 'axios'
+// import md5 from 'md5'
+// import axios from 'axios'
 
 import { fn1, fn2 } from '@common'
-import { fnA } from '@layout'
+// import { fnA } from '@layout'
 import { test } from './test'
 // import { test2 } from './test2'
 
@@ -33,7 +33,7 @@ const testFn = () => 'pageA 3 '
 console.log(testFn())
 // console.log(test2)
 
-fn1()
+// fn1()
 // fn2()
 
 // fnA()
