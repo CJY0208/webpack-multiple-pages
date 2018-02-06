@@ -74,7 +74,7 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
     compiler.plugin('after-compile', (compilation, cb) => {
       compilation.chunks.forEach(chunk => {
         if (!__project.includes(chunk.name)) return
-        console.log(chunk.name)
+        // console.log(chunk.name)
         this.recordDependencies(
           chunk.name,
           [

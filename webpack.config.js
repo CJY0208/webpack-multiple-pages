@@ -25,11 +25,16 @@ const {
   dll: dll_entries
 } = entries
 const customized_vendor_entry_names = Object.keys(customized_vendor_entries)
-// console.log(customized_vendor_entries)
 const vendor_entry_names = Object.keys(vendor_entries)
-// const dll_files = glob
-//   .sync(path.resolve(__dirname, './dist/lib/*.js'))
-//   .map(filepath => `${filepath.split('/dist/').pop()}`)
+const dll_entry_names = Object.keys(dll_entries)
+
+const queryDependencies = (
+  { resource = '', sourceRequest = '', reasons = [] } = {},
+  vendor
+) =>
+  ((new RegExp(vendor).test(resource) && /node_modules/.test(resource)) ||
+    reasons.some(({ module }) => queryDependencies(module, vendor))) &&
+  !/dll-reference/.test(sourceRequest)
 
 module.exports = {
   // watch: true,
@@ -109,49 +114,61 @@ module.exports = {
     // new HashedModuleIdsPlugin(),
     new NamedModulesPlugin(),
 
-    /**
-     * 两个 CommonsChunkPlugin 的作用是分离 Webpack runtime & manifest
-     * 民间资料：https://segmentfault.com/a/1190000010317802
-     * 官方资料（中文版）：https://doc.webpack-china.org/guides/caching#-extracting-boilerplate-
-     */
-    ...Object.entries(vendor_entries).map(
-      ([key, value]) =>
-        new CommonsChunkPlugin({
-          name: key,
-          filename: 'vendor/[name].[chunkhash:6].js',
-          chunks: Object.keys(project_entries),
-          minChunks(module) {
-            // console.log()
-            return value.some(vendor =>
-              new RegExp(vendor).test(module.resource)
-            )
-          }
-        })
-    ),
     ...Object.entries(customized_vendor_entries).map(
       ([key, value]) =>
         new CommonsChunkPlugin({
           name: key,
           filename: 'customizedVendor/[name].[chunkhash:6].js',
           chunks: Object.keys(project_entries),
-          minChunks(module) {
-            // console.log(value)
-            // console.log(module.resource)
+          minChunks({ resource = '' }) {
+            // console.log(path.resolve(value))
+            // console.log(`${key} #`)
+            // console.log(resource)
+            // console.log(/customizedVendor/.test(resource) && new RegExp(`${key} #`).test(resource))
             // return false
-            return new RegExp(value).test(module.resource)
+            return (
+              /customizedVendor/.test(resource) &&
+              new RegExp(`${key} #`).test(resource)
+            )
+            // new RegExp(path.resolve(value)).test(path.resolve(resource))
           }
         })
     ),
-    // new CommonsChunkPlugin({
-    //   names: [...vendor_entry_names, ...customized_vendor_entry_names],
-    //   filename: 'vendor/[name].[chunkhash:6].js',
-    //   children: false,
-    //   // async: 'children-async',
-    //   deepChildren: true,
-    //   chunks: Object.keys(project_entries),
-    //   minChunks: Infinity
-    // }),
+    ...Object.entries(vendor_entries).map(
+      ([key, value]) =>
+        new CommonsChunkPlugin({
+          name: key,
+          filename: 'vendor/[name].[chunkhash:6].js',
+          chunks: [
+            ...Object.keys(project_entries),
+            ...customized_vendor_entry_names
+          ],
+          minChunks(module) {
+            const { resource = '', sourceRequest = '', reasons = [] } = module
 
+            // console.log(Object.keys(module))
+            if (
+              new RegExp('/node_modules/process/browser.js').test(sourceRequest)
+            ) {
+              console.log(Object.keys(module))
+              console.log(sourceRequest)
+              // console.log(request)
+              // console.log(module.sourceRequest)
+              // console.log(reasonsResource)
+
+              // console.log(module.reasons)
+              // console.log(module.reasons)
+            }
+
+            return value.some(vendor => queryDependencies(module, vendor))
+          }
+        })
+    ),
+    /**
+     * 这个 CommonsChunkPlugin 的作用是分离 Webpack runtime & manifest
+     * 民间资料：https://segmentfault.com/a/1190000010317802
+     * 官方资料（中文版）：https://doc.webpack-china.org/guides/caching#-extracting-boilerplate-
+     */
     new CommonsChunkPlugin({
       name: '__runtime',
       filename: '__runtime.[chunkhash:6].js'
@@ -163,13 +180,14 @@ module.exports = {
      * Webpack Dll 功能：预编译第三方模块以提升业务代码打包速度
      * 民间资料：https://segmentfault.com/a/1190000005969643
      */
-    // ...Object.keys(dll_entries).map(
-    //   dll =>
-    //     new DllReferencePlugin({
-    //       context: path.resolve(__dirname, './webpack/dll'),
-    //       manifest: require(`./webpack/dll/manifest/${dll}.json`)
-    //     })
-    // ),
+    ...Object.keys(dll_entries).map(
+      dll =>
+        new DllReferencePlugin({
+          context: path.resolve(__dirname, './webpack/dll'),
+          manifest: require(`./webpack/dll/manifest/${dll}.json`)
+          // scope: dll
+        })
+    ),
 
     new AutoDllPlugin({
       // inject: true,
@@ -182,29 +200,35 @@ module.exports = {
     // /**
     //  * 忽略国际化部分以减小 moment.js 体积，参考：https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
     //  */
-    new IgnorePlugin(/^\.\/locale$/, /moment$/),
+    // new IgnorePlugin(/^\.\/locale$/, /moment$/),
 
     // /**
     //  *  环境变量设置为生产模式以减小 react 或其他第三方插件体积，参考：https://reactjs.org/docs/add-react-to-an-existing-app.html#development-and-production-versions
     //  */
-    new DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production')
-      }
-    }),
+    // new DefinePlugin({
+    //   'process.env': {
+    //     NODE_ENV: JSON.stringify('production')
+    //   }
+    // }),
 
     /**
      * Webpack 任务前/后，使用此插件清除旧的编译文件
      */
-    new CleanWebpackPlugin(['dist'], {
-      exclude: ['dist/lib'],
-      verbose: false, // 不输出 log
-      beforeEmit: true // 在 Webpack 工作完成、输出文件前夕执行清除操作
-    })
+    new CleanWebpackPlugin(
+      [
+        // 'dist/asset', 'dist/async', 'dist/customizedVendor', 'dist/vendor', 'dist/*.js', 'dist/*.html', 'dist/*.map'
+        'dist'
+      ],
+      {
+        // exclude: ['dist/lib/*.js'],
+        verbose: false, // 不输出 log
+        beforeEmit: true // 在 Webpack 工作完成、输出文件前夕执行清除操作
+      }
+    )
 
-    /**
-     * 关于 Tree Shaking，Webpack 只标记未使用的依赖而不清除，需通过 UglifyJsPlugin 达到清除未使用代码的效果
-     */
+    // /**
+    //  * 关于 Tree Shaking，Webpack 只标记未使用的依赖而不清除，需通过 UglifyJsPlugin 达到清除未使用代码的效果
+    //  */
     // new UglifyJsPlugin({
     //   compress: {
     //     warnings: false

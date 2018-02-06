@@ -1,12 +1,13 @@
 import 'babel-polyfill'
 import React from 'react'
-import ReactDom from 'react-dom'
-import moment from 'moment'
-// import md5 from 'md5'
-// import axios from 'axios'
+// import ReactDom from 'react-dom'
+// import 'react-router-dom'
+// import moment from 'moment'
+import md5 from 'md5'
+import axios from 'axios'
 
 import { fn1, fn2 } from '@common'
-// import { fnA } from '@layout'
+import { fnA } from '@layout'
 import { test } from './test'
 // import { test2 } from './test2'
 
@@ -24,11 +25,11 @@ import { test } from './test'
 //   console.log(test)
 // })
 
-Object.assign(window, { React, ReactDom, moment })
+// Object.assign(window, { React, ReactDom, moment })
 
-const App = () => <div className="test">{`App Text `}</div>
+// const App = () => <div className="test">{`App Text `}</div>
 
-const testFn = () => 'pageA 3 '
+const testFn = () => 'pageA 3'
 
 console.log(testFn())
 // console.log(test2)

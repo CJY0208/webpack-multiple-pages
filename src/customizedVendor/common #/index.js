@@ -23,7 +23,7 @@ export class Test {
   async test() {
     console.log('common Test')
     await delay(2000)
-    console.log('common Test class after 2000 ms')
+    console.log('common Test class after 2000 ms ')
   }
 }
 

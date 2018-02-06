@@ -1,10 +1,9 @@
 import 'babel-polyfill'
 import React from 'react'
-
-console.log('done')
 import ReactDOM from 'react-dom'
 import { Router, Route, Link, withRouter } from 'react-router-dom'
 import { createHashHistory } from 'history'
+// import 'axios'
 
 console.log(withRouter)
 

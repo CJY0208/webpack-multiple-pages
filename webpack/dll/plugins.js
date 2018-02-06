@@ -1,11 +1,11 @@
 const path = require('path')
-const CleanWebpackPlugin = require('clean-webpack-plugin')
 const {
-  optimize: { UglifyJsPlugin } = {},
+  optimize: { CommonsChunkPlugin, UglifyJsPlugin } = {},
   // DllPlugin,
   DefinePlugin,
   IgnorePlugin,
   NamedChunksPlugin,
+  NamedModulesPlugin,
   HashedModuleIdsPlugin
 } = require('webpack')
 
@@ -18,16 +18,8 @@ module.exports = {
      * 可预测的长效缓存（扩展）：https://medium.com/webpack/predictable-long-term-caching-with-webpack-d3eee1d3fa31
      */
     new NamedChunksPlugin(),
-    new HashedModuleIdsPlugin(),
-
-    /**
-     * Webpack 任务前/后，使用此插件清除旧的编译文件
-     */
-    new CleanWebpackPlugin([path.resolve(__dirname, '../../dist/lib')], {
-      verbose: false, // 不输出 log
-      allowExternal: true, // 允许 CleanWebpackPlugin 清除本配置目录外的文件
-      beforeEmit: true // 在 Webpack 工作完成、输出文件前夕执行清除操作
-    }),
+    new NamedModulesPlugin(),
+    // new HashedModuleIdsPlugin(),
 
     /**
      * 忽略国际化部分以减小 moment.js 体积，参考：https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
@@ -43,9 +35,9 @@ module.exports = {
       }
     }),
 
-    /**
-     * 此处与 Tree Shaking 无关，单纯对第三方模块做压缩处理
-     */
+    // /**
+    //  * 此处与 Tree Shaking 无关，单纯对第三方模块做压缩处理
+    //  */
     new UglifyJsPlugin({
       compress: {
         warnings: false
