@@ -162,7 +162,7 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
           // console.log(Object.keys(htmlPluginData))
           // console.log(htmlPluginData.outputName)
           htmlPluginData.assets.js.splice(
-            1,
+            -1,
             0,
             ...this.__record[htmlPluginData.outputName].assets
           )

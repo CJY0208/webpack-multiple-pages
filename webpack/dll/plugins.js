@@ -18,8 +18,8 @@ module.exports = {
      * 可预测的长效缓存（扩展）：https://medium.com/webpack/predictable-long-term-caching-with-webpack-d3eee1d3fa31
      */
     new NamedChunksPlugin(),
-    new NamedModulesPlugin(),
-    // new HashedModuleIdsPlugin(),
+    // new NamedModulesPlugin(),
+    new HashedModuleIdsPlugin(),
 
     /**
      * 忽略国际化部分以减小 moment.js 体积，参考：https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
@@ -35,9 +35,9 @@ module.exports = {
       }
     }),
 
-    // /**
-    //  * 此处与 Tree Shaking 无关，单纯对第三方模块做压缩处理
-    //  */
+    /**
+     * 此处与 Tree Shaking 无关，单纯对第三方模块做压缩处理
+     */
     new UglifyJsPlugin({
       compress: {
         warnings: false

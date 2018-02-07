@@ -24,6 +24,7 @@ const {
   customizedVendor: customized_vendor_entries,
   dll: dll_entries
 } = entries
+const project_entry_names = Object.keys(project_entries)
 const customized_vendor_entry_names = Object.keys(customized_vendor_entries)
 const vendor_entry_names = Object.keys(vendor_entries)
 const dll_entry_names = Object.keys(dll_entries)
@@ -38,12 +39,7 @@ const queryDependencies = (
 
 module.exports = {
   // watch: true,
-  entry: Object.assign(
-    {},
-    project_entries
-    // vendor_entries
-    // customized_vendor_entries
-  ),
+  entry: project_entries,
   output: {
     path: path.resolve(__dirname, './dist'),
     filename: 'asset/[name].[chunkhash:6].js',
@@ -90,87 +86,81 @@ module.exports = {
         new CommonsChunkPlugin({
           name: key,
           filename: 'customizedVendor/[name].[chunkhash:6].js',
-          chunks: Object.keys(project_entries),
-          minChunks({ resource = '' }) {
-            // console.log(path.resolve(value))
-            // console.log(`${key} #`)
-            // console.log(resource)
-            // console.log(/customizedVendor/.test(resource) && new RegExp(`${key} #`).test(resource))
-            // return false
-            return (
-              /customizedVendor/.test(resource) &&
-              new RegExp(`${key} #`).test(resource)
-            )
-            // new RegExp(path.resolve(value)).test(path.resolve(resource))
-          }
+          chunks: project_entry_names,
+          minChunks: ({ resource = '' }) =>
+            /customizedVendor/.test(resource) &&
+            new RegExp(`${key} #`).test(resource)
         })
     ),
+    new CommonsChunkPlugin({
+      name: '__customizedVendorShare',
+      filename: 'customizedVendor/[name].[chunkhash:6].js',
+      chunks: [...project_entry_names, ...customized_vendor_entry_names],
+      minChunks: ({ resource = '' }, count) =>
+        count >= 2 && /customizedVendor/.test(resource)
+    }),
+
     ...Object.entries(vendor_entries).map(
       ([key, value]) =>
         new CommonsChunkPlugin({
           name: key,
           filename: 'vendor/[name].[chunkhash:6].js',
-          chunks: [
-            ...Object.keys(project_entries)
-            // ...customized_vendor_entry_names
-          ],
+          chunks: [...project_entry_names, ...customized_vendor_entry_names],
           minChunks(module, count) {
+            const {
+              isDependentByMultipleChunk: __isDependentByMultipleChunk
+            } = module
+
             /**
              * 是否被当前 Chunk 引用
              */
-            let isBeDependentByCurrentChunk = false
+            let isDependentByCurrentChunk
+
             /**
              * 是否被多个 Chunk 引用
              */
-            const isBeDependentByMultipleChunk =
-              Object.entries(vendor_entries)
-                .map(([__key, value]) => {
-                  const __isBeDependentByCurrentChunk = value.some(vendor =>
-                    queryDependencies(module, vendor)
-                  )
-                  if (__key === key)
-                    isBeDependentByCurrentChunk = __isBeDependentByCurrentChunk
-                  return __isBeDependentByCurrentChunk
+            let isDependentByMultipleChunk
+
+            switch (__isDependentByMultipleChunk) {
+              case true:
+              case false:
+                isDependentByCurrentChunk = value.some(vendor =>
+                  queryDependencies(module, vendor)
+                )
+                isDependentByMultipleChunk = __isDependentByMultipleChunk
+                break
+              default:
+                isDependentByCurrentChunk = false
+                isDependentByMultipleChunk =
+                  Object.entries(vendor_entries)
+                    .map(([__key, value]) => {
+                      const __isDependentByCurrentChunk = value.some(vendor =>
+                        queryDependencies(module, vendor)
+                      )
+                      if (__key === key)
+                        isDependentByCurrentChunk = __isDependentByCurrentChunk
+                      return __isDependentByCurrentChunk
+                    })
+                    .filter(res => res).length >= 2
+
+                // 缓存 “是否被多个 Chunk 引用” 统计结果
+                Object.assign(module, {
+                  isDependentByMultipleChunk
                 })
-                .filter(res => res).length >= 2
+            }
 
-            // const { resource = '', sourceRequest = '', reasons = [], request = '' } = module
-
-            // console.log(Object.keys(module))
-            // if (count >= 2) {
-            //   console.log(resource)
-            // }
-            // if (
-            //   new RegExp('process').test(request)
-            // ) {
-            // console.log(request, count)
-            // console.log(module.reasons)
-            // console.log(isBeDependentByMultipleChunk)
-            // return false
-            // console.log(Object.keys(module))
-            // console.log(request)
-            // console.log(request)
-            // console.log(module.sourceRequest)
-            // console.log(reasonsResource)
-
-            // console.log(module.reasons)
-            // }
-
-            return !isBeDependentByMultipleChunk && isBeDependentByCurrentChunk
+            return !isDependentByMultipleChunk && isDependentByCurrentChunk
           }
         })
     ),
     new CommonsChunkPlugin({
-      name: '__share',
-      filename: 'vendor/__share.[chunkhash:6].js',
-      chunks: [...Object.keys(project_entries), ...vendor_entry_names],
-      minChunks(module, count) {
-        if (count >= 2) {
-          console.log(module.resource)
-        }
-        return count >= 2 && /node_modules/.test(module.resource)
-      }
+      name: '__vendorShare',
+      filename: 'vendor/[name].[chunkhash:6].js',
+      chunks: [...project_entry_names, ...vendor_entry_names],
+      minChunks: ({ resource = '' }, count) =>
+        count >= 2 && /node_modules/.test(resource)
     }),
+
     /**
      * 这个 CommonsChunkPlugin 的作用是分离 Webpack runtime & manifest
      * 民间资料：https://segmentfault.com/a/1190000010317802
@@ -179,11 +169,9 @@ module.exports = {
     new CommonsChunkPlugin({
       name: '__runtime',
       filename: '__runtime.[chunkhash:6].js'
-      // chunks: [...vendor_entry_names, ...customized_vendor_entry_names]
-      // minChunks: Infinity
     }),
 
-    ...Object.keys(project_entries).map(
+    ...project_entry_names.map(
       project =>
         new HtmlWebpackPlugin({
           inject: false,
@@ -191,12 +179,11 @@ module.exports = {
           template: 'template.html',
           chunks: [
             '__runtime',
-            '__share',
-            // ...customized_vendor_entry_names,
-            // ...vendor_entry_names,
+            '__vendorShare',
+            '__customizedVendorShare',
             project
           ],
-          chunksSortMode: 'dependency',
+          chunksSortMode: 'manual',
           /**
            * html-minifier DOC: https://github.com/kangax/html-minifier
            */
@@ -251,17 +238,10 @@ module.exports = {
     /**
      * Webpack 任务前/后，使用此插件清除旧的编译文件
      */
-    new CleanWebpackPlugin(
-      [
-        // 'dist/asset', 'dist/async', 'dist/customizedVendor', 'dist/vendor', 'dist/*.js', 'dist/*.html', 'dist/*.map'
-        'dist'
-      ],
-      {
-        // exclude: ['dist/lib/*.js'],
-        verbose: false, // 不输出 log
-        beforeEmit: true // 在 Webpack 工作完成、输出文件前夕执行清除操作
-      }
-    )
+    new CleanWebpackPlugin(['dist'], {
+      verbose: false, // 不输出 log
+      beforeEmit: true // 在 Webpack 工作完成、输出文件前夕执行清除操作
+    })
 
     // /**
     //  * 关于 Tree Shaking，Webpack 只标记未使用的依赖而不清除，需通过 UglifyJsPlugin 达到清除未使用代码的效果
@@ -270,7 +250,7 @@ module.exports = {
     //   compress: {
     //     warnings: false
     //   },
-    //   beautify: false,
+    //   beautify: true,
     //   output: {
     //     comments: false
     //   },

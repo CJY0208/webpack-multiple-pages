@@ -1,4 +1,8 @@
 import 'babel-polyfill'
+// import { common_common as aaa } from '../common_common'
+// console.log(common_common)
+
+// export const common_common = aaa
 
 export const fn1 = () => {
   console.log('common fn1')
