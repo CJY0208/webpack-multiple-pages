@@ -16,13 +16,19 @@ const parseEntries = entries =>
 const queryDependencies = dep => {
   let result = []
   const { userRequest, module } = dep
-  const { dependencies = [], fileDependencies: [filepath = ''] = [] } =
+  const {
+    dependencies = [],
+    fileDependencies: [filepath = ''] = [],
+    id,
+    variables
+  } =
     module || {}
+  // if (/process/.test(request)) console.log(request)
 
   if (typeof userRequest !== 'undefined') {
     result.push(userRequest)
     // console.log(Object.keys(dep.module))
-    // console.log(dep.module.fileDependencies)
+    // console.log(dep.module)
     // console.log(userRequest,
     //   isVendor(userRequest) ||
     //   isDll(userRequest) ||
@@ -30,6 +36,14 @@ const queryDependencies = dep => {
     //   isNotFromNodeModules(filepath)
     // )
   }
+
+  // console.log(variables)
+
+  // if (/adapters/.test(id)) {
+  //   console.log('bingo~~', id)
+  //   console.log(module.variables[0].dependencies)
+  //   // console.log(Object.keys(module))
+  // }
 
   if (
     // true

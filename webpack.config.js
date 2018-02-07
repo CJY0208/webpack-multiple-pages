@@ -75,35 +75,6 @@ module.exports = {
     )
   },
   plugins: [
-    ...Object.keys(project_entries).map(
-      project =>
-        new HtmlWebpackPlugin({
-          inject: false,
-          filename: `${project}.html`,
-          template: 'template.html',
-          chunks: [
-            '__runtime',
-            // ...customized_vendor_entry_names,
-            // ...vendor_entry_names,
-            project
-          ],
-          chunksSortMode: 'dependency',
-          /**
-           * html-minifier DOC: https://github.com/kangax/html-minifier
-           */
-          minify: {
-            minifyCSS: true,
-            minifyJS: true
-            // collapseWhitespace: true
-          }
-        })
-    ),
-
-    new HtmlWebpackAutoDependenciesPlugin({
-      entries,
-      dllPath: 'lib/'
-    }),
-
     /**
      * NamedChunksPlugin 和 HashedModuleIdsPlugin 保证模块 hash 不受编译顺序的影响
      * 民间资料：https://www.imooc.com/article/details/id/21538
@@ -140,30 +111,66 @@ module.exports = {
           name: key,
           filename: 'vendor/[name].[chunkhash:6].js',
           chunks: [
-            ...Object.keys(project_entries),
-            ...customized_vendor_entry_names
+            ...Object.keys(project_entries)
+            // ...customized_vendor_entry_names
           ],
-          minChunks(module) {
-            const { resource = '', sourceRequest = '', reasons = [] } = module
+          minChunks(module, count) {
+            /**
+             * 是否被当前 Chunk 引用
+             */
+            let isBeDependentByCurrentChunk = false
+            /**
+             * 是否被多个 Chunk 引用
+             */
+            const isBeDependentByMultipleChunk =
+              Object.entries(vendor_entries)
+                .map(([__key, value]) => {
+                  const __isBeDependentByCurrentChunk = value.some(vendor =>
+                    queryDependencies(module, vendor)
+                  )
+                  if (__key === key)
+                    isBeDependentByCurrentChunk = __isBeDependentByCurrentChunk
+                  return __isBeDependentByCurrentChunk
+                })
+                .filter(res => res).length >= 2
+
+            // const { resource = '', sourceRequest = '', reasons = [], request = '' } = module
 
             // console.log(Object.keys(module))
-            if (
-              new RegExp('/node_modules/process/browser.js').test(sourceRequest)
-            ) {
-              console.log(Object.keys(module))
-              console.log(sourceRequest)
-              // console.log(request)
-              // console.log(module.sourceRequest)
-              // console.log(reasonsResource)
+            // if (count >= 2) {
+            //   console.log(resource)
+            // }
+            // if (
+            //   new RegExp('process').test(request)
+            // ) {
+            // console.log(request, count)
+            // console.log(module.reasons)
+            // console.log(isBeDependentByMultipleChunk)
+            // return false
+            // console.log(Object.keys(module))
+            // console.log(request)
+            // console.log(request)
+            // console.log(module.sourceRequest)
+            // console.log(reasonsResource)
 
-              // console.log(module.reasons)
-              // console.log(module.reasons)
-            }
+            // console.log(module.reasons)
+            // }
 
-            return value.some(vendor => queryDependencies(module, vendor))
+            return !isBeDependentByMultipleChunk && isBeDependentByCurrentChunk
           }
         })
     ),
+    new CommonsChunkPlugin({
+      name: '__share',
+      filename: 'vendor/__share.[chunkhash:6].js',
+      chunks: [...Object.keys(project_entries), ...vendor_entry_names],
+      minChunks(module, count) {
+        if (count >= 2) {
+          console.log(module.resource)
+        }
+        return count >= 2 && /node_modules/.test(module.resource)
+      }
+    }),
     /**
      * 这个 CommonsChunkPlugin 的作用是分离 Webpack runtime & manifest
      * 民间资料：https://segmentfault.com/a/1190000010317802
@@ -176,18 +183,48 @@ module.exports = {
       // minChunks: Infinity
     }),
 
-    /**
-     * Webpack Dll 功能：预编译第三方模块以提升业务代码打包速度
-     * 民间资料：https://segmentfault.com/a/1190000005969643
-     */
-    ...Object.keys(dll_entries).map(
-      dll =>
-        new DllReferencePlugin({
-          context: path.resolve(__dirname, './webpack/dll'),
-          manifest: require(`./webpack/dll/manifest/${dll}.json`)
-          // scope: dll
+    ...Object.keys(project_entries).map(
+      project =>
+        new HtmlWebpackPlugin({
+          inject: false,
+          filename: `${project}.html`,
+          template: 'template.html',
+          chunks: [
+            '__runtime',
+            '__share',
+            // ...customized_vendor_entry_names,
+            // ...vendor_entry_names,
+            project
+          ],
+          chunksSortMode: 'dependency',
+          /**
+           * html-minifier DOC: https://github.com/kangax/html-minifier
+           */
+          minify: {
+            minifyCSS: true,
+            minifyJS: true
+            // collapseWhitespace: true
+          }
         })
     ),
+
+    new HtmlWebpackAutoDependenciesPlugin({
+      entries,
+      dllPath: 'lib/'
+    }),
+
+    // /**
+    //  * Webpack Dll 功能：预编译第三方模块以提升业务代码打包速度
+    //  * 民间资料：https://segmentfault.com/a/1190000005969643
+    //  */
+    // ...Object.keys(dll_entries).map(
+    //   dll =>
+    //     new DllReferencePlugin({
+    //       context: path.resolve(__dirname, './webpack/dll'),
+    //       manifest: require(`./webpack/dll/manifest/${dll}.json`)
+    //       // scope: dll
+    //     })
+    // ),
 
     new AutoDllPlugin({
       // inject: true,
