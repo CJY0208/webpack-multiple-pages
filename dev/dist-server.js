@@ -1,6 +1,9 @@
 const path = require('path')
-const express = require('express'),
-  app = express()
+const compression = require('compression')
+const express = require('express')
+const app = express()
+
+app.use(compression()) // gzip 压缩
 
 app.use(
   '/v4',
