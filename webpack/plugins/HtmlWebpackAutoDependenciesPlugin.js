@@ -23,30 +23,12 @@ const queryDependencies = dep => {
     variables
   } =
     module || {}
-  // if (/process/.test(request)) console.log(request)
 
   if (typeof userRequest !== 'undefined') {
     result.push(userRequest)
-    // console.log(Object.keys(dep.module))
-    // console.log(dep.module)
-    // console.log(userRequest,
-    //   isVendor(userRequest) ||
-    //   isDll(userRequest) ||
-    //   isCustomizedVendor(userRequest) ||
-    //   isNotFromNodeModules(filepath)
-    // )
   }
 
-  // console.log(variables)
-
-  // if (/adapters/.test(id)) {
-  //   console.log('bingo~~', id)
-  //   console.log(module.variables[0].dependencies)
-  //   // console.log(Object.keys(module))
-  // }
-
   if (
-    // true
     typeof userRequest === 'undefined' ||
     isVendor(userRequest) ||
     isDll(userRequest) ||
@@ -88,7 +70,7 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
     compiler.plugin('after-compile', (compilation, cb) => {
       compilation.chunks.forEach(chunk => {
         if (!__project.includes(chunk.name)) return
-        // console.log(chunk.name)
+
         this.recordDependencies(
           chunk.name,
           [
@@ -126,8 +108,6 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
         )
       })
 
-      // console.log(this.__record)
-
       if (typeof this.__record !== 'undefined') {
         const allChunks = compilation.getStats().toJson().chunks
         const chunkFilesMap = allChunks.reduce((res, chunk) => {
@@ -135,8 +115,7 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
             [chunk.names[0]]: chunk.files[0]
           })
         }, {})
-        // console.log(chunkFilesMap)
-        // console.log(JSON.stringify(this.__record, null, '  '))
+
         Object.entries(this.__record).forEach(([key, value]) => {
           this.__record[key].assetsDll = [
             ...value.dll.map(dll => `${this.__dllPath}${dll}`)
@@ -148,7 +127,6 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
             )
           ]
         })
-        // console.log(this.__record)
       }
 
       cb()
@@ -158,9 +136,6 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
       compilation.plugin(
         'html-webpack-plugin-before-html-generation',
         (htmlPluginData, cb) => {
-          // console.log('html-webpack-plugin-before-html-generation')
-          // console.log(Object.keys(htmlPluginData))
-          // console.log(htmlPluginData.outputName)
           htmlPluginData.assets.js.splice(
             -1,
             0,
@@ -170,7 +145,7 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
             ...this.__record[htmlPluginData.outputName].assetsDll,
             ...htmlPluginData.assets.js
           ]
-          // return htmlPluginData
+
           cb(null, htmlPluginData)
         }
       )

@@ -241,20 +241,20 @@ module.exports = {
     new CleanWebpackPlugin(['dist'], {
       verbose: false, // 不输出 log
       beforeEmit: true // 在 Webpack 工作完成、输出文件前夕执行清除操作
-    })
+    }),
 
-    // /**
-    //  * 关于 Tree Shaking，Webpack 只标记未使用的依赖而不清除，需通过 UglifyJsPlugin 达到清除未使用代码的效果
-    //  */
-    // new UglifyJsPlugin({
-    //   compress: {
-    //     warnings: false
-    //   },
-    //   beautify: true,
-    //   output: {
-    //     comments: false
-    //   },
-    //   sourceMap: false
-    // })
+    /**
+     * 关于 Tree Shaking，Webpack 只标记未使用的依赖而不清除，需通过 UglifyJsPlugin 达到清除未使用代码的效果
+     */
+    new UglifyJsPlugin({
+      compress: {
+        warnings: false
+      },
+      beautify: true,
+      output: {
+        comments: false
+      },
+      sourceMap: false
+    })
   ]
 }
