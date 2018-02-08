@@ -2,7 +2,6 @@ import 'babel-polyfill'
 // import React from 'react'
 // import ReactDom from 'react-dom'
 // import 'react-router-dom'
-// import moment from 'moment'
 // import md5 from 'md5'
 // import axios from 'axios'
 

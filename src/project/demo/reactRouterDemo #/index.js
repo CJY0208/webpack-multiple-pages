@@ -1,16 +1,16 @@
 import 'babel-polyfill'
-import React from 'react'
+import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-import { Router, Route, Link, withRouter } from 'react-router-dom'
-import { createHashHistory } from 'history'
+import { HashRouter as Router, Route, Link, withRouter } from 'react-router-dom'
+// import { createHashHistory } from 'history'
 // import 'axios'
 
-console.log(withRouter)
+// console.log(withRouter)
 
-const history = createHashHistory()
+// const history = createHashHistory()
 
 const BasicExample = () => (
-  <Router {...{ history }}>
+  <Router>
     <div>
       <ul>
         <li>
@@ -33,11 +33,16 @@ const BasicExample = () => (
   </Router>
 )
 
-const Home = () => (
-  <div>
-    <h2>Home</h2>
-  </div>
-)
+@withRouter
+class Home extends Component {
+  render() {
+    return (
+      <div>
+        <h2>Home</h2>
+      </div>
+    )
+  }
+}
 
 const About = () => (
   <div>

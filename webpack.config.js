@@ -56,10 +56,16 @@ module.exports = {
         test: /.js$/,
         exclude: /node_modules/,
         use: ['babel-loader']
+      },
+      {
+        test: /.vue$/,
+        exclude: /node_modules/,
+        use: ['vue-loader']
       }
     ]
   },
   resolve: {
+    extensions: ['.js', '.vue', '.json'],
     alias: Object.entries(customized_vendor_entries).reduce(
       (alias, [key, value]) =>
         typeof value !== 'string'
@@ -226,14 +232,14 @@ module.exports = {
     //  */
     // new IgnorePlugin(/^\.\/locale$/, /moment$/),
 
-    // /**
-    //  *  环境变量设置为生产模式以减小 react 或其他第三方插件体积，参考：https://reactjs.org/docs/add-react-to-an-existing-app.html#development-and-production-versions
-    //  */
-    // new DefinePlugin({
-    //   'process.env': {
-    //     NODE_ENV: JSON.stringify('production')
-    //   }
-    // }),
+    /**
+     *  环境变量设置为生产模式以减小 react 或其他第三方插件体积，参考：https://reactjs.org/docs/add-react-to-an-existing-app.html#development-and-production-versions
+     */
+    new DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('production')
+      }
+    }),
 
     /**
      * Webpack 任务前/后，使用此插件清除旧的编译文件
@@ -250,7 +256,7 @@ module.exports = {
       compress: {
         warnings: false
       },
-      beautify: true,
+      beautify: false,
       output: {
         comments: false
       },
