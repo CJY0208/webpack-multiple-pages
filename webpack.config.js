@@ -38,7 +38,6 @@ const queryDependencies = (
   !/dll-reference/.test(sourceRequest)
 
 module.exports = {
-  // watch: true,
   entry: project_entries,
   output: {
     path: path.resolve(__dirname, './dist'),
@@ -55,7 +54,7 @@ module.exports = {
       {
         test: /.js$/,
         exclude: /node_modules/,
-        use: ['babel-loader']
+        use: ['babel-loader', 'eslint-loader']
       },
       {
         test: /.vue$/,
@@ -262,5 +261,15 @@ module.exports = {
       },
       sourceMap: false
     })
-  ]
+  ],
+  watch: true,
+  stats: {
+    assets: true,
+    chunks: false,
+    modules: false,
+    children: false,
+    errors: true,
+    errorDetails: true,
+    warnings: true
+  }
 }

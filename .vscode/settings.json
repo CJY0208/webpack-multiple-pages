@@ -6,9 +6,5 @@
     "yarn.lock": true,
     "package-lock.json": true,
     "**/*.map": true
-  },
-  "[javascript]": {
-    "editor.formatOnSave": false,
-    "editor.formatOnPaste": false
   }
 }

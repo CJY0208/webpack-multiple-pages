@@ -47,7 +47,7 @@ module.exports = Object.assign({}, business_entries, {
     react: ['react', 'react-dom'],
     // vue: ['vue'],
     vueTools: ['vuex', 'vue-router'],
-    ramda: ['ramda']
+    lodashFp: ['lodash/fp']
     // reactRouter: ['react-router-dom', 'history'],
     // reactRouter: ['react-router-dom'],
   }
