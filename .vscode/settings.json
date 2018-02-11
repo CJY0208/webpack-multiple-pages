@@ -6,5 +6,11 @@
     "yarn.lock": true,
     "package-lock.json": true,
     "**/*.map": true
+  },
+  "files.associations": {
+    ".babelrc": "jsonc",
+    ".eslintrc.json": "jsonc",
+    "package.json": "jsonc",
+    ".prettierrc": "jsonc"
   }
 }

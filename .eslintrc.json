@@ -1,0 +1,46 @@
+{
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "rules": {
+    //参考资料：http://eslint.cn/docs/rules/
+    "semi": "off", //要求或禁止使用分号而不是 ASI
+    "no-undef": "error", //禁用未声明的变量，除非它们在 /*globals */ 注释中被提到
+    "no-unused-vars": "off", //禁止出现未使用过的变量
+    "no-use-before-define": "off", //不允许在变量定义之前使用它们
+    "no-empty": "warn", //禁止空语句块
+    "no-empty-function": "warn", //禁止出现空函数
+    "eqeqeq": "warn", //要求使用 === 和 !==
+    "no-lone-blocks": "warn", //禁用不必要的嵌套块
+    "no-loop-func": "warn", //禁止在循环中出现 function 声明和表达式
+    "no-native-reassign": "error", //禁止对原生对象赋值
+    "no-alert": "off", //禁用 alert、confirm 和 prompt
+    "no-extra-label": "warn", //禁用不必要的标签
+    "no-eval": "error", //禁用 eval()
+    "no-redeclare": "error", //禁止使用 var 多次声明同一变量
+    "radix": "warn", //强制在 parseInt() 使用基数参数
+    "no-return-assign": "warn", //禁止在 return 语句中使用赋值语句
+    "no-bitwise": "off", //禁用按位运算符（防止类似于将 && 错写为 & 的错误）
+    "no-mixed-spaces-and-tabs": "warn", //不允许空格和 tab 混合缩进
+    "max-depth": ["warn", { "max": 4 }], //强制可嵌套的块的最大深度
+    "max-params": ["warn", { "max": 4 }], //强制 function 定义中最多允许的参数数量
+    "max-lines": ["warn", { "max": 1000 }], //强制最大行数
+    "no-const-assign": "error", //禁止修改 const 声明的变量
+    "prefer-template": "warn", //要求使用模板字面量而非字符串连接
+    "no-var": "warn", //要求使用 let 或 const 而不是 var
+    "no-implicit-globals": "error", //禁止在全局范围内使用 var 和命名的 function 声明
+    "wrap-iife": "error", //要求 IIFE 使用括号括起来
+    "no-extra-semi": "warn" //禁止不必要的分号
+  },
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "allowImportExportEverywhere": true,
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  }
+}

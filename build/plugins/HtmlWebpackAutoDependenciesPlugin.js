@@ -1,8 +1,8 @@
 let isDll = () => false
-let isVendor = () => false
+let isLib = () => false
 const isNotFromNodeModules = path => !/node_modules/.test(path)
 const isDllReference = value => /^dll-reference/.test(value)
-const isCustomizedVendor = value => /^@/.test(value)
+const isVendor = value => /^@/.test(value)
 const parseEntries = entries =>
   Object.entries(entries).reduce((res, [key, value]) => {
     if (!Array.isArray(value)) return res
@@ -30,9 +30,9 @@ const queryDependencies = dep => {
 
   if (
     typeof userRequest === 'undefined' ||
-    isVendor(userRequest) ||
+    isLib(userRequest) ||
     isDll(userRequest) ||
-    isCustomizedVendor(userRequest) ||
+    isVendor(userRequest) ||
     isNotFromNodeModules(filepath)
   ) {
     result = dependencies.reduce(
@@ -48,11 +48,11 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
   constructor({ entries, dllPath }) {
     this.__dllPath = dllPath
 
-    const { vendor, project, dll } = entries
-    this.__vendor = parseEntries(vendor)
+    const { lib, project, dll } = entries
+    this.__lib = parseEntries(lib)
     this.__dll = parseEntries(dll)
     isDll = value => value in this.__dll
-    isVendor = value => value in this.__vendor
+    isLib = value => value in this.__lib
 
     this.__project = Object.keys(project)
   }
@@ -60,12 +60,12 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
   recordDependencies(projectName, dependencies) {
     this.__record = this.__record || {}
 
-    dependencies.vendor = [...new Set(dependencies.vendor)]
+    dependencies.lib = [...new Set(dependencies.lib)]
     this.__record[`${projectName}.html`] = dependencies
   }
 
   apply(compiler) {
-    const { __project, __vendor } = this
+    const { __project, __lib } = this
 
     compiler.plugin('after-compile', (compilation, cb) => {
       compilation.chunks.forEach(chunk => {
@@ -78,10 +78,7 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
               chunk.origins
                 .reduce((res, dep) => [...res, ...queryDependencies(dep)], [])
                 .filter(
-                  dep =>
-                    isVendor(dep) ||
-                    isDllReference(dep) ||
-                    isCustomizedVendor(dep)
+                  dep => isLib(dep) || isDllReference(dep) || isVendor(dep)
                 )
             )
           ].reduce(
@@ -94,15 +91,14 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
                     .replace('_', '.')
                     .concat('.js')
                 )
-              if (isCustomizedVendor(dep))
-                res.customizedVendor.push(dep.replace('@', ''))
-              if (isVendor(dep)) res.vendor.push(__vendor[dep])
+              if (isVendor(dep)) res.vendfor.push(dep.replace('@', ''))
+              if (isLib(dep)) res.lib.push(__lib[dep])
               return res
             },
             {
               dll: [],
-              vendor: [],
-              customizedVendor: []
+              lib: [],
+              vendfor: []
             }
           )
         )
@@ -121,10 +117,8 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
             ...value.dll.map(dll => `${this.__dllPath}${dll}`)
           ]
           this.__record[key].assets = [
-            ...value.vendor.map(vendor => chunkFilesMap[vendor]),
-            ...value.customizedVendor.map(
-              customizedVendor => chunkFilesMap[customizedVendor]
-            )
+            ...value.lib.map(lib => chunkFilesMap[lib]),
+            ...value.vendfor.map(vendfor => chunkFilesMap[vendfor])
           ]
         })
       }

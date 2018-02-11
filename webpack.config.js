@@ -20,28 +20,29 @@ const HtmlWebpackAutoDependenciesPlugin = require('./build/plugins/HtmlWebpackAu
 const entries = require('./build/entries')
 const {
   project: project_entries,
+  lib: lib_entries,
   vendor: vendor_entries,
-  customizedVendor: customized_vendor_entries,
   dll: dll_entries
 } = entries
 const project_entry_names = Object.keys(project_entries)
-const customized_vendor_entry_names = Object.keys(customized_vendor_entries)
 const vendor_entry_names = Object.keys(vendor_entries)
+const lib_entry_names = Object.keys(lib_entries)
 const dll_entry_names = Object.keys(dll_entries)
 
-const queryDependencies = (
+const queryLibDependencies = (
   { resource = '', sourceRequest = '', reasons = [] } = {},
-  vendor
+  libName
 ) =>
-  ((new RegExp(vendor).test(resource) && /node_modules/.test(resource)) ||
-    reasons.some(({ module }) => queryDependencies(module, vendor))) &&
+  ((new RegExp(libName).test(resource) &&
+    (/node_modules/.test(resource) || /build\/lib/.test(resource))) ||
+    reasons.some(({ module }) => queryLibDependencies(module, libName))) &&
   !/dll-reference/.test(sourceRequest)
 
 module.exports = {
   entry: project_entries,
   output: {
     path: path.resolve(__dirname, './dist'),
-    filename: 'asset/[name].[chunkhash:6].js',
+    filename: 'project/[name].[chunkhash:6].js',
     /**
      * chunkFilename 只用来打包 require.ensure 或 import() 方法中引入的异步模块，若无异步模块则不会生成任何 chunk 块文件
      * 民间资料：https://www.cnblogs.com/toward-the-sun/p/6147324.html?utm_source=itdadao&utm_medium=referral
@@ -68,7 +69,7 @@ module.exports = {
     alias: {
       // 'vue': 'vue/dist/vue.esm.js',
       'lodash/fp': path.resolve(__dirname, './build/lib/lodash/fp'),
-      ...Object.entries(customized_vendor_entries).reduce(
+      ...Object.entries(vendor_entries).reduce(
         (alias, [key, value]) =>
           typeof value !== 'string'
             ? alias
@@ -90,31 +91,30 @@ module.exports = {
     // new HashedModuleIdsPlugin(),
     new NamedModulesPlugin(),
 
-    ...Object.entries(customized_vendor_entries).map(
-      ([key, value]) =>
-        new CommonsChunkPlugin({
-          name: key,
-          filename: 'customizedVendor/[name].[chunkhash:6].js',
-          chunks: project_entry_names,
-          minChunks: ({ resource = '' }) =>
-            /customizedVendor/.test(resource) &&
-            new RegExp(`${key} #`).test(resource)
-        })
-    ),
-    new CommonsChunkPlugin({
-      name: '__customizedVendorShare',
-      filename: 'customizedVendor/[name].[chunkhash:6].js',
-      chunks: [...project_entry_names, ...customized_vendor_entry_names],
-      minChunks: ({ resource = '' }, count) =>
-        count >= 2 && /customizedVendor/.test(resource)
-    }),
-
     ...Object.entries(vendor_entries).map(
       ([key, value]) =>
         new CommonsChunkPlugin({
           name: key,
           filename: 'vendor/[name].[chunkhash:6].js',
-          chunks: [...project_entry_names, ...customized_vendor_entry_names],
+          chunks: project_entry_names,
+          minChunks: ({ resource = '' }) =>
+            /vendor/.test(resource) && new RegExp(`${key} #`).test(resource)
+        })
+    ),
+    new CommonsChunkPlugin({
+      name: '__vendorShare',
+      filename: 'vendor/[name].[chunkhash:6].js',
+      chunks: [...project_entry_names, ...vendor_entry_names],
+      minChunks: ({ resource = '' }, count) =>
+        count >= 2 && /vendor/.test(resource)
+    }),
+
+    ...Object.entries(lib_entries).map(
+      ([key, value]) =>
+        new CommonsChunkPlugin({
+          name: key,
+          filename: 'lib/[name].[chunkhash:6].js',
+          chunks: [...project_entry_names, ...vendor_entry_names],
           minChunks(module, count) {
             const {
               isDependentByMultipleChunk: __isDependentByMultipleChunk
@@ -133,18 +133,18 @@ module.exports = {
             switch (__isDependentByMultipleChunk) {
               case true:
               case false:
-                isDependentByCurrentChunk = value.some(vendor =>
-                  queryDependencies(module, vendor)
+                isDependentByCurrentChunk = value.some(lib =>
+                  queryLibDependencies(module, lib)
                 )
                 isDependentByMultipleChunk = __isDependentByMultipleChunk
                 break
               default:
                 isDependentByCurrentChunk = false
                 isDependentByMultipleChunk =
-                  Object.entries(vendor_entries)
+                  Object.entries(lib_entries)
                     .map(([__key, value]) => {
-                      const __isDependentByCurrentChunk = value.some(vendor =>
-                        queryDependencies(module, vendor)
+                      const __isDependentByCurrentChunk = value.some(lib =>
+                        queryLibDependencies(module, lib)
                       )
                       if (__key === key)
                         isDependentByCurrentChunk = __isDependentByCurrentChunk
@@ -163,11 +163,12 @@ module.exports = {
         })
     ),
     new CommonsChunkPlugin({
-      name: '__vendorShare',
-      filename: 'vendor/[name].[chunkhash:6].js',
-      chunks: [...project_entry_names, ...vendor_entry_names],
+      name: '__libShare',
+      filename: 'lib/[name].[chunkhash:6].js',
+      chunks: [...project_entry_names, ...lib_entry_names],
       minChunks: ({ resource = '' }, count) =>
-        count >= 2 && /node_modules/.test(resource)
+        count >= 2 &&
+        (/node_modules/.test(resource) || /build\/lib/.test(resource))
     }),
 
     /**
@@ -186,12 +187,7 @@ module.exports = {
           inject: false,
           filename: `${project}.html`,
           template: 'template.html',
-          chunks: [
-            '__runtime',
-            '__vendorShare',
-            '__customizedVendorShare',
-            project
-          ],
+          chunks: ['__runtime', '__libShare', '__vendorShare', project],
           chunksSortMode: 'manual',
           /**
            * html-minifier DOC: https://github.com/kangax/html-minifier
@@ -235,14 +231,14 @@ module.exports = {
     //  */
     // new IgnorePlugin(/^\.\/locale$/, /moment$/),
 
-    // /**
-    //  *  环境变量设置为生产模式以减小 react 或其他第三方插件体积，参考：https://reactjs.org/docs/add-react-to-an-existing-app.html#development-and-production-versions
-    //  */
-    // new DefinePlugin({
-    //   'process.env': {
-    //     NODE_ENV: JSON.stringify('production')
-    //   }
-    // }),
+    /**
+     *  环境变量设置为生产模式以减小 react 或其他第三方插件体积，参考：https://reactjs.org/docs/add-react-to-an-existing-app.html#development-and-production-versions
+     */
+    new DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('production')
+      }
+    }),
 
     /**
      * Webpack 任务前/后，使用此插件清除旧的编译文件
@@ -254,6 +250,7 @@ module.exports = {
 
     /**
      * 关于 Tree Shaking，Webpack 只标记未使用的依赖而不清除，需通过 UglifyJsPlugin 达到清除未使用代码的效果
+     * 且 Tree Shaking 特性要求使用 es6 模块语法才能分析无效引用，所以 .babelrc文件中要关闭 babel 对 import 语法的转义
      */
     new UglifyJsPlugin({
       compress: {

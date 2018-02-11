@@ -1,6 +1,11 @@
 {
   "presets": [
-    "env",
+    ["env", {
+      /**
+       * 由于 Tree Shaking 特性可能对缓存功能有较大影响，此处关闭此特性
+       */
+      // "modules": false // Tree Shaking 特性要求使用 es6 模块语法才能分析无效引用，所以此处要关闭 babel 对 import 语法的转义
+    }],
     "react"
   ],
   "plugins": [

@@ -3,6 +3,11 @@ import ReactDom from 'react-dom'
 import md5 from 'md5'
 import 'axios'
 
+import fp from 'lodash/fp'
+import _ from 'lodash'
+
+Object.assign(window, { _, fp })
+
 import { fn1 } from '@commonDemo'
 import { fnB } from '@layoutDemo'
 import { test as test1 } from './test'
