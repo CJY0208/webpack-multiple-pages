@@ -1,14 +1,13 @@
 const path = require('path')
 const { plugins } = require('./plugins')
-const { dll: entry } = require('../entries')
+const { dll: entry } = require('../prod/entries')
 const { DllPlugin } = require('webpack')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
-console.log(entry)
 
 module.exports = {
   entry,
   output: {
-    path: path.resolve(__dirname, '../../dist/dll'),
+    path: path.resolve(__dirname, './files'),
     filename: '[name].[chunkhash].js',
     library: '[name]_[chunkhash]'
   },
@@ -20,13 +19,13 @@ module.exports = {
      */
     new CleanWebpackPlugin(
       [
-        path.resolve(__dirname, '../../dist/dll'),
+        path.resolve(__dirname, './files'),
         path.resolve(__dirname, './manifest')
       ],
       {
         verbose: false, // 不输出 log
-        allowExternal: true, // 允许 CleanWebpackPlugin 清除本配置目录外的文件
-        beforeEmit: true // 在 Webpack 工作完成、输出文件前夕执行清除操作
+        allowExternal: true // 允许 CleanWebpackPlugin 清除本配置目录外的文件
+        // beforeEmit: true // 在 Webpack 工作完成、输出文件前夕执行清除操作
       }
     ),
 

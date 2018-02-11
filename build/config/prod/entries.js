@@ -1,7 +1,7 @@
 const path = require('path')
 const glob = require('glob')
 
-const srcDir = path.resolve(__dirname, '../src')
+const srcDir = path.resolve(__dirname, '../../../src')
 const business_entries = glob.sync(`${srcDir}/**/* #`).reduce(
   (entries, filepath) => {
     const type = path
