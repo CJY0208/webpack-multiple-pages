@@ -1,7 +1,8 @@
 import 'babel-polyfill'
-import _ from 'lodash/fp'
+import fp from 'lodash/fp'
+import _ from 'lodash'
 
-window._ = _
+Object.assign(window, { _, fp })
 
 // import 'babel-polyfill'
 // // import React from 'react'

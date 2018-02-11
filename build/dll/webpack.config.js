@@ -8,7 +8,7 @@ console.log(entry)
 module.exports = {
   entry,
   output: {
-    path: path.resolve(__dirname, '../../dist/lib'),
+    path: path.resolve(__dirname, '../../dist/dll'),
     filename: '[name].[chunkhash].js',
     library: '[name]_[chunkhash]'
   },
@@ -20,7 +20,7 @@ module.exports = {
      */
     new CleanWebpackPlugin(
       [
-        path.resolve(__dirname, '../../dist/lib'),
+        path.resolve(__dirname, '../../dist/dll'),
         path.resolve(__dirname, './manifest')
       ],
       {

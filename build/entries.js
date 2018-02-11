@@ -32,7 +32,8 @@ module.exports = Object.assign({}, business_entries, {
      */
     reactRouter: ['react-router-dom', 'history'],
     vue: ['vue'],
-    utils: ['axios']
+    utils: ['axios'],
+    lodash: ['lodash', 'lodash/fp']
     // vue: ['vue', 'vuex', 'vue-router'],
     // react: ['react', 'react-dom'],
     // polyfill: ['babel-polyfill'],
@@ -46,8 +47,8 @@ module.exports = Object.assign({}, business_entries, {
     polyfill: ['babel-polyfill'],
     react: ['react', 'react-dom'],
     // vue: ['vue'],
-    vueTools: ['vuex', 'vue-router'],
-    lodashFp: ['lodash/fp']
+    vueTools: ['vuex', 'vue-router']
+    // lodashFp: ['lodash/fp']
     // reactRouter: ['react-router-dom', 'history'],
     // reactRouter: ['react-router-dom'],
   }

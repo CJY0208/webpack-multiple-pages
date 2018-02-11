@@ -3,7 +3,7 @@ const glob = require('glob')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HasOutput = require('webpack-plugin-hash-output')
-const AutoDllPlugin = require('./webpack/plugins/autodll-webpack-plugin')
+const AutoDllPlugin = require('./build/plugins/autodll-webpack-plugin')
 const webpack = require('webpack')
 const {
   optimize: { CommonsChunkPlugin, UglifyJsPlugin } = {},
@@ -15,9 +15,9 @@ const {
   IgnorePlugin
 } = webpack
 
-const HtmlWebpackAutoDependenciesPlugin = require('./webpack/plugins/HtmlWebpackAutoDependenciesPlugin')
+const HtmlWebpackAutoDependenciesPlugin = require('./build/plugins/HtmlWebpackAutoDependenciesPlugin')
 
-const entries = require('./webpack/entries')
+const entries = require('./build/entries')
 const {
   project: project_entries,
   vendor: vendor_entries,
@@ -65,15 +65,19 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
-    alias: Object.entries(customized_vendor_entries).reduce(
-      (alias, [key, value]) =>
-        typeof value !== 'string'
-          ? alias
-          : Object.assign(alias, {
-              [`@${key}`]: value
-            }),
-      {}
-    )
+    alias: {
+      // 'vue': 'vue/dist/vue.esm.js',
+      'lodash/fp': path.resolve(__dirname, './build/lib/lodash/fp'),
+      ...Object.entries(customized_vendor_entries).reduce(
+        (alias, [key, value]) =>
+          typeof value !== 'string'
+            ? alias
+            : Object.assign(alias, {
+                [`@${key}`]: value
+              }),
+        {}
+      )
+    }
   },
   plugins: [
     /**
@@ -202,7 +206,7 @@ module.exports = {
 
     new HtmlWebpackAutoDependenciesPlugin({
       entries,
-      dllPath: 'lib/'
+      dllPath: 'dll/'
     }),
 
     // /**
@@ -220,10 +224,10 @@ module.exports = {
 
     new AutoDllPlugin({
       // inject: true,
-      filename: '[name].[chunkhash].js', // No output file in ./lib
-      path: 'lib',
+      filename: '[name].[chunkhash].js', // No output file in ./dll
+      path: 'dll',
       entry: dll_entries,
-      plugins: require('./webpack/dll/plugins').plugins
+      plugins: require('./build/dll/plugins').plugins
     }),
 
     // /**
@@ -231,14 +235,14 @@ module.exports = {
     //  */
     // new IgnorePlugin(/^\.\/locale$/, /moment$/),
 
-    /**
-     *  环境变量设置为生产模式以减小 react 或其他第三方插件体积，参考：https://reactjs.org/docs/add-react-to-an-existing-app.html#development-and-production-versions
-     */
-    new DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production')
-      }
-    }),
+    // /**
+    //  *  环境变量设置为生产模式以减小 react 或其他第三方插件体积，参考：https://reactjs.org/docs/add-react-to-an-existing-app.html#development-and-production-versions
+    //  */
+    // new DefinePlugin({
+    //   'process.env': {
+    //     NODE_ENV: JSON.stringify('production')
+    //   }
+    // }),
 
     /**
      * Webpack 任务前/后，使用此插件清除旧的编译文件
@@ -262,7 +266,7 @@ module.exports = {
       sourceMap: false
     })
   ],
-  watch: true,
+  watch: false,
   stats: {
     assets: true,
     chunks: false,
