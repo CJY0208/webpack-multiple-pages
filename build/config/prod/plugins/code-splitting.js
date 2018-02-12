@@ -1,36 +1,30 @@
 const { optimize: { CommonsChunkPlugin } = {} } = require('webpack')
 
-const entries = require('../entries')
-const {
-  project: project_entries,
-  lib: lib_entries,
-  vendor: vendor_entries,
-  dll: dll_entries
-} = entries
-const project_entry_names = Object.keys(project_entries)
-const vendor_entry_names = Object.keys(vendor_entries)
-const lib_entry_names = Object.keys(lib_entries)
-const dll_entry_names = Object.keys(dll_entries)
+const { project, lib: lib, vendor: vendor } = require('../entries')
+const project_names = Object.keys(project)
+const vendor_names = Object.keys(vendor)
+const lib_names = Object.keys(lib)
+const lib_entries = Object.entries(lib)
 
-const queryLibDependencies = (
-  { resource = '', sourceRequest = '', reasons = [] } = {},
-  libName
+const isDependentBy = (
+  libName,
+  { resource = '', sourceRequest = '', reasons = [] } = {}
 ) =>
   ((new RegExp(libName).test(resource) &&
-    /(node_modules|build\/lib|build\\lib)/.test(resource)) ||
-    reasons.some(({ module }) => queryLibDependencies(module, libName))) &&
+    /(node_modules|build\/utils|build\\utils)/.test(resource)) ||
+    reasons.some(({ module }) => isDependentBy(libName, module))) &&
   !/dll-reference/.test(sourceRequest)
 
 module.exports = [
   /**
    * 抽离 vendor
    */
-  ...Object.entries(vendor_entries).map(
+  ...Object.entries(vendor).map(
     ([key, value]) =>
       new CommonsChunkPlugin({
         name: key,
         filename: 'vendor/[name].[chunkhash:6].js',
-        chunks: project_entry_names,
+        chunks: project_names,
         minChunks: ({ resource = '' }) =>
           /vendor/.test(resource) && new RegExp(`${key} #`).test(resource)
       })
@@ -38,13 +32,13 @@ module.exports = [
   /**
    * 抽离 lib
    */
-  ...Object.entries(lib_entries).map(
+  ...lib_entries.map(
     ([key, value]) =>
       new CommonsChunkPlugin({
         name: key,
         filename: 'lib/[name].[chunkhash:6].js',
-        chunks: [...project_entry_names, ...vendor_entry_names],
-        minChunks(module, count) {
+        chunks: [...project_names, ...vendor_names],
+        minChunks(module) {
           const {
             isDependentByMultipleChunk: __isDependentByMultipleChunk
           } = module
@@ -62,18 +56,18 @@ module.exports = [
           switch (__isDependentByMultipleChunk) {
             case true:
             case false:
-              isDependentByCurrentChunk = value.some(lib =>
-                queryLibDependencies(module, lib)
+              isDependentByCurrentChunk = value.some(libName =>
+                isDependentBy(libName, module)
               )
               isDependentByMultipleChunk = __isDependentByMultipleChunk
               break
             default:
               isDependentByCurrentChunk = false
               isDependentByMultipleChunk =
-                Object.entries(lib_entries)
+                lib_entries
                   .map(([__key, value]) => {
-                    const __isDependentByCurrentChunk = value.some(lib =>
-                      queryLibDependencies(module, lib)
+                    const __isDependentByCurrentChunk = value.some(libName =>
+                      isDependentBy(libName, module)
                     )
                     if (__key === key)
                       isDependentByCurrentChunk = __isDependentByCurrentChunk
@@ -91,14 +85,13 @@ module.exports = [
         }
       })
   ),
-
   /**
    * 抽离 share
    */
   new CommonsChunkPlugin({
     name: '__share',
     filename: '[name].[chunkhash:6].js',
-    chunks: [...project_entry_names, ...vendor_entry_names, ...lib_entry_names],
+    chunks: [...project_names, ...vendor_names, ...lib_names],
     minChunks: ({ resource = '' }, count) =>
       count >= 2 && (/node_modules/.test(resource) || /vendor/.test(resource))
   }),

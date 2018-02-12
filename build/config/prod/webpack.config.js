@@ -1,20 +1,13 @@
 const path = require('path')
-
-const entries = require('./entries')
-const {
-  project: project_entries,
-  lib: lib_entries,
-  vendor: vendor_entries,
-  dll: dll_entries
-} = entries
-const project_entry_names = Object.keys(project_entries)
-const vendor_entry_names = Object.keys(vendor_entries)
-const lib_entry_names = Object.keys(lib_entries)
-const dll_entry_names = Object.keys(dll_entries)
+const { project, vendor } = require('./entries')
 
 module.exports = {
-  context: path.resolve(__dirname, '../../../'),
-  entry: project_entries,
+  ...require('./loaders'),
+  ...require('./log-config'),
+  ...require('./plugins'),
+
+  devtool: false, // 'source-map',
+  entry: project,
   output: {
     path: path.resolve(__dirname, '../../../dist'),
     filename: 'project/[name].[chunkhash:6].js',
@@ -24,49 +17,23 @@ module.exports = {
      */
     chunkFilename: 'async/[name].[chunkhash:6].js'
   },
-  devtool: false, // 'source-map',
-  module: {
-    rules: [
-      {
-        test: /.js$/,
-        exclude: /node_modules/,
-        use: ['babel-loader', 'eslint-loader']
-      },
-      {
-        test: /.vue$/,
-        exclude: /node_modules/,
-        use: ['vue-loader']
-      }
-    ]
-  },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       // 'vue': 'vue/dist/vue.esm.js',
       'lodash/fp': path.resolve(__dirname, '../../utils/lodash/fp'),
-      ...Object.entries(vendor_entries).reduce(
+      ...Object.entries(vendor).reduce(
         (alias, [key, value]) =>
-          typeof value !== 'string'
-            ? alias
-            : Object.assign(alias, {
-                [`@${key}`]: value
-              }),
+          Object.assign(
+            {
+              [`@${key}`]: value
+            },
+            alias
+          ),
         {}
       )
     }
   },
-  plugins: require('./plugins'),
   watch: false,
-  /**
-   * 定制 webpack 的日志输出，文档参考：https://webpack.js.org/configuration/stats/
-   */
-  stats: {
-    assets: true,
-    chunks: false,
-    modules: false,
-    children: false,
-    errors: true,
-    errorDetails: true,
-    warnings: true
-  }
+  context: path.resolve(__dirname, '../../../')
 }

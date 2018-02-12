@@ -5,6 +5,12 @@
     "es6": true,
     "node": true
   },
+  "plugins": [
+    /**
+     * 校验 .vue 文件内部的 script 语句，文档：https://vue-loader.vuejs.org/zh-cn/workflow/linting.html
+     */
+    "html"
+  ],
   "rules": {
     //参考资料：http://eslint.cn/docs/rules/
     "semi": "off", //要求或禁止使用分号而不是 ASI

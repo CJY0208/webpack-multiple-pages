@@ -7,6 +7,6 @@ Vue.config.productionTip = true
 
 new Vue({
   el: '#app',
-  render: createElement => createElement('App'),
+  render: h => <App />,
   components: { App }
 })

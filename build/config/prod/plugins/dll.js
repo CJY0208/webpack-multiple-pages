@@ -1,16 +1,16 @@
 const path = require('path')
 const {
-  optimize: { CommonsChunkPlugin, UglifyJsPlugin } = {},
+  optimize: { UglifyJsPlugin } = {},
   // DllPlugin,
   DefinePlugin,
-  IgnorePlugin,
+  // IgnorePlugin,
   NamedChunksPlugin,
   NamedModulesPlugin,
   HashedModuleIdsPlugin
 } = require('webpack')
 const AutoDllPlugin = require('../../../utils/autodll-webpack-plugin')
 
-const { dll: dll_entries } = require('../entries')
+const { dll } = require('../entries')
 
 module.exports = [
   /**
@@ -18,9 +18,9 @@ module.exports = [
    */
   new AutoDllPlugin({
     // inject: true,
-    filename: '[name].[chunkhash].js', // No output file in ./dll
+    filename: '[name].[chunkhash].js',
     path: 'dll',
-    entry: dll_entries,
+    entry: dll,
     plugins: [
       /**
        * NamedChunksPlugin 和 HashedModuleIdsPlugin 保证模块 hash 不受编译顺序的影响
@@ -66,11 +66,11 @@ module.exports = [
   //  * Webpack Dll 功能：预编译第三方模块以提升业务代码打包速度
   //  * 民间资料：https://segmentfault.com/a/1190000005969643
   //  */
-  // ...Object.keys(dll_entries).map(
+  // ...Object.keys(dll).map(
   //   dll =>
   //     new DllReferencePlugin({
-  //       context: path.resolve(__dirname, './webpack/dll'),
-  //       manifest: require(`./webpack/dll/manifest/${dll}.json`)
+  //       context: path.resolve(__dirname, '../../__dll'),
+  //       manifest: require(`../../__dll/manifest/${dll}.json`)
   //     })
   // ),
 ]

@@ -11,6 +11,11 @@
   "plugins": [
     "syntax-dynamic-import",
     "transform-decorators-legacy",
-    "transform-async-functions"
+    "transform-async-functions",
+
+    /**
+     *  让 vue 支持 jsx 语法，文档：https://github.com/vuejs/eslint-plugin-vue
+     */
+    "transform-vue-jsx"
   ]
 }
