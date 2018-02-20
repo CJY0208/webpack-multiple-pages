@@ -40,48 +40,50 @@ module.exports = [
         chunks: [...project_names, ...vendor_names],
         minChunks(module) {
           const {
-            isDependentByMultipleChunk: __isDependentByMultipleChunk
+            isDependentByMultipleLib: __isDependentByMultipleLib
           } = module
 
           /**
-           * 是否被当前 Chunk 引用
+           * 是否被当前 Lib 引用
            */
-          let isDependentByCurrentChunk
+          let isDependentByCurrentLib
 
           /**
-           * 是否被多个 Chunk 引用
+           * 是否被多个 Lib 引用
            */
-          let isDependentByMultipleChunk
+          let isDependentByMultipleLib
 
-          switch (__isDependentByMultipleChunk) {
+          switch (__isDependentByMultipleLib) {
             case true:
             case false:
-              isDependentByCurrentChunk = value.some(libName =>
+              isDependentByCurrentLib = value.some(libName =>
                 isDependentBy(libName, module)
               )
-              isDependentByMultipleChunk = __isDependentByMultipleChunk
+              isDependentByMultipleLib = __isDependentByMultipleLib
               break
             default:
-              isDependentByCurrentChunk = false
-              isDependentByMultipleChunk =
-                lib_entries
-                  .map(([__key, value]) => {
-                    const __isDependentByCurrentChunk = value.some(libName =>
-                      isDependentBy(libName, module)
-                    )
-                    if (__key === key)
-                      isDependentByCurrentChunk = __isDependentByCurrentChunk
-                    return __isDependentByCurrentChunk
-                  })
-                  .filter(res => res).length >= 2
+              isDependentByCurrentLib = false
+              const dependentTimes = lib_entries
+                .map(([__key, value]) => {
+                  const __isDependentByCurrentLib = value.some(libName =>
+                    isDependentBy(libName, module)
+                  )
+                  if (__key === key)
+                    isDependentByCurrentLib = __isDependentByCurrentLib
+                  return __isDependentByCurrentLib
+                })
+                .filter(res => res).length
 
-              // 缓存 “是否被多个 Chunk 引用” 统计结果
+              isDependentByMultipleLib = dependentTimes >= 2
+
+              // 缓存 “是否被多个 Lib 引用” 统计结果
               Object.assign(module, {
-                isDependentByMultipleChunk
+                isDependentByMultipleLib,
+                isDependentByLib: dependentTimes >= 1
               })
           }
 
-          return !isDependentByMultipleChunk && isDependentByCurrentChunk
+          return !isDependentByMultipleLib && isDependentByCurrentLib
         }
       })
   ),
@@ -92,8 +94,10 @@ module.exports = [
     name: '__share',
     filename: '[name].[chunkhash:6].js',
     chunks: [...project_names, ...vendor_names, ...lib_names],
-    minChunks: ({ resource = '' }, count) =>
-      count >= 2 && (/node_modules/.test(resource) || /vendor/.test(resource))
+    minChunks: ({ resource = '', isDependentByLib = false }, count) =>
+      isDependentByLib &&
+      count >= 2 &&
+      (/node_modules/.test(resource) || /vendor/.test(resource))
   }),
 
   /**

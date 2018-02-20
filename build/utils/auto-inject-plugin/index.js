@@ -1,5 +1,6 @@
 let isDll = () => false
 let isLib = () => false
+let libMapper = value => value
 const isNotFromNodeModules = path => !/node_modules/.test(path)
 const isDllReference = value => /^dll-reference/.test(value)
 const isVendor = value => /^@/.test(value)
@@ -50,9 +51,19 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
 
     const { lib, project, dll } = entries
     this.__lib = parseEntries(lib)
+    const allLib = Object.keys(this.__lib)
     this.__dll = parseEntries(dll)
     isDll = value => value in this.__dll
     isLib = value => value in this.__lib
+    libMapper = value => {
+      let libName = value
+      return allLib.some(__libName => {
+        libName = __libName
+        return new RegExp(`^${__libName}`).test(value)
+      })
+        ? libName
+        : value
+    }
 
     this.__project = Object.keys(project)
   }
@@ -61,7 +72,7 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
     this.__record = this.__record || {}
 
     dependencies.lib = [...new Set(dependencies.lib)]
-    this.__record[`${projectName}.html`] = dependencies
+    this.__record[projectName] = dependencies
   }
 
   apply(compiler) {
@@ -77,6 +88,7 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
             ...new Set(
               chunk.origins
                 .reduce((res, dep) => [...res, ...queryDependencies(dep)], [])
+                .map(libMapper)
                 .filter(
                   dep => isLib(dep) || isDllReference(dep) || isVendor(dep)
                 )
@@ -91,14 +103,14 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
                     .replace('_', '.')
                     .concat('.js')
                 )
-              if (isVendor(dep)) res.vendfor.push(dep.replace('@', ''))
+              if (isVendor(dep)) res.vendor.push(dep.replace('@', ''))
               if (isLib(dep)) res.lib.push(__lib[dep])
               return res
             },
             {
               dll: [],
               lib: [],
-              vendfor: []
+              vendor: []
             }
           )
         )
@@ -116,10 +128,14 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
           this.__record[key].assetsDll = [
             ...value.dll.map(dll => `${this.__dllPath}${dll}`)
           ]
-          this.__record[key].assets = [
+          this.__record[key].assetsJs = [
             ...value.lib.map(lib => chunkFilesMap[lib]),
-            ...value.vendfor.map(vendfor => chunkFilesMap[vendfor])
+            ...value.vendor.map(vendor => chunkFilesMap[vendor])
           ]
+          // this.__record[key].assetsCss = [
+          //   ...value.vendor.map(vendor => chunkFilesMap[vendor].replace(/^\w+\//, 'css/').replace(/.js$/, '.css')),
+          //   chunkFilesMap[key].replace(/^\w+\//, 'css/').replace(/.js$/, '.css')
+          // ]
         })
       }
 
@@ -130,15 +146,25 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
       compilation.plugin(
         'html-webpack-plugin-before-html-generation',
         (htmlPluginData, cb) => {
+          const projectName = htmlPluginData.outputName.replace(/.html$/, '')
           htmlPluginData.assets.js.splice(
             -1,
             0,
-            ...this.__record[htmlPluginData.outputName].assets
+            ...this.__record[projectName].assetsJs
           )
           htmlPluginData.assets.js = [
-            ...this.__record[htmlPluginData.outputName].assetsDll,
+            ...this.__record[projectName].assetsDll,
             ...htmlPluginData.assets.js
           ]
+
+          // console.log(htmlPluginData)
+
+          // htmlPluginData.assets.css = [
+          //   ...new Set([
+          //     ...this.__record[projectName].assetsCss,
+          //     ...htmlPluginData.assets.css
+          //   ])
+          // ]
 
           cb(null, htmlPluginData)
         }

@@ -35,13 +35,14 @@ module.exports = Object.assign({}, business_entries, {
      */
     reactRouter: ['react-router-dom', 'history'],
     vue: ['vue'],
-    utils: ['axios'],
-    lodash: ['lodash', 'lodash/fp']
+    utils: ['axios', 'fastclick'],
+    lodash: ['lodash', 'lodash/fp'],
+    antd: ['antd-mobile']
   },
   dll: {
     utils: ['md5', 'date-fns'],
     polyfill: ['babel-polyfill'],
-    react: ['react', 'react-dom'],
+    react: ['react', 'react-dom', 'prop-types'],
     vueTools: ['vuex', 'vue-router']
   }
 })

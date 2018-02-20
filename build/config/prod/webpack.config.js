@@ -18,7 +18,7 @@ module.exports = {
     chunkFilename: 'async/[name].[chunkhash:6].js'
   },
   resolve: {
-    extensions: ['.js', '.vue', '.json'],
+    extensions: ['.js', '.vue', '.json', '.css', '.scss', '.sass', '.less'],
     alias: {
       // 'vue': 'vue/dist/vue.esm.js',
       'lodash/fp': path.resolve(__dirname, '../../utils/lodash/fp'),

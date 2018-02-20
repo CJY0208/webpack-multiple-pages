@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <title><%= htmlWebpackPlugin.options.title %></title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Expires" content="-1">
   <meta http-equiv="Cache-Control" content="no-cache">
@@ -193,8 +194,8 @@
       }
     }
     document.addEventListener('readystatechange', window.__f)
-  </script> 
-  <title><%= htmlWebpackPlugin.options.title %></title>
+  </script><% for (var i = 0; i < htmlWebpackPlugin.files.css.length; i++) {%>
+  <link href="<%= htmlWebpackPlugin.files.css[i] %>" rel="stylesheet" /><% } %>
 </head>
 <body>
   <div id="app"></div><% for (var i = 0; i < htmlWebpackPlugin.files.js.length; i++) {%>
