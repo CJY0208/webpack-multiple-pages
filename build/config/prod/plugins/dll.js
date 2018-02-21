@@ -8,7 +8,7 @@ const {
   NamedModulesPlugin,
   HashedModuleIdsPlugin
 } = require('webpack')
-const AutoDllPlugin = require('../../../utils/autodll-webpack-plugin')
+const AutoDllPlugin = require('autodll-webpack-plugin')
 
 const { dll } = require('../entries')
 
