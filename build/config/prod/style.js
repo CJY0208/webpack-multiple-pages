@@ -9,6 +9,7 @@ module.exports = {
         use: [
           'style-loader',
           'css-loader',
+          'postcss-loader',
           {
             loader: 'less-loader',
             options: {
@@ -19,7 +20,11 @@ module.exports = {
       },
       {
         test: /\.(scss|sass)$/,
-        use: extractSASS.extract(['css-loader', 'sass-loader'])
+        use: extractSASS.extract([
+          'css-loader',
+          'postcss-loader',
+          'sass-loader'
+        ])
       }
     ]
   },

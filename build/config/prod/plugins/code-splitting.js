@@ -40,7 +40,8 @@ module.exports = [
         chunks: [...project_names, ...vendor_names],
         minChunks(module) {
           const {
-            isDependentByMultipleLib: __isDependentByMultipleLib
+            isDependentByMultipleLib: __isDependentByMultipleLib,
+            resource = ''
           } = module
 
           /**
@@ -83,7 +84,11 @@ module.exports = [
               })
           }
 
-          return !isDependentByMultipleLib && isDependentByCurrentLib
+          return (
+            !/-loader/.test(resource) &&
+            !isDependentByMultipleLib &&
+            isDependentByCurrentLib
+          )
         }
       })
   ),
