@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom'
 import { HashRouter as Router, Route, Link, withRouter } from 'react-router-dom'
 import './style.scss'
 import './test.css'
+import '@layoutDemo'
 // import { createHashHistory } from 'history'
 // import 'axios'
 

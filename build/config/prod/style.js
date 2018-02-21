@@ -1,5 +1,5 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const extractSASS = new ExtractTextPlugin('css/[name].[chunkhash:6].css')
+const extractSASS = new ExtractTextPlugin('style/[name].[chunkhash:6].css')
 
 module.exports = {
   module: {

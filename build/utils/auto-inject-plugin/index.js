@@ -118,24 +118,31 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
 
       if (typeof this.__record !== 'undefined') {
         const allChunks = compilation.getStats().toJson().chunks
-        const chunkFilesMap = allChunks.reduce((res, chunk) => {
-          return Object.assign(res, {
-            [chunk.names[0]]: chunk.files[0]
-          })
-        }, {})
+        const chunkFilesMap = allChunks.reduce(
+          (res, { id, files }) =>
+            Object.assign(res, {
+              [id]: files
+            }),
+          {}
+        )
+        const getFiles = extname => (files, chunk) => [
+          ...files,
+          ...chunkFilesMap[chunk].filter(file =>
+            new RegExp(`\.${extname}$`).test(file)
+          )
+        ]
+        const getJs = getFiles('js')
+        const getCss = getFiles('css')
 
         Object.entries(this.__record).forEach(([key, value]) => {
           this.__record[key].assetsDll = [
             ...value.dll.map(dll => `${this.__dllPath}${dll}`)
           ]
           this.__record[key].assetsJs = [
-            ...value.lib.map(lib => chunkFilesMap[lib]),
-            ...value.vendor.map(vendor => chunkFilesMap[vendor])
+            ...value.lib.reduce(getJs, []),
+            ...value.vendor.reduce(getJs, [])
           ]
-          // this.__record[key].assetsCss = [
-          //   ...value.vendor.map(vendor => chunkFilesMap[vendor].replace(/^\w+\//, 'css/').replace(/.js$/, '.css')),
-          //   chunkFilesMap[key].replace(/^\w+\//, 'css/').replace(/.js$/, '.css')
-          // ]
+          this.__record[key].assetsCss = [...value.vendor.reduce(getCss, [])]
         })
       }
 
@@ -157,14 +164,10 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
             ...htmlPluginData.assets.js
           ]
 
-          // console.log(htmlPluginData)
-
-          // htmlPluginData.assets.css = [
-          //   ...new Set([
-          //     ...this.__record[projectName].assetsCss,
-          //     ...htmlPluginData.assets.css
-          //   ])
-          // ]
+          htmlPluginData.assets.css = [
+            ...this.__record[projectName].assetsCss,
+            ...htmlPluginData.assets.css
+          ]
 
           cb(null, htmlPluginData)
         }
