@@ -23,8 +23,8 @@ module.exports = {
      * 可预测的长效缓存（扩展）：https://medium.com/webpack/predictable-long-term-caching-with-webpack-d3eee1d3fa31
      */
     new NamedChunksPlugin(),
-    // new HashedModuleIdsPlugin(),
-    new NamedModulesPlugin(),
+    new HashedModuleIdsPlugin(),
+    // new NamedModulesPlugin(),
 
     /**
      *  环境变量设置为生产模式以减小 react 或其他第三方插件体积，参考：https://reactjs.org/docs/add-react-to-an-existing-app.html#development-and-production-versions

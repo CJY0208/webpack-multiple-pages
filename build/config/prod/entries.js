@@ -37,7 +37,8 @@ module.exports = Object.assign({}, business_entries, {
     vue: ['vue'],
     utils: ['axios', 'fastclick'],
     lodash: ['lodash', 'lodash/fp'],
-    antd: ['antd-mobile']
+    antd: ['antd-mobile'],
+    mintUI: ['mint-ui']
   },
   dll: {
     utils: ['md5', 'date-fns'],
