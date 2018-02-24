@@ -1,7 +1,9 @@
+const styleConfig = require('../style')
+
 module.exports = {
   module: {
     rules: [
-      ...require('../style').module.rules,
+      ...styleConfig.module.rules,
       {
         test: /\.js$/,
         exclude: /node_modules/,
@@ -10,7 +12,15 @@ module.exports = {
       {
         test: /\.vue$/,
         exclude: /node_modules/,
-        use: ['vue-loader', 'eslint-loader']
+        use: [
+          {
+            loader: 'vue-loader',
+            options: {
+              ...styleConfig.vue
+            }
+          },
+          'eslint-loader'
+        ]
       }
     ]
   }

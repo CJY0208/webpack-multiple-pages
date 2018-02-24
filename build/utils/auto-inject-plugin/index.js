@@ -125,14 +125,12 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
             }),
           {}
         )
-        const getFiles = extname => (files, chunk) => [
+        const getFiles = reg => (files, chunk) => [
           ...files,
-          ...chunkFilesMap[chunk].filter(file =>
-            new RegExp(`\.${extname}$`).test(file)
-          )
+          ...(chunkFilesMap[chunk] || []).filter(file => reg.test(file))
         ]
-        const getJs = getFiles('js')
-        const getCss = getFiles('css')
+        const getJs = getFiles(/\.js$/)
+        const getCss = getFiles(/\.css$/)
 
         Object.entries(this.__record).forEach(([key, value]) => {
           this.__record[key].assetsDll = [

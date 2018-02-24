@@ -1,8 +1,8 @@
 const path = require('path')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HasOutput = require('webpack-plugin-hash-output')
+const ParallelUglifyPlugin = require('webpack-parallel-uglify-plugin')
 const {
-  optimize: { UglifyJsPlugin } = {},
   NamedChunksPlugin,
   HashedModuleIdsPlugin,
   NamedModulesPlugin,
@@ -48,16 +48,18 @@ module.exports = {
      * 关于 Tree Shaking，Webpack 只标记未使用的依赖而不清除，需通过 UglifyJsPlugin 达到清除未使用代码的效果
      * 且 Tree Shaking 特性要求使用 es6 模块语法才能分析无效引用，所以 .babelrc文件中要关闭 babel 对 import 语法的转义
      */
-    new UglifyJsPlugin({
-      compress: {
-        warnings: false
+    new ParallelUglifyPlugin({
+      cacheDir: path.resolve(__dirname, './.uglify_cache'),
+      uglifyJs: {
+        compress: {
+          warnings: false
+        },
+        beautify: false,
+        output: {
+          comments: false
+        }
       },
-      beautify: false,
-      output: {
-        comments: false
-      },
-      sourceMap: false,
-      parallel: true
+      sourceMap: false
     }),
 
     new HasOutput()

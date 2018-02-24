@@ -22,11 +22,32 @@ module.exports = {
         test: /\.(scss|sass)$/,
         use: extractSASS.extract([
           'css-loader',
-          'postcss-loader',
-          'sass-loader'
+          'sass-loader',
+          'postcss-loader'
         ])
       }
     ]
   },
-  plugins: [extractSASS]
+  plugins: [extractSASS],
+  vue: {
+    loaders: {
+      scss: extractSASS.extract({
+        fallback: 'vue-style-loader',
+        use: [
+          'css-loader',
+          'sass-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              config: {
+                ctx: {
+                  useSCSS: true
+                }
+              }
+            }
+          }
+        ]
+      })
+    }
+  }
 }

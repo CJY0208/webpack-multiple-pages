@@ -1,6 +1,6 @@
 <template>
   <div>
-    Hello Vue, I am {{`${name}`}}
+    Hello Vue, I am {{`${name}`}} lalala
   </div>
 </template>
 
@@ -14,10 +14,14 @@ export default {
 // var a = 1
 </script>
 
-<style>
+<style lang="scss">
 
 * {
   color: blue;
   font-size: 24px;
+  // height: 100vh;
+  div {
+    color: red;
+  }
 }
 </style>

@@ -14,6 +14,9 @@
     "transform-decorators-legacy",
     "transform-async-functions",
 
+    /**
+     * babel-plugin-import 实现 antd-mobile 按需加载配置，文档：https://github.com/ant-design/babel-plugin-import
+     */
     ["import", { "libraryName": "antd-mobile", "style": true }]
 
     /**
