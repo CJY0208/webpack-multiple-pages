@@ -1,5 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const entries = require('../entries')
+const entries = require('../../../entries')
 const { project } = entries
 
 const AutoInjectPlugin = require('../../../utils/auto-inject-plugin')

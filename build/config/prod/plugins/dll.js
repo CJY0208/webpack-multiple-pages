@@ -10,7 +10,7 @@ const {
 } = require('webpack')
 const AutoDllPlugin = require('autodll-webpack-plugin')
 
-const { dll } = require('../entries')
+const { dll } = require('../../../entries')
 
 module.exports = [
   /**

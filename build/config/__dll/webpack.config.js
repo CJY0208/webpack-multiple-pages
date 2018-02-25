@@ -1,6 +1,6 @@
 const path = require('path')
 const { plugins } = require('./plugins')
-const { dll: entry } = require('../prod/entries')
+const { dll: entry } = require('../../entries')
 const { DllPlugin } = require('webpack')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 

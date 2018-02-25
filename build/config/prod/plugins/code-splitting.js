@@ -1,6 +1,6 @@
 const { optimize: { CommonsChunkPlugin } = {} } = require('webpack')
 
-const { project, lib, vendor } = require('../entries')
+const { project, lib, vendor } = require('../../../entries')
 const project_names = Object.keys(project)
 const vendor_names = Object.keys(vendor)
 const lib_names = Object.keys(lib)

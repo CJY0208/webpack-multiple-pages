@@ -1,5 +1,5 @@
 const path = require('path')
-const { project, vendor } = require('./entries')
+const { project, vendor } = require('../../entries')
 
 module.exports = {
   ...require('./loaders'),

@@ -1,3 +1,5 @@
+const supportedBrowswers = ['iOS > 7', 'Android >= 4.0']
+
 module.exports = ({ file = {}, options = {}, env }) => ({
   parser: (() => {
     if (options.useSCSS) return 'postcss-scss'
@@ -13,7 +15,7 @@ module.exports = ({ file = {}, options = {}, env }) => ({
   plugins: [
     // doiuse 文档：https://github.com/anandthakker/doiuse
     require('doiuse')({
-      browsers: ['iOS > 7', 'Android >= 4.0'],
+      browsers: supportedBrowswers,
       ignoreFiles: [
         '**/node_modules/**/*.css',
         '**/node_modules/**/*.less',
@@ -21,7 +23,7 @@ module.exports = ({ file = {}, options = {}, env }) => ({
       ]
     }),
     require('autoprefixer')({
-      browsers: ['iOS > 7', 'Android >= 4.0']
+      browsers: supportedBrowswers
     }),
     require('cssnano')({
       preset: 'default'

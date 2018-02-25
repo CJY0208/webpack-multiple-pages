@@ -5,6 +5,8 @@ import { HashRouter as Router, Route, Link, withRouter } from 'react-router-dom'
 import './style.scss'
 import './test.css'
 import '@layoutDemo'
+import 'mobx-react'
+import 'react-redux'
 // import { createHashHistory } from 'history'
 // import 'axios'
 

@@ -3,7 +3,7 @@
 
 ### 特性介绍
 
-1. 尽可能自由的代码分割
+1. 尽可能自由的代码分割，分割配置文件为`build/entries.js`
 
 	- 多页面，每个页面一个js
 
@@ -15,15 +15,9 @@
 
 3. 支持多框架共存（目前仅内置react、vue），如A页面用react，B页面用vue，并引入了常用的工具，如下
 
-	- react-router
+	- react：`react-router`、`antd-mobile（按需打包）`、`redux`、`immutable`、`mobx`
 
-	- antd-mobile（按需打包）
-
-	- vue-router
-
-	- vuex
-
-	- mint-ui（按需打包）
+	- vue：`vue-ruter`、`mint-ui（按需打包）`、`vuex`
 
 4. eslint代码校验，prettier格式化（commit时自动格式化）
 
@@ -37,23 +31,13 @@
 
 7. 引入了postcss，支持autoprefixer及doiuse功能，兼容浏览器为 `[iOS > 7, Android >= 4.0]`
 
-8. 集成如下工具
-
-	- lodash、lodash/fp
-
-	- axios
-
-	- date-fn
-
-	- md5
-
-	- faskclick
+8. 集成了部分常用工具：`lodash`、`lodash/fp`、`axios`、`date-fn`、`md5`、`fastclick`
 
 - - -
 
 ### 业务入口说明
 
-- 业务代码存放在`src`目录中，每个入口文件夹名称必须有`空格#` 标识，入口文件必须为`index.js`
+- 业务代码存放在`src`目录中，每个入口文件夹名称必须以`空格#`标识结尾，入口文件必须为`index.js`
 
 - `src/project`中为多页面入口代码
 
