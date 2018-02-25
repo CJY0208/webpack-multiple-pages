@@ -8,7 +8,7 @@ module.exports = {
         test: /\.(css|less)$/,
         use: [
           'style-loader',
-          'css-loader',
+          'css-loader?minimize',
           'postcss-loader',
           {
             loader: 'less-loader',
@@ -21,7 +21,7 @@ module.exports = {
       {
         test: /\.(scss|sass)$/,
         use: extractSASS.extract([
-          'css-loader',
+          'css-loader?minimize',
           'sass-loader',
           'postcss-loader'
         ])
@@ -34,7 +34,7 @@ module.exports = {
       scss: extractSASS.extract({
         fallback: 'vue-style-loader',
         use: [
-          'css-loader',
+          'css-loader?minimize',
           'sass-loader',
           {
             loader: 'postcss-loader',

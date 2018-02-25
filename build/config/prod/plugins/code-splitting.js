@@ -1,6 +1,6 @@
 const { optimize: { CommonsChunkPlugin } = {} } = require('webpack')
 
-const { project, lib: lib, vendor: vendor } = require('../entries')
+const { project, lib, vendor } = require('../entries')
 const project_names = Object.keys(project)
 const vendor_names = Object.keys(vendor)
 const lib_names = Object.keys(lib)
@@ -14,6 +14,68 @@ const isDependentBy = (
     /(node_modules|build\/utils|build\\utils)/.test(resource)) ||
     reasons.some(({ module }) => isDependentBy(libName, module))) &&
   !/dll-reference/.test(sourceRequest)
+
+const getLibSplitter = (key, value) => module => {
+  const {
+    isDependentByMultipleLib: __isDependentByMultipleLib,
+    resource = '',
+    rawRequest = ''
+  } = module
+
+  /**
+   * 是否被当前 Lib 引用
+   */
+  let isDependentByCurrentLib
+
+  /**
+   * 是否被多个 Lib 引用
+   */
+  let isDependentByMultipleLib
+
+  /**
+   * 是否当前的 Lib
+   */
+  const isCurrentLib = value.some(
+    libName =>
+      libName === rawRequest || new RegExp(`^${libName}\/`).test(rawRequest)
+  )
+
+  switch (__isDependentByMultipleLib) {
+    case true:
+    case false:
+      isDependentByCurrentLib = value.some(libName =>
+        isDependentBy(libName, module)
+      )
+      isDependentByMultipleLib = __isDependentByMultipleLib
+      break
+    default:
+      isDependentByCurrentLib = false
+      const dependentTimes = lib_entries
+        .map(([__key, value]) => {
+          const __isDependentByCurrentLib = value.some(libName =>
+            isDependentBy(libName, module)
+          )
+          if (__key === key) isDependentByCurrentLib = __isDependentByCurrentLib
+          return __isDependentByCurrentLib
+        })
+        .filter(res => res).length
+
+      isDependentByMultipleLib = dependentTimes >= 2
+
+      // 缓存 “是否被多个 Lib 引用” 统计结果
+      Object.assign(module, {
+        isDependentByMultipleLib,
+        isDependentByLib: dependentTimes >= 1
+      })
+  }
+
+  return (
+    isCurrentLib ||
+    (!/-loader/.test(resource) &&
+      !isDependentByMultipleLib &&
+      isDependentByCurrentLib)
+  )
+}
 
 module.exports = [
   /**
@@ -38,58 +100,7 @@ module.exports = [
         name: key,
         filename: 'lib/[name].[chunkhash:6].js',
         chunks: [...project_names, ...vendor_names],
-        minChunks(module) {
-          const {
-            isDependentByMultipleLib: __isDependentByMultipleLib,
-            resource = ''
-          } = module
-
-          /**
-           * 是否被当前 Lib 引用
-           */
-          let isDependentByCurrentLib
-
-          /**
-           * 是否被多个 Lib 引用
-           */
-          let isDependentByMultipleLib
-
-          switch (__isDependentByMultipleLib) {
-            case true:
-            case false:
-              isDependentByCurrentLib = value.some(libName =>
-                isDependentBy(libName, module)
-              )
-              isDependentByMultipleLib = __isDependentByMultipleLib
-              break
-            default:
-              isDependentByCurrentLib = false
-              const dependentTimes = lib_entries
-                .map(([__key, value]) => {
-                  const __isDependentByCurrentLib = value.some(libName =>
-                    isDependentBy(libName, module)
-                  )
-                  if (__key === key)
-                    isDependentByCurrentLib = __isDependentByCurrentLib
-                  return __isDependentByCurrentLib
-                })
-                .filter(res => res).length
-
-              isDependentByMultipleLib = dependentTimes >= 2
-
-              // 缓存 “是否被多个 Lib 引用” 统计结果
-              Object.assign(module, {
-                isDependentByMultipleLib,
-                isDependentByLib: dependentTimes >= 1
-              })
-          }
-
-          return (
-            !/-loader/.test(resource) &&
-            !isDependentByMultipleLib &&
-            isDependentByCurrentLib
-          )
-        }
+        minChunks: getLibSplitter(key, value)
       })
   ),
   /**
