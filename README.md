@@ -3,6 +3,8 @@
 
 **注：目前仅支持production生产环境构建，目前侧重于移动端支持，调整webpack配置后可支持PC端**
 
+- - -
+
 ### 特性介绍
 
 1. 尽可能自由的代码分割，在`build/entries.js`文件中配置代码分割
@@ -27,13 +29,9 @@
 
 5. 内置了[`babel-polyfill`](https://babeljs.io/docs/usage/polyfill/)垫片库，支持es各种新特性（装饰器、async/await等）
 
-6. 支持sass、less、css，打包文件有以下特点
+6. 支持sass、less、css，样式将抽取成独立的css文件
 
-	- sass编写的业务代码将抽取为单独的css文件
-	
-	- css、less不做抽取，集成在js文件中
-
-7. 引入了[`postcss`](https://github.com/postcss/postcss/blob/master/README.cn.md)，开启了[`autoprefixer`](https://github.com/postcss/autoprefixer)、[`doiuse`](https://github.com/anandthakker/doiuse)、[`cssnano`](http://cssnano.co/)功能，兼容浏览器为 [`[iOS > 7, Android >= 4.0]`](https://github.com/ai/browserslist#queries)
+7. 引入了[`postcss`](https://github.com/postcss/postcss/blob/master/README.cn.md)，开启了[`cssnext`](http://cssnext.io/)（内置autoprefixer）、[`cssnano`](http://cssnano.co/)功能，兼容浏览器为 [`[iOS > 7, Android >= 4.0]`](https://github.com/ai/browserslist#queries)，css文件可使用最新css语法进行开发
 
 8. 集成了部分常用工具：[`lodash`](https://lodash.com/)、[`lodash/fp`](https://github.com/lodash/lodash/wiki/FP-Guide)、[`axios`](https://github.com/axios/axios)、[`date-fns`](https://date-fns.org/)、[`md5`](https://github.com/pvorb/node-md5)、[`fastclick`](https://github.com/ftlabs/fastclick)
 
@@ -46,6 +44,8 @@
 - `src/project`中为多页面入口代码
 
 - `src/vendor`中为业务公共部分代码
+
+- - -
 
 ### 启动方式
 
@@ -65,4 +65,4 @@ node server/dist.js
 
 4. 启动服务器后，浏览器打开`localhost:10001/wmp/任意页面名` 来进行浏览
 
-例如[`localhost:10001/wmp/reduxCouterDemo`](http://localhost:10001/wmp/reduxCouterDemo)
+	例如 [`localhost:10001/wmp/reduxCouterDemo`](http://localhost:10001/wmp/reduxCouterDemo)

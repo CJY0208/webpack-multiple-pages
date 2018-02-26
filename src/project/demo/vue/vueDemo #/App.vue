@@ -14,13 +14,17 @@ export default {
 // var a = 1
 </script>
 
-<style lang="scss">
+<style lang="postcss">
+
+:root {
+  --mainColor: gray(70);
+}
 
 * {
-  color: blue;
+  color: var(--mainColor);
   font-size: 24px;
   // height: 100vh;
-  div {
+  & div {
     color: red;
   }
 }

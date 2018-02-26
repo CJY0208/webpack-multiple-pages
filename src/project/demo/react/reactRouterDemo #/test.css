@@ -1,4 +1,8 @@
 
+:root {
+  --mainColor: gray(85);
+}
+
 * {
-  color: red;
+  color: var(--mainColor);
 }

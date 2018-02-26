@@ -140,7 +140,10 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
             ...value.lib.reduce(getJs, []),
             ...value.vendor.reduce(getJs, [])
           ]
-          this.__record[key].assetsCss = [...value.vendor.reduce(getCss, [])]
+          this.__record[key].assetsCss = [
+            ...value.lib.reduce(getCss, []),
+            ...value.vendor.reduce(getCss, [])
+          ]
         })
       }
 

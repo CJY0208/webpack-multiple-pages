@@ -2,5 +2,5 @@ dist
 node_modules
 build/config/__dll/manifest
 build/config/__dll/files
-package-lock.json
 .uglify_cache
+yarn-error.log

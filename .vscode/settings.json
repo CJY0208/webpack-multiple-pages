@@ -3,15 +3,15 @@
   "files.exclude": {
     "**/.vscode": true,
     // "node_modules": true,
-    "yarn.lock": true,
+    // "yarn.lock": true,
     "**/.uglify_cache": true,
-    "package-lock.json": true,
-    "**/*.map": true
+    // "package-lock.json": true,
+    "**/*.map": true,
+    "yarn-error.log": true
   },
   "files.associations": {
     ".babelrc": "jsonc",
     ".eslintrc.json": "jsonc",
-    "package.json": "jsonc",
     ".prettierrc": "jsonc"
   }
 }
