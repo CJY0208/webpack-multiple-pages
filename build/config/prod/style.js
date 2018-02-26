@@ -7,14 +7,26 @@ const extractProjectStyle = new ExtractTextPlugin(
   'project/[name].[chunkhash:6].css'
 )
 
-const vueSassConfig = extractProjectStyle.extract({
-  fallback: 'vue-style-loader',
-  use: ['css-loader?minimize', 'postcss-loader', 'sass-loader']
-})
-const vueCssConfig = extractProjectStyle.extract({
-  fallback: 'vue-style-loader',
-  use: ['css-loader?minimize', 'postcss-loader']
-})
+const publicPath = '../'
+
+const getSassExtracter = (extracter, fallback = 'style-loader') =>
+  extracter.extract({
+    fallback,
+    publicPath,
+    use: ['css-loader?minimize', 'postcss-loader', 'sass-loader']
+  })
+const getLessExtracter = (extracter, fallback = 'style-loader') =>
+  extracter.extract({
+    fallback,
+    publicPath,
+    use: ['css-loader?minimize', 'postcss-loader', 'less-loader']
+  })
+const getCssExtracter = (extracter, fallback = 'style-loader') =>
+  extracter.extract({
+    fallback,
+    publicPath,
+    use: ['css-loader?minimize', 'postcss-loader']
+  })
 
 module.exports = {
   plugins: [extractLibStyle, extractVendorStyle, extractProjectStyle],
@@ -36,65 +48,40 @@ module.exports = {
       // --------------------------- 处理 Vendor 样式文件 --------------------------------
       {
         test: /.*src.*vendor.*\.css$/,
-        use: extractVendorStyle.extract([
-          'css-loader?minimize',
-          'postcss-loader'
-        ])
+        use: getCssExtracter(extractVendorStyle)
       },
       {
         test: /.*src.*vendor.*\.less$/,
-        use: extractVendorStyle.extract([
-          'css-loader?minimize',
-          'less-loader',
-          'postcss-loader'
-        ])
+        use: getLessExtracter(extractVendorStyle)
       },
       {
         test: /.*src.*vendor.*\.(scss|sass)$/,
-        use: extractVendorStyle.extract([
-          'css-loader?minimize',
-          'sass-loader',
-          'postcss-loader'
-        ])
+        use: getSassExtracter(extractVendorStyle)
       },
       // --------------------------- 处理 Vendor 样式文件 --------------------------------
       // --------------------------- 处理 Project 样式文件 -------------------------------
       {
         test: /.*src.*project.*\.css$/,
-        use: extractProjectStyle.extract([
-          'css-loader?minimize',
-          'postcss-loader'
-        ])
+        use: getCssExtracter(extractProjectStyle)
       },
       {
         test: /.*src.*project.*\.less$/,
-        use: extractProjectStyle.extract([
-          'css-loader?minimize',
-          'postcss-loader',
-          'less-loader'
-        ])
+        use: getLessExtracter(extractProjectStyle)
       },
       {
         test: /.*src.*project.*\.(scss|sass)$/,
-        use: extractProjectStyle.extract([
-          'css-loader?minimize',
-          'postcss-loader',
-          'sass-loader'
-        ])
+        use: getSassExtracter(extractProjectStyle)
       }
       // --------------------------- 处理 Project 样式文件 --------------------------------
     ]
   },
   vue: {
     loaders: {
-      scss: vueSassConfig,
-      sass: vueSassConfig,
-      less: extractProjectStyle.extract({
-        fallback: 'vue-style-loader',
-        use: ['css-loader?minimize', 'postcss-loader', 'less-loader']
-      }),
-      postcss: vueCssConfig,
-      css: vueCssConfig
+      scss: getSassExtracter(extractProjectStyle, 'vue-style-loader'),
+      sass: getSassExtracter(extractProjectStyle, 'vue-style-loader'),
+      less: getLessExtracter(extractProjectStyle, 'vue-style-loader'),
+      postcss: getCssExtracter(extractProjectStyle, 'vue-style-loader'),
+      css: getCssExtracter(extractProjectStyle, 'vue-style-loader')
     }
   }
 }
