@@ -13,6 +13,8 @@ Object.assign(window, { _, fp })
 import { fn1, fn2 } from '@commonDemo'
 import { fnA } from '@layoutDemo'
 import { test } from './test'
+
+import './style'
 // import { test2 } from './test2'
 
 // import { test } from './test'

@@ -10,12 +10,7 @@ module.exports = {
           'style-loader',
           'css-loader?minimize',
           'postcss-loader',
-          {
-            loader: 'less-loader',
-            options: {
-              javascriptEnabled: true
-            }
-          }
+          'less-loader?javascriptEnabled'
         ]
       },
       {

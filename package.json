@@ -20,7 +20,7 @@
     "clean-webpack-plugin": "^0.1.18",
     "compression": "^1.7.1",
     "css-loader": "^0.28.9",
-    "cssnano": "^3.10.0",
+    "cssnano": "^4.0.0-rc.2",
     "doiuse": "^4.0.0",
     "eslint": "^4.17.0",
     "eslint-loader": "^1.9.0",
@@ -46,11 +46,13 @@
     "webpack": "^3.10.0",
     "webpack-parallel-uglify-plugin": "^1.0.2",
     "webpack-plugin-hash-output": "^1.3.0",
+    "yargs": "^11.0.0",
     "yarn": "^1.3.2"
   },
   "scripts": {
-    "build": "webpack --config ./build/config/prod/webpack.config.js",
-    "dll": "webpack --config ./build/config/__dll/webpack.config.js",
+    "build":
+      "webpack --config ./build/config/prod/webpack.config.js --progress",
+    "dll": "webpack --config ./build/config/__dll/webpack.config.js --progress",
     "format": "prettier --write \"./**/*.js\"",
     "precommit": "lint-staged",
     "initDependencies":
