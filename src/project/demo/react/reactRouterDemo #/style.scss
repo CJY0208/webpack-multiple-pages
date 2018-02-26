@@ -3,6 +3,25 @@ div {
   color: blue;
 
   h2 {
-    color: green; // lalala
+    color: orange; // lalala
   }
+}
+
+.module {
+  color: green
+}
+.another-module {
+  color: blue
+}
+.module {
+  background: red
+}
+.another-module {
+  background: yellow
+}
+
+.a {
+  height: 10px;
+  background: orange;
+  background: rgba(255, 165, 0, 0.5);
 }

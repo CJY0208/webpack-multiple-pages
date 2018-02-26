@@ -4748,6 +4748,13 @@ postcss-colormin@^4.0.0-rc.2:
     postcss "^6.0.0"
     postcss-value-parser "^3.0.0"
 
+postcss-combine-duplicated-selectors@^4.0.2:
+  version "4.0.2"
+  resolved "http://registry.npm.taobao.org/postcss-combine-duplicated-selectors/download/postcss-combine-duplicated-selectors-4.0.2.tgz#797df9c2a89e1ef67d73fdf4ad7ce81169d9e846"
+  dependencies:
+    postcss "^6.0.2"
+    postcss-selector-parser "^3.1.0"
+
 postcss-convert-values@^2.3.4:
   version "2.6.1"
   resolved "http://registry.npm.taobao.org/postcss-convert-values/download/postcss-convert-values-2.6.1.tgz#bbd8593c5c1fd2e3d1c322bb925dcae8dae4d62d"
@@ -5277,7 +5284,7 @@ postcss-selector-parser@^2.0.0, postcss-selector-parser@^2.2.2, postcss-selector
     indexes-of "^1.0.1"
     uniq "^1.0.1"
 
-postcss-selector-parser@^3.0.0-rc.0:
+postcss-selector-parser@^3.0.0-rc.0, postcss-selector-parser@^3.1.0:
   version "3.1.1"
   resolved "http://registry.npm.taobao.org/postcss-selector-parser/download/postcss-selector-parser-3.1.1.tgz#4f875f4afb0c96573d5cf4d74011aee250a7e865"
   dependencies:
@@ -5340,7 +5347,7 @@ postcss@^5.0.10, postcss@^5.0.11, postcss@^5.0.12, postcss@^5.0.13, postcss@^5.0
     source-map "^0.5.6"
     supports-color "^3.2.3"
 
-postcss@^6.0, postcss@^6.0.0, postcss@^6.0.1, postcss@^6.0.11, postcss@^6.0.14, postcss@^6.0.17, postcss@^6.0.18, postcss@^6.0.5, postcss@^6.0.6, postcss@^6.0.8:
+postcss@^6.0, postcss@^6.0.0, postcss@^6.0.1, postcss@^6.0.11, postcss@^6.0.14, postcss@^6.0.17, postcss@^6.0.18, postcss@^6.0.2, postcss@^6.0.5, postcss@^6.0.6, postcss@^6.0.8:
   version "6.0.19"
   resolved "http://registry.npm.taobao.org/postcss/download/postcss-6.0.19.tgz#76a78386f670b9d9494a655bf23ac012effd1555"
   dependencies:

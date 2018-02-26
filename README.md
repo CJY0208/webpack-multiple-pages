@@ -31,7 +31,13 @@
 
 6. 支持sass、less、css，样式将抽取成独立的css文件
 
-7. 引入了[`postcss`](https://github.com/postcss/postcss/blob/master/README.cn.md)，开启了[`cssnext`](http://cssnext.io/)（内置autoprefixer）、[`cssnano`](http://cssnano.co/)功能，兼容浏览器为 [`[iOS > 7, Android >= 4.0]`](https://github.com/ai/browserslist#queries)，css文件可使用最新css语法进行开发
+7. 引入[`postcss`](https://github.com/postcss/postcss/blob/master/README.cn.md)，启用以下插件
+
+	- [`cssnext`](http://cssnext.io/)支持最新css语法，内置了[`autoprefixer`](https://github.com/postcss/autoprefixer)，兼容浏览器为 [`[iOS > 7, Android >= 4.0]`](https://github.com/ai/browserslist#queries)
+
+	- [`cssnano`](http://cssnano.co/)对样式文件进行压缩
+
+	- [`postcss-combine-duplicated-selectors`](https://github.com/ChristianMurphy/postcss-combine-duplicated-selectors)对样式或属性进行合并
 
 8. 集成了部分常用工具：[`lodash`](https://lodash.com/)、[`lodash/fp`](https://github.com/lodash/lodash/wiki/FP-Guide)、[`axios`](https://github.com/axios/axios)、[`date-fns`](https://date-fns.org/)、[`md5`](https://github.com/pvorb/node-md5)、[`fastclick`](https://github.com/ftlabs/fastclick)
 
