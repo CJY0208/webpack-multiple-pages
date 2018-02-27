@@ -1,3 +1,5 @@
+const HappyPack = require('happypack')
+const happyThreadPool = HappyPack.ThreadPool({ size: 4 })
 const styleConfig = require('../style')
 
 module.exports = {
@@ -7,26 +9,21 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: ['babel-loader', 'eslint-loader']
+        use: ['babel-loader', 'eslint-loader'] // 'happypack/loader?id=js'
       },
       {
         test: /\.vue$/,
-        exclude: /node_modules/,
-        use: [
-          {
-            loader: 'vue-loader',
-            options: {
-              ...styleConfig.vue
-            }
-          },
-          'eslint-loader'
-        ]
+        loader: 'vue-loader',
+        options: {
+          ...styleConfig.vue,
+          js: ['babel-loader', 'eslint-loader'] // 'happypack/loader?id=js'
+        }
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
         options: {
-          limit: 10000,
+          limit: 8192,
           name: 'assest/img/[name].[hash:6].[ext]'
         }
       },
@@ -34,7 +31,7 @@ module.exports = {
         test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
         loader: 'url-loader',
         options: {
-          limit: 10000,
+          limit: 8192,
           name: 'assest/media/[name].[hash:6].[ext]'
         }
       },
@@ -42,10 +39,18 @@ module.exports = {
         test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
         loader: 'url-loader',
         options: {
-          limit: 10000,
+          limit: 8192,
           name: 'assest/fonts/[name].[hash:6].[ext]'
         }
       }
     ]
-  }
+  },
+  plugins: [
+    // new HappyPack({
+    //   id: 'js',
+    //   threads: 4,
+    //   // threadPool: happyThreadPool,
+    //   loaders: ['babel-loader', 'eslint-loader']
+    // })
+  ]
 }

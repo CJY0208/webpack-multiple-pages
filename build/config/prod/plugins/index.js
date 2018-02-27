@@ -11,10 +11,11 @@ const {
 
 module.exports = {
   plugins: [
+    ...require('../style').plugins,
+    ...require('../loaders').plugins,
     ...require('./code-splitting'),
     ...require('./dll'),
     ...require('./html'),
-    ...require('../style').plugins,
 
     /**
      * NamedChunksPlugin 和 HashedModuleIdsPlugin 保证模块 hash 不受编译顺序的影响
