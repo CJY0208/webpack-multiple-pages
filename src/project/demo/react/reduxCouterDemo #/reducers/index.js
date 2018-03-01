@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import { handleActions, combineActions } from 'redux-actions'
-import { add, reduce } from '../actions'
+import { add, reduce, delayChangeWord } from '../actions'
 
 const count = handleActions(
   {
@@ -10,4 +10,12 @@ const count = handleActions(
   0
 )
 
-export default combineReducers({ count })
+const word = handleActions(
+  {
+    [combineActions(delayChangeWord)]: (state, { payload: word }) =>
+      typeof word !== undefined ? word : state
+  },
+  'hello'
+)
+
+export default combineReducers({ count, word })

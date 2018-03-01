@@ -68,6 +68,7 @@
     "*.{js,json}": ["npm run format", "git add"]
   },
   "dependencies": {
+    "amfe-flexible": "^2.2.1",
     "antd-mobile": "^2.1.6",
     "axios": "^0.17.1",
     "babel-polyfill": "^6.26.0",

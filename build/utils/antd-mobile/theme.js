@@ -1,4 +1,4 @@
-const hd = 2
+const hd = 1
 
 module.exports = {
   hd: `${hd}px`,

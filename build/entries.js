@@ -13,7 +13,7 @@ module.exports = Object.assign(
       vue: ['vue'],
       utils: ['axios'],
       lodash: ['lodash', 'lodash/fp'],
-      antd: ['antd-mobile'],
+      antdMobile: ['antd-mobile'],
       mintUI: ['mint-ui'],
       /**
        * react-router 与 react-router-dom 异同：https://github.com/ReactTraining/react-router/issues/4648
@@ -34,7 +34,11 @@ module.exports = Object.assign(
        * 使用 Viewport Units Buggyfill 插件来兼容 vw、vh、vmin、vmax 等css单位，参考：https://www.w3cplus.com/mobile/vw-layout-in-vue.html
        */
       polyfill: ['babel-polyfill', 'viewport-units-buggyfill', 'fastclick'],
-      utils: ['md5', 'date-fns'],
+      utils: [
+        'md5',
+        'date-fns'
+        // 'amfe-flexible'
+      ],
       immutable: ['immutable'],
       react: ['react', 'react-dom', 'prop-types'],
       vueTools: ['vuex', 'vue-router']

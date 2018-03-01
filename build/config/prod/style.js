@@ -27,7 +27,7 @@ module.exports = {
     rules: [
       // --------------------------- 处理 Lib 样式文件 -----------------------------------
       {
-        test: /.*node_modules.*\.less$/,
+        test: /.*node_modules.*antd-mobile.*\.less$/,
         use: extractLibStyle.extract([
           'css-loader?minimize',
           {
@@ -35,7 +35,7 @@ module.exports = {
             options: {
               config: {
                 ctx: {
-                  usePostcssPxToViewport: true
+                  // usePostcssPxToViewport: true
                 }
               }
             }
@@ -47,6 +47,14 @@ module.exports = {
               modifyVars: require('../../utils/antd-mobile/theme')
             }
           }
+        ])
+      },
+      {
+        test: /.*node_modules.*\.less$/,
+        exclude: [/antd-mobile/],
+        use: extractLibStyle.extract([
+          'css-loader?minimize',
+          'less-loader?javascriptEnabled'
         ])
       },
       {
