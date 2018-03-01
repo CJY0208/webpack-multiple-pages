@@ -1,9 +1,6 @@
-import 'babel-polyfill'
+import '__prefix__'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import FastClick from 'fastclick'
-
-FastClick.attach(document.body)
 
 import { DatePicker, List } from 'antd-mobile'
 import enUs from 'antd-mobile/lib/date-picker/locale/en_US'

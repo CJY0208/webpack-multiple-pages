@@ -108,12 +108,12 @@ module.exports = [
    */
   new CommonsChunkPlugin({
     name: '__share',
-    filename: '[name].[chunkhash:6].js',
+    filename: 'project/[name].[chunkhash:6].js',
     chunks: [...project_names, ...vendor_names, ...lib_names],
     minChunks: ({ resource = '', isDependentByLib = false }, count) =>
-      isDependentByLib &&
-      count >= 2 &&
-      (/node_modules/.test(resource) || /vendor/.test(resource))
+      /__prefix__/.test(resource) ||
+      // isDependentByLib &&
+      (count >= 2 && (/node_modules/.test(resource) || /vendor/.test(resource)))
   }),
 
   /**
@@ -123,6 +123,6 @@ module.exports = [
    */
   new CommonsChunkPlugin({
     name: '__runtime',
-    filename: '[name].[chunkhash:6].js'
+    filename: 'project/[name].[chunkhash:6].js'
   })
 ]

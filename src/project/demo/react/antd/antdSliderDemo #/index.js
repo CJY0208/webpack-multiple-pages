@@ -1,9 +1,6 @@
-import 'babel-polyfill'
+import '__prefix__'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import FastClick from 'fastclick'
-
-FastClick.attach(document.body)
 
 import { Slider, WingBlank, WhiteSpace } from 'antd-mobile'
 

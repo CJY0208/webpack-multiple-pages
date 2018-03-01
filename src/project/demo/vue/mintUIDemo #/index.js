@@ -1,4 +1,4 @@
-import 'babel-polyfill'
+import '__prefix__'
 import Vue from 'vue'
 import { DatetimePicker } from 'mint-ui'
 import App from './App'

@@ -1,4 +1,3 @@
-import 'babel-polyfill'
 import { common_common as aaa } from '../common_common'
 // console.log(common_common)
 

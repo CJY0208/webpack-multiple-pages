@@ -22,6 +22,7 @@ module.exports = {
     alias: {
       // 'vue': 'vue/dist/vue.esm.js',
       'lodash/fp': path.resolve(__dirname, '../../utils/lodash/fp'),
+      __prefix__: path.resolve(__dirname, '../../../src/__prefix__'),
       ...Object.entries(vendor).reduce(
         (alias, [key, value]) =>
           Object.assign(

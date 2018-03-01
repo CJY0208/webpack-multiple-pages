@@ -1,4 +1,4 @@
-import 'babel-polyfill'
+import '__prefix__'
 import React from 'react'
 import ReactDom from 'react-dom'
 import 'react-router-dom'

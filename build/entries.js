@@ -30,9 +30,12 @@ module.exports = Object.assign(
       ]
     },
     dll: {
-      utils: ['md5', 'date-fns', 'fastclick'],
+      /**
+       * 使用 Viewport Units Buggyfill 插件来兼容 vw、vh、vmin、vmax 等css单位，参考：https://www.w3cplus.com/mobile/vw-layout-in-vue.html
+       */
+      polyfill: ['babel-polyfill', 'viewport-units-buggyfill', 'fastclick'],
+      utils: ['md5', 'date-fns'],
       immutable: ['immutable'],
-      polyfill: ['babel-polyfill'],
       react: ['react', 'react-dom', 'prop-types'],
       vueTools: ['vuex', 'vue-router']
     }

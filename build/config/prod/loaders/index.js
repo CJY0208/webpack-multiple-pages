@@ -13,11 +13,16 @@ module.exports = {
       },
       {
         test: /\.vue$/,
-        loader: 'vue-loader',
-        options: {
-          ...styleConfig.vue,
-          js: ['babel-loader', 'eslint-loader'] // 'happypack/loader?id=js'
-        }
+        use: [
+          {
+            loader: 'vue-loader',
+            options: {
+              ...styleConfig.vue,
+              js: ['babel-loader'] // 'happypack/loader?id=js'
+            }
+          },
+          'eslint-loader'
+        ]
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
