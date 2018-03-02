@@ -1,7 +1,8 @@
 dist
 node_modules
 build/config/__dll/manifest
-build/config/__dll/files
+build/config/__check_dll/manifest
+build/config/__check_dll/files
 package-lock.json
 build/utils/autodll-webpack-plugin
 .uglify_cache

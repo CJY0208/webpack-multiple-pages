@@ -1845,7 +1845,7 @@ css-declaration-sorter@^2.0.1:
     timsort "^0.3.0"
     write-file-stdout "0.0.2"
 
-css-loader@^0.28.9:
+css-loader@^0.28.10:
   version "0.28.10"
   resolved "http://registry.npm.taobao.org/css-loader/download/css-loader-0.28.10.tgz#40282e79230f7bcb4e483efa631d670b735ebf42"
   dependencies:

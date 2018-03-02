@@ -1,5 +1,4 @@
 const path = require('path')
-const ParallelUglifyPlugin = require('webpack-parallel-uglify-plugin')
 const {
   optimize: { CommonsChunkPlugin, UglifyJsPlugin } = {},
   // DllPlugin,
@@ -39,16 +38,12 @@ module.exports = {
     /**
      * 此处与 Tree Shaking 无关，单纯对第三方模块做压缩处理
      */
-    new ParallelUglifyPlugin({
-      cacheDir: path.resolve(__dirname, './.uglify_cache'),
-      uglifyJs: {
-        compress: {
-          warnings: false
-        },
-        beautify: false,
-        output: {
-          comments: false
-        }
+    new UglifyJsPlugin({
+      compress: {
+        warnings: false
+      },
+      output: {
+        comments: false
       },
       sourceMap: false
     })

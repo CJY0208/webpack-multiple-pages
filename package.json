@@ -18,7 +18,7 @@
     "babel-preset-stage-2": "^6.24.1",
     "clean-webpack-plugin": "^0.1.18",
     "compression": "^1.7.1",
-    "css-loader": "^0.28.9",
+    "css-loader": "^0.28.10",
     "cssnano": "^4.0.0-rc.2",
     "eslint": "^4.17.0",
     "eslint-loader": "^1.9.0",
@@ -56,7 +56,11 @@
   "scripts": {
     "build":
       "webpack --config ./build/config/prod/webpack.config.js --progress",
+    "check-dll":
+      "webpack --config ./build/config/__check_dll/webpack.config.js --progress",
     "dll": "webpack --config ./build/config/__dll/webpack.config.js --progress",
+    "watch":
+      "npm run dll && webpack --config ./build/config/watch/webpack.config.js --progress",
     "format": "prettier --write \"./**/*.js\"",
     "precommit": "lint-staged",
     "initDependencies":
