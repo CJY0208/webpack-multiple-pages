@@ -22,10 +22,6 @@
   &:not(input, textarea) {
     user-select: none;
   }
-
-  &::after, &::before {
-    color: transparent;
-  }
 }
 
 html,
@@ -33,8 +29,4 @@ body {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-}
-
-img {
-  content: normal !important;
 }

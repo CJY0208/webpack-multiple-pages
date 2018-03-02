@@ -1,8 +1,16 @@
+// import '__prefix__'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { List, Switch, Calendar } from 'antd-mobile'
 import enUS from 'antd-mobile/lib/calendar/locale/en_US'
 import zhCN from 'antd-mobile/lib/calendar/locale/zh_CN'
+import { fetchCDN } from '@common'
+
+console.log('test')
+
+fetchCDN.js('//cdn.jsdelivr.net/npm/eruda').then(() => {
+  window.eruda.init()
+})
 
 const locale = {
   title: '日期选择',

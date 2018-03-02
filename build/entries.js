@@ -40,6 +40,7 @@ module.exports = Object.assign(
         // 'amfe-flexible'
       ],
       immutable: ['immutable'],
+      eruda: ['eruda'],
       react: ['react', 'react-dom', 'prop-types'],
       vueTools: ['vuex', 'vue-router']
     }

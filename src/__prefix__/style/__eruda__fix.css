@@ -1,0 +1,6 @@
+
+#eruda {
+  & ::after, & ::before {
+    color: unset;
+  }
+}
