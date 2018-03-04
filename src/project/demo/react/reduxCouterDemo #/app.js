@@ -6,7 +6,7 @@ import { add, reduce, delayChangeWord } from './actions'
   count: state.count,
   word: state.word
 }))
-export default class App extends Component {
+class App extends Component {
   change = () => {
     const { input } = this
     const { dispatch } = this.props
@@ -33,3 +33,8 @@ export default class App extends Component {
     )
   }
 }
+
+export default (process.env.NODE_ENV !== 'production'
+  ? require('react-hot-loader').hot(module)(App)
+  : App)
+// export default App
