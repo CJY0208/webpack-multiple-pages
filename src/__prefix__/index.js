@@ -12,3 +12,7 @@ require('./style/__eruda__fix.css')
 if (process.env.NODE_ENV !== 'production') {
   require('eruda').init()
 }
+
+if (module.hot) {
+  module.hot.accept()
+}
