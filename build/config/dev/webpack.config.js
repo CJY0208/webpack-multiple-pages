@@ -1,6 +1,14 @@
 const path = require('path')
 const { project, vendor, lib, dll } = require('../../entries')
 
+let __filter
+
+try {
+  __filter = require('../../../.entryignore')
+} catch (err) {
+  __filter = []
+}
+
 module.exports = {
   ...require('./dev-server'),
   ...require('./loaders'),
@@ -8,7 +16,15 @@ module.exports = {
 
   devtool: 'cheap-module-source-map',
   entry: {
-    ...project
+    ...Object.entries(project).reduce(
+      (project, [name, filepath]) =>
+        __filter.some(filter => filter.test(filepath))
+          ? project
+          : Object.assign(project, {
+              [name]: filepath
+            }),
+      {}
+    )
     // ...vendor,
     // ...lib,
     // ...dll

@@ -1,7 +1,6 @@
 const path = require('path')
 const glob = require('glob')
 
-const __filter = require('./__entriesFilter')
 const srcDir = path.resolve(__dirname, '../src')
 
 /**
@@ -52,16 +51,14 @@ module.exports = Object.assign(
         .resolve(filepath)
         .replace(srcDir, '')
         .split(path.sep)[1]
-      return __filter.some(filter => filter.test(filepath))
-        ? entries
-        : Object.assign(entries, {
-            [type]: Object.assign({}, entries[type], {
-              [filepath
-                .split('/')
-                .pop()
-                .replace(' #', '')]: filepath
-            })
-          })
+      return Object.assign(entries, {
+        [type]: Object.assign({}, entries[type], {
+          [filepath
+            .split('/')
+            .pop()
+            .replace(' #', '')]: filepath
+        })
+      })
     },
     {
       project: {},
