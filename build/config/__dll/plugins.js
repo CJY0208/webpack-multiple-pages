@@ -34,23 +34,23 @@ module.exports = {
       'process.env': {
         NODE_ENV: JSON.stringify('develop')
       }
-    }),
+    })
 
     /**
      * 此处与 Tree Shaking 无关，单纯对第三方模块做压缩处理
      */
-    new ParallelUglifyPlugin({
-      cacheDir: path.resolve(__dirname, './.uglify_cache'),
-      uglifyJs: {
-        compress: {
-          warnings: false
-        },
-        beautify: false,
-        output: {
-          comments: false
-        }
-      },
-      sourceMap: false
-    })
+    // new ParallelUglifyPlugin({
+    //   cacheDir: path.resolve(__dirname, './.uglify_cache'),
+    //   uglifyJs: {
+    //     compress: {
+    //       warnings: false
+    //     },
+    //     beautify: false,
+    //     output: {
+    //       comments: false
+    //     }
+    //   },
+    //   sourceMap: false
+    // })
   ]
 }

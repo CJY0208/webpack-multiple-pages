@@ -1,9 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin')
-const entries = require('../../../entries')
-const { project } = entries
-
-const AutoInjectPlugin = require('../../../utils/auto-inject-plugin')
+const { project } = require('../__entries')
 
 module.exports = [
   /**
@@ -24,12 +21,4 @@ module.exports = [
     assets: ['__dll.js'],
     append: false
   })
-
-  /**
-   * 自建组件，分析入口文件引用，引入相关依赖
-   */
-  // new AutoInjectPlugin({
-  //   entries,
-  //   dllPath: 'dll/'
-  // })
 ]

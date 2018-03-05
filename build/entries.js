@@ -43,7 +43,44 @@ module.exports = Object.assign(
       eruda: ['eruda'],
       react: ['react', 'react-dom', 'prop-types'],
       vueTools: ['vuex', 'vue-router']
+    }
+  },
+  glob.sync(`${srcDir}/**/* @*`).reduce(
+    (entries, filepath) => {
+      const type = path
+        .resolve(filepath)
+        .replace(srcDir, '')
+        .split(path.sep)[1]
+      const [name, alias] = filepath
+        .split('/')
+        .pop()
+        .split(' @')
+
+      const projectName = alias || name
+
+      if (projectName in entries[type]) {
+        throw new Error(`
+          Duplicated entry named '${projectName}' 
+          Found in '${path.resolve(filepath).replace(srcDir, 'src')}' 
+          Agains with '${path
+            .resolve(entries[type][projectName])
+            .replace(srcDir, 'src')}'
+        `)
+      }
+
+      return Object.assign(entries, {
+        [type]: Object.assign({}, entries[type], {
+          [alias || name]: filepath
+        })
+      })
     },
+    {
+      project: {},
+      vendor: {}
+    }
+  ),
+  {
+    // 此处勿改动，仅作优化dev速度使用
     __dev: {
       __devTools: [
         './node_modules/sockjs-client/dist/sockjs.js',
@@ -52,7 +89,7 @@ module.exports = Object.assign(
         'loglevel',
         'punycode',
         'querystring-es3',
-        'react-hot-loader',
+        // 'react-hot-loader',
         'url',
         'ansi-html',
         './node_modules/style-loader/lib/addStyles.js',
@@ -63,7 +100,6 @@ module.exports = Object.assign(
 
         './node_modules/mint-ui/lib/picker/index.js',
         './node_modules/mint-ui/lib/popup/index.js',
-        // './node_modules/mint-ui/lib/datetime-picker/index.js',
 
         './node_modules/vue-hot-reload-api/dist/index.js',
         './node_modules/vue-loader/lib/runtime/component-normalizer.js',
@@ -72,25 +108,5 @@ module.exports = Object.assign(
         './node_modules/webpack-dev-server/client/index.js'
       ]
     }
-  },
-  glob.sync(`${srcDir}/**/* #`).reduce(
-    (entries, filepath) => {
-      const type = path
-        .resolve(filepath)
-        .replace(srcDir, '')
-        .split(path.sep)[1]
-      return Object.assign(entries, {
-        [type]: Object.assign({}, entries[type], {
-          [filepath
-            .split('/')
-            .pop()
-            .replace(' #', '')]: filepath
-        })
-      })
-    },
-    {
-      project: {},
-      vendor: {}
-    }
-  )
+  }
 )
