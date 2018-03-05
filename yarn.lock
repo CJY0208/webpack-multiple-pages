@@ -2765,10 +2765,6 @@ error@^7.0.2:
     string-template "~0.2.1"
     xtend "~4.0.0"
 
-eruda@^1.4.3:
-  version "1.4.3"
-  resolved "http://registry.npm.taobao.org/eruda/download/eruda-1.4.3.tgz#7860a0103e40b3c005837b5fda43d805433421e3"
-
 es-abstract@^1.7.0:
   version "1.10.0"
   resolved "http://registry.npm.taobao.org/es-abstract/download/es-abstract-1.10.0.tgz#1ecb36c197842a00d8ee4c2dfd8646bb97d60864"

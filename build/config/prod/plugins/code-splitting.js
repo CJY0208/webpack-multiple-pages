@@ -71,7 +71,8 @@ const getLibSplitter = (key, value) => module => {
 
   return (
     isCurrentLib ||
-    (!/-loader/.test(resource) &&
+    (!/node_modules\W+.*-loader/.test(resource) && // 不抽离-loader类型依赖
+    !/node_modules\W+webpack\W+/.test(resource) && // 不抽离webpack目录下的依赖
       !isDependentByMultipleLib &&
       isDependentByCurrentLib)
   )
@@ -88,7 +89,7 @@ module.exports = [
         filename: 'vendor/[name].[chunkhash:6].js',
         chunks: project_names,
         minChunks: ({ resource = '' }) =>
-          /vendor/.test(resource) && new RegExp(`${key} #`).test(resource)
+          /vendor/.test(resource) && new RegExp(`${key} @`).test(resource)
       })
   ),
   /**
