@@ -53,11 +53,13 @@ module.exports = {
   plugins: [
     new HappyPack({
       id: 'js',
+      verbose: false,
       threadPool: happyThreadPool,
       loaders: ['babel-loader?cacheDirectory', 'eslint-loader']
     }),
     new HappyPack({
       id: 'vue',
+      verbose: false,
       threadPool: happyThreadPool,
       loaders: ['babel-loader?cacheDirectory']
     })

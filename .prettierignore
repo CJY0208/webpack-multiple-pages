@@ -7,4 +7,4 @@ build/config/__check_dll/files
 package-lock.json
 build/utils/autodll-webpack-plugin
 .uglify_cache
-.entryignore.js
+__entry.config.js

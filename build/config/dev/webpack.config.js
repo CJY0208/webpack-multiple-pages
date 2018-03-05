@@ -1,12 +1,14 @@
 const path = require('path')
 const { project, vendor, lib, dll } = require('../../entries')
 
-let __filter
+let __entry_include, __entry_exclude
 
 try {
-  __filter = require('../../../.entryignore')
+  const __entry_config = require('../../../__entry.config.js')
+  __entry_include = __entry_config.include
+  __entry_exclude = __entry_config.exclude
 } catch (err) {
-  __filter = []
+  __entry_exclude = []
 }
 
 module.exports = {
@@ -18,7 +20,10 @@ module.exports = {
   entry: {
     ...Object.entries(project).reduce(
       (project, [name, filepath]) =>
-        __filter.some(filter => filter.test(filepath))
+        __entry_exclude.some(filter => filter.test(filepath)) ||
+        (Array.isArray(__entry_include) &&
+          __entry_include.length > 0 &&
+          !__entry_include.some(filter => filter.test(filepath)))
           ? project
           : Object.assign(project, {
               [name]: filepath

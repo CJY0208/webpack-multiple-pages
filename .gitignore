@@ -6,4 +6,4 @@ build/config/__check_dll/manifest
 build/config/__check_dll/files
 .uglify_cache
 yarn-error.log
-.entryignore.js
+__entry.config.js

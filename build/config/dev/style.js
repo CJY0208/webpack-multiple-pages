@@ -73,6 +73,7 @@ module.exports = {
   plugins: [
     new HappyPack({
       id: 'css',
+      verbose: false,
       threadPool: happyThreadPool,
       loaders: [
         'style-loader?sourceMap',
@@ -82,6 +83,7 @@ module.exports = {
     }),
     new HappyPack({
       id: 'sass',
+      verbose: false,
       threadPool: happyThreadPool,
       loaders: [
         'style-loader?sourceMap',

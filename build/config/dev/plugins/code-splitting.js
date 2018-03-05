@@ -12,7 +12,8 @@ module.exports = [
     name: '__vendor',
     filename: 'dev/[name].js',
     minChunks: (module, count) =>
-      /node_modules/.test(module.resource) || count >= 2
+      [/node_modules/, /__prefix__/].some(reg => reg.test(module.resource)) ||
+      count >= 2
   }),
 
   /**

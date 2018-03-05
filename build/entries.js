@@ -43,6 +43,34 @@ module.exports = Object.assign(
       eruda: ['eruda'],
       react: ['react', 'react-dom', 'prop-types'],
       vueTools: ['vuex', 'vue-router']
+    },
+    __dev: {
+      __devTools: [
+        './node_modules/sockjs-client/dist/sockjs.js',
+        'html-entities',
+        'events',
+        'loglevel',
+        'punycode',
+        'querystring-es3',
+        'react-hot-loader',
+        'url',
+        'ansi-html',
+        './node_modules/style-loader/lib/addStyles.js',
+        './node_modules/antd-mobile/lib/index.js',
+        './node_modules/rmc-calendar/lib/locale/en_US.js',
+
+        './node_modules/css-loader/lib/css-base.js',
+
+        './node_modules/mint-ui/lib/picker/index.js',
+        './node_modules/mint-ui/lib/popup/index.js',
+        // './node_modules/mint-ui/lib/datetime-picker/index.js',
+
+        './node_modules/vue-hot-reload-api/dist/index.js',
+        './node_modules/vue-loader/lib/runtime/component-normalizer.js',
+        './node_modules/vue-style-loader/lib/addStylesClient.js',
+        './node_modules/vue-style-loader/lib/listToStyles.js',
+        './node_modules/webpack-dev-server/client/index.js'
+      ]
     }
   },
   glob.sync(`${srcDir}/**/* #`).reduce(

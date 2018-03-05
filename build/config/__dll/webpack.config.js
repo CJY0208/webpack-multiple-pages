@@ -1,6 +1,6 @@
 const path = require('path')
 const { plugins } = require('./plugins')
-const { dll, lib } = require('../../entries')
+const { dll, lib, __dev } = require('../../entries')
 const { DllPlugin } = require('webpack')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 
@@ -8,7 +8,8 @@ module.exports = {
   entry: {
     __dll: Object.values({
       ...dll,
-      ...lib
+      ...lib,
+      ...__dev
     }).reduce((entry, val) => [...entry, ...val], [])
   },
   output: {
