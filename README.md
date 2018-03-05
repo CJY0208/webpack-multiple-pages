@@ -1,7 +1,7 @@
 
 # Webpack Multiple Pages
 
-**注：目前仅支持production生产环境构建，目前侧重于移动端支持，调整webpack配置后可支持PC端**
+**注：已支持dev开发构建，目前侧重于移动端支持，调整webpack配置后可支持PC端**
 
 - - -
 
@@ -72,15 +72,9 @@
 2. 使用以下命令进行构建
 
 ```javascript
-npm run build
+npm start
 ```
 
-3. 使用以下命令启动dist本地服务器，默认端口号为`10001`，命令可选参数`--port=12345`自定义端口号
+3. 启动服务器后，浏览器打开`localhost:10001/任意页面名.html` 来进行浏览
 
-```javascript
-node server/dist.js
-```
-
-4. 启动服务器后，浏览器打开`localhost:10001/wmp/任意页面名` 来进行浏览
-
-	例如 [`localhost:10001/wmp/reduxCouterDemo`](http://localhost:10001/wmp/reduxCouterDemo)
+	例如 [`localhost:10001/reduxCouterDemo.html`](http://localhost:10001/reduxCouterDemo.html)

@@ -1,5 +1,5 @@
 const HappyPack = require('happypack')
-const happyThreadPool = HappyPack.ThreadPool({ size: 4 })
+const happyThreadPool = require('../__threadPool')
 const styleConfig = require('../style')
 
 module.exports = {
@@ -9,7 +9,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: ['babel-loader', 'eslint-loader'] // 'happypack/loader?id=js'
+        use: 'happypack/loader?id=js'
       },
       {
         test: /\.vue$/,
@@ -18,7 +18,7 @@ module.exports = {
             loader: 'vue-loader',
             options: {
               ...styleConfig.vue,
-              js: ['babel-loader'] // 'happypack/loader?id=js'
+              js: 'happypack/loader?id=vue'
             }
           },
           'eslint-loader'
@@ -51,11 +51,15 @@ module.exports = {
     ]
   },
   plugins: [
-    // new HappyPack({
-    //   id: 'js',
-    //   threads: 4,
-    //   // threadPool: happyThreadPool,
-    //   loaders: ['babel-loader', 'eslint-loader']
-    // })
+    new HappyPack({
+      id: 'js',
+      threadPool: happyThreadPool,
+      loaders: ['babel-loader?cacheDirectory', 'eslint-loader']
+    }),
+    new HappyPack({
+      id: 'vue',
+      threadPool: happyThreadPool,
+      loaders: ['babel-loader?cacheDirectory']
+    })
   ]
 }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    Hello Vue, I am {{`${name}`}} lalala
+    Hello Vue, I am {{name}} lalala
   </div>
 </template>
 

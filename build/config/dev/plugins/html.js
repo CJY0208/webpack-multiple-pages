@@ -1,4 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin')
 const entries = require('../../../entries')
 const { project } = entries
 
@@ -15,17 +16,14 @@ module.exports = [
         filename: `${projectName}.html`,
         template: 'template.html',
         chunks: ['__runtime', '__vendor', projectName],
-        chunksSortMode: 'dependency',
-        /**
-         * html-minifier DOC: https://github.com/kangax/html-minifier
-         */
-        minify: {
-          minifyCSS: true,
-          minifyJS: true
-          // collapseWhitespace: true
-        }
+        chunksSortMode: 'dependency'
       })
-  )
+  ),
+
+  new HtmlWebpackIncludeAssetsPlugin({
+    assets: ['__dll.js'],
+    append: false
+  })
 
   /**
    * 自建组件，分析入口文件引用，引入相关依赖

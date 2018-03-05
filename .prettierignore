@@ -1,4 +1,5 @@
 dist
+.dist
 node_modules
 build/config/__dll/manifest
 build/config/__check_dll/manifest

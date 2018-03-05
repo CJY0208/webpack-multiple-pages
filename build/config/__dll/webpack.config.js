@@ -1,14 +1,19 @@
 const path = require('path')
 const { plugins } = require('./plugins')
-const { dll: entry } = require('../../entries')
+const { dll, lib } = require('../../entries')
 const { DllPlugin } = require('webpack')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 
 module.exports = {
-  entry,
+  entry: {
+    __dll: Object.values({
+      ...dll,
+      ...lib
+    }).reduce((entry, val) => [...entry, ...val], [])
+  },
   output: {
-    path: path.resolve(__dirname, '../../../dist/dll'),
-    filename: '[name].[chunkhash].js',
+    path: path.resolve(__dirname, '../dev/.dist'),
+    filename: '[name].js',
     library: '[name]_[chunkhash]'
   },
   plugins: [
@@ -19,7 +24,7 @@ module.exports = {
      */
     new CleanWebpackPlugin(
       [
-        path.resolve(__dirname, '../../../dist/dll'),
+        path.resolve(__dirname, '../dev/.dist'),
         path.resolve(__dirname, './manifest')
       ],
       {

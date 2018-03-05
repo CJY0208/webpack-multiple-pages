@@ -2,17 +2,11 @@ const path = require('path')
 const { project, vendor, lib, dll } = require('../../entries')
 
 module.exports = {
-  devServer: {
-    contentBase: path.resolve(__dirname, '../../../dist'),
-    compress: true,
-    port: 10001,
-    hot: true
-  },
+  ...require('./dev-server'),
   ...require('./loaders'),
-  ...require('./log-config'),
   ...require('./plugins'),
 
-  devtool: 'source-map',
+  devtool: 'cheap-module-source-map',
   entry: {
     ...project
     // ...vendor,
@@ -20,13 +14,14 @@ module.exports = {
     // ...dll
   },
   output: {
-    path: path.resolve(__dirname, '../../../dist'),
-    filename: 'project/[name].[hash].js',
+    // path: path.resolve(__dirname, './.dist'),
+    // publicPath: '/wmp/',
+    filename: 'project/[name].js',
     /**
      * chunkFilename 只用来打包 require.ensure 或 import() 方法中引入的异步模块，若无异步模块则不会生成任何 chunk 块文件
      * 民间资料：https://www.cnblogs.com/toward-the-sun/p/6147324.html?utm_source=itdadao&utm_medium=referral
      */
-    chunkFilename: 'async/[name].[hash].js'
+    chunkFilename: 'async/[name].js'
   },
   resolve: {
     extensions: ['.js', '.vue', '.json', '.css', '.scss', '.sass', '.less'],
