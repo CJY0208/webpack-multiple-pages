@@ -15,9 +15,19 @@ const isDependentBy = (
     reasons.some(({ module }) => isDependentBy(libName, module))) &&
   !/dll-reference/.test(sourceRequest)
 
+const checkIsDependentByMultipleProject = ({ reasons = [] }) =>
+  reasons
+    .map(({ module: { resource = '' } = {} }) =>
+      project_names.some(projectName =>
+        new RegExp(`${projectName} @`).test(resource)
+      )
+    )
+    .filter(res => res).length >= 2
+
 const getLibSplitter = (key, value) => module => {
   const {
     isDependentByMultipleLib: __isDependentByMultipleLib,
+    isDependentByMultipleProject: __isDependentByMultipleProject,
     resource = '',
     rawRequest = ''
   } = module
@@ -31,14 +41,6 @@ const getLibSplitter = (key, value) => module => {
    * 是否被多个 Lib 引用
    */
   let isDependentByMultipleLib
-
-  /**
-   * 是否当前的 Lib
-   */
-  const isCurrentLib = value.some(
-    libName =>
-      libName === rawRequest || new RegExp(`^${libName}\/`).test(rawRequest)
-  )
 
   switch (__isDependentByMultipleLib) {
     case true:
@@ -69,12 +71,37 @@ const getLibSplitter = (key, value) => module => {
       })
   }
 
+  /**
+   * 是否被多个 Project 引用
+   */
+  let isDependentByMultipleProject
+
+  switch (__isDependentByMultipleProject) {
+    case true:
+    case false:
+      isDependentByMultipleProject = __isDependentByMultipleProject
+    default:
+      isDependentByMultipleProject = checkIsDependentByMultipleProject(module)
+      Object.assign(module, {
+        isDependentByMultipleProject
+      })
+  }
+
+  /**
+   * 是否当前的 Lib
+   */
+  const isCurrentLib = value.some(
+    libName =>
+      libName === rawRequest || new RegExp(`^${libName}\/`).test(rawRequest)
+  )
+
   return (
     isCurrentLib ||
-    (!/node_modules\W+.*-loader/.test(resource) && // 不抽离-loader类型依赖
+    (isDependentByCurrentLib &&
+    !/node_modules\W+.*-loader/.test(resource) && // 不抽离-loader类型依赖
     !/node_modules\W+webpack\W+/.test(resource) && // 不抽离webpack目录下的依赖
       !isDependentByMultipleLib &&
-      isDependentByCurrentLib)
+      !isDependentByMultipleProject)
   )
 }
 

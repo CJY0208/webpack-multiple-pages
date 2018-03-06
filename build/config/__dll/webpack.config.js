@@ -13,9 +13,28 @@ module.exports = {
     }).reduce((entry, val) => [...entry, ...val], [])
   },
   output: {
-    path: path.resolve(__dirname, '../dev/.dist'),
+    path: path.resolve(__dirname, '../dev/.dist/dev'),
     filename: '[name].js',
     library: '[name]_[chunkhash]'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader?minimize']
+      },
+      {
+        test: /\.less$/,
+        use: [
+          'style-loader',
+          'css-loader?minimize',
+          'less-loader?javascriptEnabled'
+        ]
+      }
+    ]
+  },
+  resolve: {
+    extensions: ['.js', '.vue', '.json', '.css', '.scss', '.sass', '.less']
   },
   plugins: [
     ...plugins,
@@ -25,7 +44,7 @@ module.exports = {
      */
     new CleanWebpackPlugin(
       [
-        path.resolve(__dirname, '../dev/.dist'),
+        path.resolve(__dirname, '../dev/.dist/dev'),
         path.resolve(__dirname, './manifest')
       ],
       {

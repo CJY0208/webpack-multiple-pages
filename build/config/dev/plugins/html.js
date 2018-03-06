@@ -18,7 +18,7 @@ module.exports = [
   ),
 
   new HtmlWebpackIncludeAssetsPlugin({
-    assets: ['__dll.js'],
+    assets: ['dev/__dll.js'],
     append: false
   })
 ]
