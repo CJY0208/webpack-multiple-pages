@@ -15,16 +15,8 @@ module.exports = [
         template: fs.readdirSync(filepath).includes('index.html')
           ? `${filepath}/index.html`
           : 'template.html',
-        chunks: ['__runtime', '__share', projectName],
-        chunksSortMode: 'manual',
-        /**
-         * html-minifier DOC: https://github.com/kangax/html-minifier
-         */
-        minify: {
-          minifyCSS: true,
-          minifyJS: true
-          // collapseWhitespace: true
-        }
+        chunks: ['__runtime', '__vendor', projectName],
+        chunksSortMode: 'dependency'
       })
   ),
 
