@@ -29,7 +29,7 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 8192,
-          name: 'assest/img/[name].[hash:6].[ext]'
+          name: 'assets/img/[name].[hash:6].[ext]'
         }
       },
       {
@@ -37,7 +37,7 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 8192,
-          name: 'assest/media/[name].[hash:6].[ext]'
+          name: 'assets/media/[name].[hash:6].[ext]'
         }
       },
       {
@@ -45,7 +45,7 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 8192,
-          name: 'assest/fonts/[name].[hash:6].[ext]'
+          name: 'assets/fonts/[name].[hash:6].[ext]'
         }
       }
     ]

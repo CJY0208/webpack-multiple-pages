@@ -52,7 +52,7 @@ class Home extends Component {
 const About = () => (
   <div>
     <h2>About</h2>
-    <img src={require('../../../../assest/img/hot.png')} />
+    <img src={require('../../../../assets/img/hot.png')} />
   </div>
 )
 
