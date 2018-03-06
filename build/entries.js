@@ -93,7 +93,6 @@ module.exports = Object.assign(
         'url',
         'ansi-html',
         './node_modules/fast-levenshtein/levenshtein.js',
-        './node_modules/antd-mobile/lib/calendar/locale/en_US.js',
 
         './node_modules/style-loader/lib/addStyles.js',
         './node_modules/antd-mobile/lib/index.js',

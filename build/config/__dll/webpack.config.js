@@ -6,11 +6,15 @@ const CleanWebpackPlugin = require('clean-webpack-plugin')
 
 module.exports = {
   entry: {
-    __dll: Object.values({
-      ...dll,
-      ...lib,
-      ...__dev
-    }).reduce((entry, val) => [...entry, ...val], [])
+    __dll: [
+      ...new Set(
+        Object.values({
+          ...dll,
+          ...lib,
+          ...__dev
+        }).reduce((entry, val) => [...entry, ...val], [])
+      )
+    ]
   },
   output: {
     path: path.resolve(__dirname, '../dev/.dist/dev'),
