@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { add, reduce, delayChangeWord } from './actions'
+import 'axios'
 
 @connect(state => ({
   count: state.count,
