@@ -2,6 +2,7 @@ const path = require('path')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HasOutput = require('webpack-plugin-hash-output')
 const ParallelUglifyPlugin = require('webpack-parallel-uglify-plugin')
+const { argv } = require('yargs')
 const {
   NamedChunksPlugin,
   HashedModuleIdsPlugin,
@@ -32,7 +33,8 @@ module.exports = {
      */
     new DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify('production')
+        NODE_ENV: JSON.stringify('production'),
+        TEST: argv.env === 'TEST'
       }
     }),
 

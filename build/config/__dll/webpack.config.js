@@ -17,7 +17,7 @@ module.exports = {
     ]
   },
   output: {
-    path: path.resolve(__dirname, '../dev/.dist/dev'),
+    path: path.resolve(__dirname, './dist/wmp/dev'),
     filename: '[name].js',
     library: '[name]_[chunkhash]'
   },
@@ -28,11 +28,18 @@ module.exports = {
         use: ['style-loader', 'css-loader?minimize']
       },
       {
-        test: /\.less$/,
+        test: /.*node_modules.*antd-mobile.*\.less$/,
         use: [
           'style-loader',
-          'css-loader?minimize',
-          'less-loader?javascriptEnabled'
+          'css-loader',
+          'postcss-loader',
+          {
+            loader: 'less-loader',
+            options: {
+              javascriptEnabled: true,
+              modifyVars: require('../../utils/antd-mobile/theme')
+            }
+          }
         ]
       }
     ]
@@ -48,7 +55,7 @@ module.exports = {
      */
     new CleanWebpackPlugin(
       [
-        path.resolve(__dirname, '../dev/.dist/dev'),
+        path.resolve(__dirname, './dist'),
         path.resolve(__dirname, './manifest')
       ],
       {
@@ -67,5 +74,14 @@ module.exports = {
       name: '[name]_[chunkhash]',
       context: __dirname
     })
-  ]
+  ],
+  stats: {
+    assets: true,
+    chunks: false,
+    modules: false,
+    children: false,
+    errors: true,
+    errorDetails: true,
+    warnings: true
+  }
 }

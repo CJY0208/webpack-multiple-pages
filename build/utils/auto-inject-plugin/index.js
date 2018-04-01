@@ -45,7 +45,40 @@ const queryDependencies = dep => {
   return result
 }
 
-module.exports = class HtmlWebpackAutoDependenciesPlugin {
+const collect = (arr, collector) =>
+  arr.reduce((res, item) => [...res, ...collector(item)], [])
+
+const queryChunkDependencies = chunk => [
+  ...new Set(
+    collect(chunk, queryDependencies)
+      .map(libMapper)
+      .filter(dep => isLib(dep) || isDllReference(dep) || isVendor(dep))
+  )
+]
+
+const dependenciesGenerator = (dependencies, __lib) =>
+  [...new Set(dependencies)].reduce(
+    (res, dep) => {
+      if (isDllReference(dep))
+        res.dll.push(
+          dep
+            .split(' ')
+            .pop()
+            .replace('_', '.')
+            .concat('.js')
+        )
+      if (isVendor(dep)) res.vendor.push(`v-${dep.replace('@', '')}`)
+      if (isLib(dep)) res.lib.push(`l-${__lib[dep]}`)
+      return res
+    },
+    {
+      dll: [],
+      lib: [],
+      vendor: []
+    }
+  )
+
+module.exports = class autoInjectPlugin {
   constructor({ entries, dllPath }) {
     this.__dllPath = dllPath
 
@@ -82,38 +115,19 @@ module.exports = class HtmlWebpackAutoDependenciesPlugin {
       compilation.chunks.forEach(chunk => {
         if (!__project.includes(chunk.name)) return
 
-        this.recordDependencies(
-          chunk.name,
-          [
-            ...new Set(
-              chunk.origins
-                .reduce((res, dep) => [...res, ...queryDependencies(dep)], [])
-                .map(libMapper)
-                .filter(
-                  dep => isLib(dep) || isDllReference(dep) || isVendor(dep)
-                )
-            )
-          ].reduce(
-            (res, dep) => {
-              if (isDllReference(dep))
-                res.dll.push(
-                  dep
-                    .split(' ')
-                    .pop()
-                    .replace('_', '.')
-                    .concat('.js')
-                )
-              if (isVendor(dep)) res.vendor.push(dep.replace('@', ''))
-              if (isLib(dep)) res.lib.push(__lib[dep])
-              return res
-            },
-            {
-              dll: [],
-              lib: [],
-              vendor: []
-            }
+        const originDependencies = queryChunkDependencies(chunk.origins)
+        const chunksDependencies = collect(chunk.chunks, chunk =>
+          collect(chunk.blocks, block =>
+            queryChunkDependencies(block.dependencies)
           )
         )
+
+        const dependencies = dependenciesGenerator(
+          [...originDependencies, ...chunksDependencies],
+          __lib
+        )
+
+        this.recordDependencies(chunk.name, dependencies)
       })
 
       if (typeof this.__record !== 'undefined') {

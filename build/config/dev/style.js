@@ -10,16 +10,7 @@ module.exports = {
         use: [
           'style-loader?sourceMap',
           'css-loader?sourceMap',
-          {
-            loader: 'postcss-loader?sourceMap',
-            options: {
-              config: {
-                ctx: {
-                  // usePostcssPxToViewport: true
-                }
-              }
-            }
-          },
+          'postcss-loader?sourceMap',
           {
             loader: 'less-loader?sourceMap',
             options: {
@@ -41,6 +32,14 @@ module.exports = {
       {
         test: /.*src.*\.(scss|sass)$/,
         use: 'happypack/loader?id=sass'
+      },
+      {
+        test: /.*src.*\.cssm$/,
+        use: 'happypack/loader?id=cssm'
+      },
+      {
+        test: /.*src.*\.(scss|sass)m$/,
+        use: 'happypack/loader?id=sassm'
       }
     ]
   },
@@ -48,24 +47,24 @@ module.exports = {
     loaders: {
       scss: [
         'vue-style-loader?sourceMap',
-        'css-loader?sourceMap',
+        'css-loader?sourceMap&modules&localIdentName=[local]_[hash:base64:4]',
         'postcss-loader?sourceMap',
         'sass-loader?sourceMap'
       ],
       sass: [
         'vue-style-loader?sourceMap',
-        'css-loader?sourceMap',
+        'css-loader?sourceMap&modules&localIdentName=[local]_[hash:base64:4]',
         'postcss-loader?sourceMap',
         'sass-loader?sourceMap'
       ],
       css: [
         'vue-style-loader?sourceMap',
-        'css-loader?sourceMap',
+        'css-loader?sourceMap&modules&localIdentName=[local]_[hash:base64:4]',
         'postcss-loader?sourceMap'
       ],
       postcss: [
         'vue-style-loader?sourceMap',
-        'css-loader?sourceMap',
+        'css-loader?sourceMap&modules&localIdentName=[local]_[hash:base64:4]',
         'postcss-loader?sourceMap'
       ]
     }
@@ -88,6 +87,27 @@ module.exports = {
       loaders: [
         'style-loader?sourceMap',
         'css-loader?sourceMap',
+        'postcss-loader?sourceMap',
+        'sass-loader?sourceMap'
+      ]
+    }),
+    new HappyPack({
+      id: 'cssm',
+      verbose: false,
+      threadPool: happyThreadPool,
+      loaders: [
+        'style-loader?sourceMap',
+        'css-loader?sourceMap&modules&localIdentName=[local]_[hash:base64:4]',
+        'postcss-loader?sourceMap'
+      ]
+    }),
+    new HappyPack({
+      id: 'sassm',
+      verbose: false,
+      threadPool: happyThreadPool,
+      loaders: [
+        'style-loader?sourceMap',
+        'css-loader?sourceMap&modules&localIdentName=[local]_[hash:base64:4]',
         'postcss-loader?sourceMap',
         'sass-loader?sourceMap'
       ]

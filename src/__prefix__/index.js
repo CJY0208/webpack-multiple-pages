@@ -9,7 +9,7 @@ import FastClick from 'fastclick'
 FastClick.attach(document.body)
 
 require('./style/__eruda__fix.css')
-if (process.env.NODE_ENV === 'develop') {
+if (process.env.NODE_ENV === 'development') {
   if (module.hot) {
     module.hot.accept()
   }

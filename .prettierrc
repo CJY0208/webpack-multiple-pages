@@ -13,7 +13,7 @@
       }
     },
     {
-      "files": "*.{css,sass,scss,less}",
+      "files": "*.{css,sass,scss,less,cssm,sassm,scssm}",
       "options": {
         "parser": "postcss",
         "tabWidth": 2

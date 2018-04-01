@@ -12,6 +12,9 @@
   "files.associations": {
     ".babelrc": "jsonc",
     ".eslintrc.json": "jsonc",
-    ".prettierrc": "jsonc"
+    ".prettierrc": "jsonc",
+    "*.css": "postcss",
+    "*.cssm": "postcss",
+    "*.scssm": "scss"
   }
 }

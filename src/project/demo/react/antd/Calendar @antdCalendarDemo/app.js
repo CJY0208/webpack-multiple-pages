@@ -1,44 +1,8 @@
-// import '__prefix__'
-import React from 'react'
+import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { List, Switch, Calendar } from 'antd-mobile'
-import enUS from 'antd-mobile/lib/calendar/locale/en_US'
-import zhCN from 'antd-mobile/lib/calendar/locale/zh_CN'
-import { fetchCDN } from '@common'
-
-console.log('test')
-
-fetchCDN.js('//cdn.jsdelivr.net/npm/eruda').then(() => {
-  window.eruda.init()
-})
-
-const locale = {
-  title: '日期选择',
-  today: '今天',
-  month: '月',
-  year: '年',
-  am: '上午',
-  pm: '下午',
-  dateTimeFormat: 'yyyy年MM月dd日 星期w hh:mm',
-  dateFormat: 'yyyy年MM月dd日 星期w',
-  noChoose: '未选择',
-  week: ['日', '一', '二', '三', '四', '五', '六'],
-  clear: '清除',
-  selectTime: '选择时间',
-  selectStartTime: '选择开始时间',
-  selectEndTime: '选择结束时间',
-  start: '开始',
-  end: '结束',
-  begin: '起',
-  over: '止',
-  begin_over: '起/止',
-  confirm: '确认',
-  monthTitle: 'yyyy年MM月',
-  loadPrevMonth: '加载上一个月',
-  yesterday: '昨天',
-  lastWeek: '近一周',
-  lastMonth: '近一个月'
-}
+import enUS from '../../../../../assets/i18n/antd-mobile/calendar/en_US'
+import zhCN from '../../../../../assets/i18n/antd-mobile/calendar/zh_CN'
 
 const extra = {
   '2017/07/15': { info: 'Disable', disable: true }
@@ -70,7 +34,7 @@ Object.keys(extra).forEach(key => {
   }
 })
 
-class Test extends React.Component {
+class App extends Component {
   originbodyScrollY = document.getElementsByTagName('body')[0].style.overflowY
 
   constructor(props) {
@@ -212,4 +176,7 @@ class Test extends React.Component {
   }
 }
 
-ReactDOM.render(<Test />, document.getElementById('app'))
+export default (process.env.NODE_ENV === 'development'
+  ? require('react-hot-loader').hot(module)(App)
+  : App)
+// export default App

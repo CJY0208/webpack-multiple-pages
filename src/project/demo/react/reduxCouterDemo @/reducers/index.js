@@ -2,10 +2,13 @@ import { combineReducers } from 'redux'
 import { handleActions, combineActions } from 'redux-actions'
 import { add, reduce, delayChangeWord } from '../actions'
 
+import { persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
+
 const count = handleActions(
   {
     [combineActions(add, reduce)]: (state, { payload: { count } }) =>
-      state + count
+      state + count * 2
   },
   0
 )
@@ -18,4 +21,10 @@ const word = handleActions(
   'hello'
 )
 
-export default combineReducers({ count, word })
+export default persistReducer(
+  {
+    key: 'count',
+    storage
+  },
+  combineReducers({ count, word })
+)

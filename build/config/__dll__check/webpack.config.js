@@ -1,11 +1,23 @@
 const path = require('path')
 const { plugins } = require('./plugins')
-const { dll: entry } = require('../../entries')
+const { dll, lib } = require('../../entries')
 const { DllPlugin } = require('webpack')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 
+const getEntries = (obj, prefix = '') =>
+  Object.entries(obj).reduce(
+    (entries, [key, values]) => ({
+      ...entries,
+      [`${prefix}${key}`]: values
+    }),
+    {}
+  )
+
 module.exports = {
-  entry,
+  entry: {
+    ...getEntries(dll, 'd_'),
+    ...getEntries(lib, 'l_')
+  },
   output: {
     path: path.resolve(__dirname, './files'),
     filename: '[name].[chunkhash].js',
@@ -38,5 +50,14 @@ module.exports = {
       name: '[name]_[chunkhash]',
       context: __dirname
     })
-  ]
+  ],
+  stats: {
+    assets: true,
+    chunks: false,
+    modules: false,
+    children: false,
+    errors: true,
+    errorDetails: true,
+    warnings: true
+  }
 }

@@ -7,12 +7,17 @@ const [extractLibStyle, extractVendorStyle, extractProjectStyle] = [
   new ExtractTextPlugin(`project/${emitFilename}`)
 ]
 
-const getExtractLoader = (extracter, type = 'css', fallback = 'style-loader') =>
+const getExtractLoader = (
+  extracter,
+  { type = 'css', fallback = 'style-loader', useCssModule = false } = {}
+) =>
   extracter.extract({
     fallback,
     publicPath: '../',
     use: [
-      'css-loader?minimize',
+      `css-loader?minimize${
+        useCssModule ? '&modules&localIdentName=[local]_[hash:base64:4]' : ''
+      }`,
       'postcss-loader',
       ...{
         sass: ['sass-loader'],
@@ -30,16 +35,7 @@ module.exports = {
         test: /.*node_modules.*antd-mobile.*\.less$/,
         use: extractLibStyle.extract([
           'css-loader?minimize',
-          {
-            loader: 'postcss-loader',
-            options: {
-              config: {
-                ctx: {
-                  // usePostcssPxToViewport: true
-                }
-              }
-            }
-          },
+          'postcss-loader',
           {
             loader: 'less-loader',
             options: {
@@ -70,39 +66,60 @@ module.exports = {
       },
       {
         test: /.*src.*vendor.*\.(scss|sass)$/,
-        use: getExtractLoader(extractVendorStyle, 'sass')
+        use: getExtractLoader(extractVendorStyle, { type: 'sass' })
+      },
+      {
+        test: /.*src.*vendor.*\.cssm$/,
+        use: getExtractLoader(extractVendorStyle, { useCssModule: true })
+      },
+      {
+        test: /.*src.*vendor.*\.(scss|sass)m$/,
+        use: getExtractLoader(extractVendorStyle, {
+          type: 'sass',
+          useCssModule: true
+        })
       },
       // --------------------------- 处理 Vendor 样式文件 --------------------------------
 
-      // --------------------------- 处理 Project 样式文件 -------------------------------
+      // --------------------------- 处理 Project / Prefix 样式文件 ----------------------
       {
-        test: /.*src.*project.*\.css$/,
+        test: /.*src.*(project|__prefix__).*\.css$/,
         use: getExtractLoader(extractProjectStyle)
       },
       {
-        test: /.*src.*project.*\.(scss|sass)$/,
-        use: getExtractLoader(extractProjectStyle, 'sass')
+        test: /.*src.*(project|__prefix__).*\.(scss|sass)$/,
+        use: getExtractLoader(extractProjectStyle, { type: 'sass' })
       },
-      // --------------------------- 处理 Project 样式文件 --------------------------------
-
-      // --------------------------- 处理 Prefix 样式文件 ---------------------------------
       {
-        test: /.*src.*__prefix__.*\.css$/,
+        test: /.*src.*(project|__prefix__).*\.cssm$/,
         use: getExtractLoader(extractProjectStyle)
       },
       {
-        test: /.*src.*__prefix__.*\.(scss|sass)$/,
-        use: getExtractLoader(extractProjectStyle, 'sass')
+        test: /.*src.*(project|__prefix__).*\.(scss|sass)m$/,
+        use: getExtractLoader(extractProjectStyle, {
+          type: 'sass',
+          useCssModule: true
+        })
       }
-      // --------------------------- 处理 Prefix 样式文件 ---------------------------------
+      // --------------------------- 处理 Project / Prefix 样式文件 -----------------------
     ]
   },
   vue: {
     loaders: {
-      scss: getExtractLoader(extractProjectStyle, 'sass', 'vue-style-loader'),
-      sass: getExtractLoader(extractProjectStyle, 'sass', 'vue-style-loader'),
-      css: getExtractLoader(extractProjectStyle, 'css', 'vue-style-loader'),
-      postcss: getExtractLoader(extractProjectStyle, 'css', 'vue-style-loader')
+      scss: getExtractLoader(extractProjectStyle, {
+        type: 'sass',
+        fallback: 'vue-style-loader'
+      }),
+      sass: getExtractLoader(extractProjectStyle, {
+        type: 'sass',
+        fallback: 'vue-style-loader'
+      }),
+      css: getExtractLoader(extractProjectStyle, {
+        fallback: 'vue-style-loader'
+      }),
+      postcss: getExtractLoader(extractProjectStyle, {
+        fallback: 'vue-style-loader'
+      })
     }
   }
 }

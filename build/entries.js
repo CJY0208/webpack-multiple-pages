@@ -11,7 +11,7 @@ module.exports = Object.assign(
   {
     lib: {
       vue: ['vue'],
-      utils: ['axios'],
+      utils: ['axios', 'md5'],
       lodash: ['lodash', 'lodash/fp'],
       antdMobile: ['antd-mobile'],
       mintUI: ['mint-ui'],
@@ -26,20 +26,26 @@ module.exports = Object.assign(
         'redux-actions',
         'redux-thunk',
         'redux-promise',
-        'react-redux'
+        'react-redux',
+        'redux-persist'
       ]
     },
     dll: {
-      /**
-       * 使用 Viewport Units Buggyfill 插件来兼容 vw、vh、vmin、vmax 等css单位，参考：https://www.w3cplus.com/mobile/vw-layout-in-vue.html
-       */
-      polyfill: ['babel-polyfill', 'viewport-units-buggyfill', 'fastclick'],
-      helpers: [
-        'md5',
-        'date-fns'
-        // 'amfe-flexible'
+      polyfill: [
+        'babel-polyfill',
+        /**
+         * 使用 Viewport Units Buggyfill 插件来兼容 vw、vh、vmin、vmax 等css单位，参考：https://www.w3cplus.com/mobile/vw-layout-in-vue.html
+         */
+        'viewport-units-buggyfill',
+        'fastclick',
+        'amfe-flexible',
+        /**
+         * Css Modules 处理的样式暂时无法抽离成单独的css文件，需要补齐css-loader和style-loader的必要脚本以生成style标签
+         */
+        './node_modules/style-loader/lib/addStyles.js',
+        './node_modules/css-loader/lib/css-base.js'
       ],
-      immutable: ['immutable'],
+      helpers: ['immutable', 'date-fns'],
       // eruda: ['eruda'],
       react: ['react', 'react-dom', 'prop-types'],
       vueTools: ['vuex', 'vue-router']

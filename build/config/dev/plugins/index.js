@@ -24,7 +24,8 @@ module.exports = {
 
     new DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify('develop')
+        NODE_ENV: JSON.stringify('development'),
+        TEST: true
       }
     })
   ]

@@ -2,13 +2,25 @@
 //   background: url(../../../../assets/img/al_icon.png);
 // }
 
+@function p2r($px) {
+  @return $px / 750 * 10rem;
+}
+
 div {
   color: blue;
-  height: 100vh;
+  // height: 100vh;
 
   h2 {
     color: orange; // lalala
   }
+}
+
+li {
+  font-size: p2r(32);
+}
+
+h2 {
+  font-size: 32px;
 }
 
 .module {

@@ -1,9 +1,9 @@
 dist
-.dist
 node_modules
 build/config/__dll/manifest
-build/config/__check_dll/manifest
-build/config/__check_dll/files
+build/config/__dll/files
+build/config/__dll__check/manifest
+build/config/__dll__check/files
 .uglify_cache
 yarn-error.log
 __entry.config.js

@@ -1,4 +1,5 @@
-const isUndefined = obj => typeof obj === 'undefined'
+import { isUndefined } from '../is'
+
 const curry = fn => (...args) =>
   args.length < fn.length
     ? curry(fn.bind(undefined, ...args))

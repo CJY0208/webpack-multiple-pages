@@ -18,7 +18,7 @@ class App extends Component {
 
     return (
       <div>
-        <div>count: {count}</div>
+        <div>countlala: {count}</div>
         <button onClick={() => dispatch(add(1))}>add</button>
         <button onClick={() => dispatch(reduce(1))}>reduce</button>
         <div>word: {word}</div>
