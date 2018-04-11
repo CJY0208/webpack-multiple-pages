@@ -1,0 +1,22 @@
+
+.wrapper {
+  height: 100vh;
+  overflow: scroll;
+}
+
+li {
+
+  display: flex;
+
+  & div {
+    display: inline-block;
+
+    padding: 25px;
+
+    font-size: 25px;
+
+    flex-shrink: 0;
+
+    border: solid 1px #e6e6e6;
+  }
+}
