@@ -2,7 +2,7 @@ import '__prefix__'
 import React, { Component } from 'react'
 import { render } from 'react-dom'
 
-import { Column, Table } from 'react-virtualized'
+import { Column, Table, defaultTableRowRenderer } from 'react-virtualized'
 import 'react-virtualized/styles.css' // only needs to be imported once
 
 import './style.scss'
@@ -25,56 +25,46 @@ class TestTable extends Component {
   }
 
   randomData = () => {
-    this.setState(
-      {
-        list: this.state.list.map(item =>
-          Object.keys(item).reduce(
-            (obj, letter) =>
-              Object.assign(obj, {
-                [letter]: Math.random().toFixed(2)
-              }),
-            {}
-          )
+    this.setState({
+      list: this.state.list.map(item =>
+        Object.keys(item).reduce(
+          (obj, letter) =>
+            Object.assign(obj, {
+              [letter]: Math.random().toFixed(2)
+            }),
+          {}
         )
-      },
-      () => {
-        console.log('done')
-      }
-    )
+      )
+    })
 
     setTimeout(this.randomData, 100)
   }
 
   render() {
     return (
+      // https://github.com/bvaughn/react-virtualized/blob/master/docs/Table.md
       <Table
-        width={617}
-        height={363}
-        headerHeight={20}
-        rowHeight={30}
+        width={document.documentElement.clientWidth}
+        height={document.documentElement.clientHeight}
+        headerHeight={50}
+        rowHeight={50}
         rowCount={this.state.list.length}
         rowGetter={({ index }) => this.state.list[index]}
+        rowStyle={({ index }) =>
+          index % 2 === 0
+            ? {}
+            : {
+                background: '#eee'
+              }
+        }
+        // https://github.com/bvaughn/react-virtualized/blob/master/docs/Table.md#rowrenderer
+        rowRenderer={props => <div>{defaultTableRowRenderer(props)}</div>}
       >
         {['a', 'b', 'c', 'e', 'f', 'g'].map(letter => (
+          // https://github.com/bvaughn/react-virtualized/blob/master/docs/Column.md
           <Column label={letter} dataKey={letter} width={100} />
         ))}
       </Table>
-
-      // <div className="wrapper">
-      //   <ul>
-      //     {
-      //       this.state.list.map((item, idx) => (
-      //         <li>
-      //           {
-      //             item.map(data => (
-      //               <div>{data}</div>
-      //             ))
-      //           }
-      //         </li>
-      //       ))
-      //     }
-      //   </ul>
-      // </div>
     )
   }
 }
