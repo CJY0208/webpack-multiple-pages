@@ -1,0 +1,32 @@
+
+.stepper {
+
+  display: flex;
+  align-items: center;
+
+  button, span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  button {
+    width: 65px;
+    height: 62px;
+
+    color: #999;
+
+    background-color: #E7E7E7;
+
+    &.disable {
+      opacity: .5;
+    }
+  }
+
+  span {
+    width: 81px;
+    height: 62px;
+    margin: 0 2px;
+    background-color: #FAFAFC;
+  }
+}

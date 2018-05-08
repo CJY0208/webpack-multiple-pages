@@ -5,5 +5,8 @@ build/config/__dll/files
 build/config/__dll__check/manifest
 build/config/__dll__check/files
 .uglify_cache
+.cache
 yarn-error.log
 __entry.config.js
+build/language/i18n
+build/language/.txt

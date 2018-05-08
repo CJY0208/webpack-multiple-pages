@@ -25,9 +25,6 @@ module.exports = {
       '.css',
       '.scss',
       '.sass',
-      '.cssm',
-      '.scssm',
-      '.sassm',
       '.less'
     ],
     alias: {

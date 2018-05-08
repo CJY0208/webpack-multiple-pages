@@ -18,6 +18,25 @@ module.exports = {
         }
       ]
     },
-    proxy: {}
+    proxy: {
+      '/installment': {
+        target: 'https://test.mall.akulaku.com/',
+        secure: false,
+        cookieDomainRewrite: 'localhost',
+        changeOrigin: true
+      },
+      '/macaron': {
+        target: 'https://test.mall.akulaku.com/',
+        secure: false,
+        cookieDomainRewrite: 'localhost',
+        changeOrigin: true
+      },
+      '/risk': {
+        target: 'https://test.mall.akulaku.com/',
+        secure: false,
+        cookieDomainRewrite: 'localhost',
+        changeOrigin: true
+      }
+    }
   }
 }

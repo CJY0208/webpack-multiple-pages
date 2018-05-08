@@ -7,4 +7,7 @@ build/config/__dll__check/files
 package-lock.json
 build/utils/autodll-webpack-plugin
 .uglify_cache
+.cache
 __entry.config.js
+build/language/i18n
+build/language/.txt

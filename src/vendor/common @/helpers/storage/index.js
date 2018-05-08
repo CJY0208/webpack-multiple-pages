@@ -1,39 +1,50 @@
 import { isExist, isNull } from '../is'
 import withSupportive from './__with__supportive'
 
-export const get = withSupportive(key => {
-  let data = window.localStorage.getItem(key)
-  let result
+const getter = storage =>
+  withSupportive(key => {
+    let data = storage.getItem(key)
+    let result
 
-  if (data === 'undefined' || isNull(data)) {
-    result = undefined
-  } else {
-    try {
-      result = JSON.parse(data)
-    } catch (err) {
-      console.error('[ERROR ...storage.get --> JSON.parse]', err)
-      result = data
+    if (data === 'undefined' || isNull(data)) {
+      result = undefined
+    } else {
+      try {
+        result = JSON.parse(data)
+      } catch (err) {
+        console.error('[ERROR ...storage.get --> JSON.parse]', err)
+        result = data
+      }
     }
-  }
 
-  return result
-})
+    return result
+  })
 
-export const set = withSupportive((key, value) => {
-  let data
+const setter = storage =>
+  withSupportive((key, value) => {
+    let data
 
-  try {
-    data = JSON.stringify(value)
-  } catch (err) {
-    console.error('[ERROR ...storage.set --> JSON.stringify]', err)
-    data = value
-  }
+    try {
+      data = JSON.stringify(value)
+    } catch (err) {
+      console.error('[ERROR ...storage.set --> JSON.stringify]', err)
+      data = value
+    }
 
-  window.localStorage.setItem(key, data)
+    storage.setItem(key, data)
 
-  return data
-})
+    return data
+  })
 
-export const remove = withSupportive(key => {
-  window.localStorage.removeItem(key)
-})
+const remover = storage =>
+  withSupportive(key => {
+    storage.removeItem(key)
+  })
+
+export const get = getter(window.localStorage)
+export const set = setter(window.localStorage)
+export const remove = remover(window.localStorage)
+
+export const getSession = getter(window.sessionStorage)
+export const setSession = setter(window.sessionStorage)
+export const removeSession = remover(window.sessionStorage)

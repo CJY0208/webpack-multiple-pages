@@ -12,7 +12,7 @@ module.exports = {
       {
         test: /\.js(x?)$/,
         exclude: /node_modules/,
-        use: ['babel-loader', 'eslint-loader'] // 'happypack/loader?id=js'
+        use: ['babel-loader?cacheDirectory', 'eslint-loader'] // 'happypack/loader?id=js'
       },
       {
         test: /\.vue$/,
@@ -20,7 +20,7 @@ module.exports = {
           {
             loader: 'vue-loader',
             options: Object.assign(styleConfig.vue, {
-              js: ['babel-loader'] // 'happypack/loader?id=js'
+              js: ['babel-loader?cacheDirectory'] // 'happypack/loader?id=js'
             })
           },
           'eslint-loader'
@@ -46,7 +46,7 @@ module.exports = {
     //   id: 'js',
     //   threads: 4,
     //   // threadPool: happyThreadPool,
-    //   loaders: ['babel-loader', 'eslint-loader']
+    //   loaders: ['babel-loader?cacheDirectory', 'eslint-loader']
     // })
   ]
 }

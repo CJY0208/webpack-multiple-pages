@@ -22,23 +22,26 @@ module.exports = {
       },
       {
         test: /.*node_modules.*\.css$/,
+        exclude: /\.m\.css/,
         use: ['style-loader?sourceMap', 'css-loader?sourceMap']
       },
       // --------------------------- 处理 Lib 样式文件 -----------------------------------
       {
         test: /.*src.*\.css$/,
+        exclude: /\.m\.css$/,
         use: 'happypack/loader?id=css'
       },
       {
         test: /.*src.*\.(scss|sass)$/,
+        exclude: /\.m\.(scss|sass)$/,
         use: 'happypack/loader?id=sass'
       },
       {
-        test: /.*src.*\.cssm$/,
+        test: /.*src.*\.m\.css$/,
         use: 'happypack/loader?id=cssm'
       },
       {
-        test: /.*src.*\.(scss|sass)m$/,
+        test: /.*src.*\.m\.(scss|sass)$/,
         use: 'happypack/loader?id=sassm'
       }
     ]

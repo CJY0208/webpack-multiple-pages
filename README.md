@@ -45,7 +45,7 @@
 	
 	- 业务样式支持scss、sass、css
 	- 第三方样式支持css、less
-	- 支持[`cssModule`](http://www.ruanyifeng.com/blog/2016/06/css_modules.html)，需要使用.cssm、.scssm、.sassm文件后缀
+	- 支持[`cssModule`](http://www.ruanyifeng.com/blog/2016/06/css_modules.html)，需要使用.m.css、.m.scss、.m.sass文件后缀
 
 7. 引入[`postcss`](https://github.com/postcss/postcss/blob/master/README.cn.md)，启用以下插件
 

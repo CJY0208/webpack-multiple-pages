@@ -11,3 +11,5 @@ export * from './try'
 export * from './utils'
 
 export * from './i18n'
+
+export CombJudge from './CombJudge'

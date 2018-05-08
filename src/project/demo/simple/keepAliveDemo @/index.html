@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>
+    hahahaha lalalalaa
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="Expires" content="-1">
+  <meta http-equiv="Cache-Control" content="no-cache">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+  <style>
+    .loading .spinner {
+      display: inline-block;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -webkit-transform: translate3d(-50%, -50%, 0);
+      transform: translate3d(-50%, -50%, 0)
+    }
+
+    .loading .spinner .group {
+      display: inline-block;
+      margin: 8px
+    }
+
+    .loading .spinner .group:nth-of-type(1) .loader,
+    .loading .spinner .group:nth-of-type(1) .shadow {
+      -webkit-animation-delay: -.18s;
+      animation-delay: -.18s
+    }
+
+    .loading .spinner .group:nth-of-type(1) .loader {
+      background-color: #FD3541
+    }
+
+    .loading .spinner .group:nth-of-type(2) .loader,
+    .loading .spinner .group:nth-of-type(2) .shadow {
+      -webkit-animation-delay: -.09s;
+      animation-delay: -.09s
+    }
+
+    .loading .spinner .group:nth-of-type(2) .loader {
+      background-color: #FF7579
+    }
+
+    .loading .spinner .group:nth-of-type(3) .loader,
+    .loading .spinner .group:nth-of-type(3) .shadow {
+      -webkit-animation-delay: 0s;
+      animation-delay: 0s
+    }
+
+    .loading .spinner .group:nth-of-type(3) .loader {
+      background-color: #FFC0BC
+    }
+
+    .loading .spinner .loader,
+    .loading .spinner .shadow {
+      display: block;
+      position: relative;
+      -webkit-border-radius: 100%;
+      border-radius: 100%
+    }
+
+    .loading .spinner .loader {
+      width: 16px;
+      height: 16px;
+      z-index: 3;
+      -webkit-animation: loader_jump .55s linear infinite;
+      animation: loader_jump .55s linear infinite
+    }
+
+    .loading .spinner .shadow {
+      background-color: rgba(0, 0, 0, 0.2);
+      width: 12px;
+      height: 4px;
+      margin: 0 auto;
+      -webkit-animation: shadow_resize .55s linear infinite;
+      animation: shadow_resize .55s linear infinite
+    }
+
+    @-webkit-keyframes loader_jump {
+      0% {
+        -webkit-transform: translateY(2px) scale3d(1, 1, 1);
+        transform: translateY(2px) scale3d(1, 1, 1);
+        -webkit-animation-timing-function: ease-out;
+        animation-timing-function: ease-out
+      }
+      48%,
+      52% {
+        -webkit-transform: translateY(-20px) scale3d(1.35, 1.35, 1.35);
+        transform: translateY(-20px) scale3d(1.35, 1.35, 1.35);
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in
+      }
+      100% {
+        -webkit-transform: translateY(1.5px) scale3d(1, 1, 1);
+        transform: translateY(1.5px) scale3d(1, 1, 1);
+        -webkit-animation-timing-function: ease-out;
+        animation-timing-function: ease-out
+      }
+    }
+
+    @keyframes loader_jump {
+      0% {
+        -webkit-transform: translateY(2px) scale3d(1, 1, 1);
+        transform: translateY(2px) scale3d(1, 1, 1);
+        -webkit-animation-timing-function: ease-out;
+        animation-timing-function: ease-out
+      }
+      48%,
+      52% {
+        -webkit-transform: translateY(-20px) scale3d(1.35, 1.35, 1.35);
+        transform: translateY(-20px) scale3d(1.35, 1.35, 1.35);
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in
+      }
+      100% {
+        -webkit-transform: translateY(1.5px) scale3d(1, 1, 1);
+        transform: translateY(1.5px) scale3d(1, 1, 1);
+        -webkit-animation-timing-function: ease-out;
+        animation-timing-function: ease-out
+      }
+    }
+
+    @-webkit-keyframes shadow_resize {
+      0% {
+        -webkit-transform: scale(1.4);
+        transform: scale(1.4);
+        -webkit-animation-timing-function: ease-out;
+        animation-timing-function: ease-out
+      }
+      48%,
+      52% {
+        -webkit-transform: scale(1.1);
+        transform: scale(1.1);
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in
+      }
+      100% {
+        -webkit-transform: scale(1.4);
+        transform: scale(1.4);
+        -webkit-animation-timing-function: ease-out;
+        animation-timing-function: ease-out
+      }
+    }
+
+    @keyframes shadow_resize {
+      0% {
+        -webkit-transform: scale(1.4);
+        transform: scale(1.4);
+        -webkit-animation-timing-function: ease-out;
+        animation-timing-function: ease-out
+      }
+      48%,
+      52% {
+        -webkit-transform: scale(1.1);
+        transform: scale(1.1);
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in
+      }
+      100% {
+        -webkit-transform: scale(1.4);
+        transform: scale(1.4);
+        -webkit-animation-timing-function: ease-out;
+        animation-timing-function: ease-out
+      }
+    }
+  </style>
+  <script> 
+    window.__f = function () {
+      if (document.readyState === 'interactive') {
+        var $l = document.createElement('div')
+        $l.className = 'loading show'
+        $l.innerHTML = '\
+          <div class="spinner">\
+            <div class="group">\
+              <span class="loader"></span>\
+              <span class="shadow"></span>\
+            </div>\
+            <div class="group">\
+              <span class="loader"></span>\
+              <span class="shadow"></span>\
+            </div>\
+            <div class="group">\
+              <span class="loader"></span>\
+              <span class="shadow"></span>\
+            </div>\
+          </div>\
+        '
+        // document.body.appendChild($l)
+        document.removeEventListener('readystatechange', window.__f)
+        delete window.__f
+      }
+    }
+    document.addEventListener('readystatechange', window.__f)
+  </script>
+  <% for (var i = 0; i < htmlWebpackPlugin.files.css.length; i++) {%>
+    <link href="<%= htmlWebpackPlugin.files.css[i] %>" rel="stylesheet" />
+    <% } %>
+</head>
+
+<body>
+  <div id="app"></div>
+  <% for (var i = 0; i < htmlWebpackPlugin.files.js.length; i++) {%>
+    <script src="<%= htmlWebpackPlugin.files.js[i] %>"></script>
+    <% } %>
+</body>
+
+</html>

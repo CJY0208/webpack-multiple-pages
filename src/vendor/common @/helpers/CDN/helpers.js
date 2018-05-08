@@ -1,15 +1,13 @@
 import { isUndefined } from '../is'
+import { curry } from '../utils'
 
-const curry = fn => (...args) =>
-  args.length < fn.length
-    ? curry(fn.bind(undefined, ...args))
-    : fn.apply(undefined, args)
+const root = global || window
 
 const getExt = curry((src, key) => {
-  const ext = window[key]
+  const ext = root[key]
   !isUndefined(key) &&
     isUndefined(ext) &&
-    console.warn(`No external named '${key}' in window after loaded ${src}`)
+    console.warn(`No external named '${key}' in global after loaded ${src}`)
   return ext
 })
 

@@ -3,7 +3,7 @@ import { helpers } from '@common'
 
 const { get, set, run, value, isFunction } = helpers
 
-export default class EasyFluxStore {
+export default class EasyStore {
   __connectedComponent = []
   __mergedStore = []
   __store
@@ -61,8 +61,8 @@ export default class EasyFluxStore {
   connect = (stateMapper, actionMapper) => Component => {
     const self = this
 
-    return class EFS_HOC extends Component {
-      static displayName = `EFS-HOC(${value(
+    return class ES_HOC extends React.Component {
+      static displayName = `ES-HOC(${value(
         Component.displayName,
         Component.name
       )})`

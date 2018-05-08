@@ -1,6 +1,6 @@
-import EasyFlux from '@EasyFlux'
+import EasyStore from '@EasyStore'
 
-@EasyFlux
+@EasyStore
 export default class Store {
   next = data => {
     // console.log(this, 'next', data)
