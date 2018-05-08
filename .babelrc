@@ -1,4 +1,7 @@
 {
+  "parserOpts": {
+    "parser": "babylon" // babylon 固定在 6.13.0 版本以支持 pipeline 语法
+  },
   "presets": [
     ["env", {
       /**
@@ -13,6 +16,7 @@
   "env": {
     "production": {
       "plugins": [
+        "transform-pipeline",
         "syntax-dynamic-import",
         "transform-decorators-legacy",
         "transform-async-functions",
@@ -37,27 +41,14 @@
     },
     "development": {
       "plugins": [
+        "transform-pipeline",
         "react-hot-loader/babel",
         "syntax-dynamic-import",
         "transform-decorators-legacy",
         "transform-async-functions",
         "transform-export-extensions",
-
-        /**
-        * babel-plugin-import 实现 antd-mobile 按需加载配置，文档：https://github.com/ant-design/babel-plugin-import
-        */
         ["import", { "libraryName": "antd-mobile", "style": true }],
-
-        /**
-        * babel-plugin-component 实现 mint-ui 按需加载配置，文档：https://github.com/ElementUI/babel-plugin-component
-        */
         ["component", { "libraryName": "mint-ui", "style": true }]
-
-        /**
-        * 让 vue 支持 jsx 语法，文档：https://github.com/vuejs/babel-plugin-transform-vue-jsx
-        * 由于与 react jsx 语法编译互斥，停止使用
-        */
-        // "transform-vue-jsx"
       ]
     }
   }

@@ -1,0 +1,18 @@
+
+.itemList {
+  display: flex;
+}
+
+.col {
+  flex: 1;
+  width: 339px;
+  padding: 0 14px;
+
+  &:first-of-type {
+    padding-right: 7px;
+  }
+
+  &:last-of-type {
+    padding-left: 7px;
+  }
+}

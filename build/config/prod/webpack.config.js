@@ -30,9 +30,6 @@ module.exports = Object.assign(
         '.css',
         '.scss',
         '.sass',
-        '.cssm',
-        '.scssm',
-        '.sassm',
         '.less'
       ],
       alias: Object.assign(

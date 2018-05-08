@@ -3,7 +3,7 @@
 // }
 
 @function p2r($px) {
-  @return $px / 750 * 10rem;
+  @return $px / 720 * 10rem;
 }
 
 div {
@@ -16,7 +16,7 @@ div {
 }
 
 li {
-  font-size: p2r(32);
+  font-size: p2r(32);  
 }
 
 h2 {

@@ -81,9 +81,10 @@ var obj = {
 
 // 函数存在时
 run(obj, 'deep.deep.add', 1, 2) // 3
-run(obj, 'deep.deep.reduce') // undefined
 
-// 取值不是函数时，行为与 get 函数一致
+
+// 取值不是函数或查找结果不存在时，行为与 get 函数一致
+run(obj, 'deep.deep.reduce') // undefined
 run(obj, 'name') // CJY
 
 // 保护上下文

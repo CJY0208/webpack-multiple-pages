@@ -1,0 +1,55 @@
+{
+  "首付": "Uang muka",
+  "月付": "Per bulan",
+  "月": "Bulan",
+  "Credit Pay": "Bayar dengan limit",
+  "Credit Pay说明":
+    "Kamu dapat membeli produk dengan menggunakan limit kreditmu, Silahkan lunasi tagihanmu sebelum tanggal jatuh tempo.",
+  "不分期": "Tanpa Cicilan",
+  "选择分期": "Rencana Cicilan",
+  "现在购买": "Beli",
+  "支付": "BAYAR",
+  "如果您在当月的账单日期未能偿还，将扣除逾期款 XX":
+    "${XX} Biaya keterlambatan akan dikenakan jika Anda gagal membayar sesuai tanggal tagihan bulan ini.",
+  "总还款": "Total Tagihan",
+  "还款计划": "Waktu Pembayaran",
+  "我同意条款": "Saya menyetujui cicilan tersebut",
+  "条款协议": "Syarat dan ketentuan",
+  "登陆或注册": "Masuk",
+  "请先登陆您的账号": "Masukkan Akun Anda",
+  "好的": "Konfirmasi",
+  "取消": "Batal",
+  "请选择支付方式": "Silahkan Pilih Metode Pembayaran",
+  "新建地址": "Tambah Alamat Pengiriman",
+  "请选择收货地址": "Silahkan Pilih Alamat",
+  "商品详情": "Detail Item",
+  "选择分期方案": "Rencana Cicilan",
+  "确认支付": "Konfirmasi Akhir",
+  "选择地址": "Pilih Alamat",
+  "支付方式": "Rencana Cicilan",
+  "无法配送的地址": "Alamat tidak tersedia",
+  "暂无地址，前往新建": "Belum ada alamat pengiriman. Silahkan tambahkan.",
+  "您未同意条款协议": "Anda Tidak Setuju dengan Cicilan!",
+  "您有未完成的退款订单，请前往“账单”页面完成退款流程并继续购物。":
+    "Pengembalian dana pada pesanan Anda belum selesai. Silakan ke menu ",
+  "您的帐户仍然有未完成的余额，请先偿还，继续购物。":
+    "Masih ada tagihan yang belum dibayarkan, silakan bayar tagihan terlebih dahulu sebelum belanja kembali.",
+  "您未获取信用支付授权，请先完成分期或全额付款":
+    "Anda harus melakukan transaksi cicilan atau pembayaran tunai dahulu agar dapat menggunakan fitur ",
+  "额度不足": "Saldo tidak mencukupi",
+  "分期付款申请": "Pengajuan Cicilan",
+  "您现在没有信用额度，请先申请信用额度以启用分期付款购物。":
+    "Saat ini Anda tidak memiliki limit kredit. Silakan ajukan limit kredit terlebih dahulu untuk belanja dengan cicilan",
+  "立即申请": "Ajukan Sekarang",
+  "激活受理中": "Limit sedang diaktifkan",
+  "激活受理中！请于额度激活成功后选择信用支付！":
+    "Limit sedang diaktifkan, silakan menggunakan limit setelah proses sukses",
+  "激活额度": "Aktifkan limit",
+  "您的信用额度尚未激活，请现在激活它，开始无信用卡购物。":
+    "Limit kredit Anda belum diaktifkan, silakan aktifkan limit Anda.",
+  "现在激活": "Aktifkan sekarang",
+  "以后再说": "Jangan sekarang",
+  "审核中": "Dalam Proses Audit",
+  "我们正在处理您的申请，请等待。":
+    "Kami Sedang Memproses Dokumen Anda, Mohon Tunggu."
+}

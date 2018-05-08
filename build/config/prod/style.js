@@ -62,18 +62,20 @@ module.exports = {
       // --------------------------- 处理 Vendor 样式文件 --------------------------------
       {
         test: /.*src.*vendor.*\.css$/,
+        exclude: /\.m\.css$/,
         use: getExtractLoader(extractVendorStyle)
       },
       {
         test: /.*src.*vendor.*\.(scss|sass)$/,
+        exclude: /\.m\.(scss|sass)$/,
         use: getExtractLoader(extractVendorStyle, { type: 'sass' })
       },
       {
-        test: /.*src.*vendor.*\.cssm$/,
+        test: /.*src.*vendor.*\.m\.css$/,
         use: getExtractLoader(extractVendorStyle, { useCssModule: true })
       },
       {
-        test: /.*src.*vendor.*\.(scss|sass)m$/,
+        test: /.*src.*vendor.*\.m\.(scss|sass)$/,
         use: getExtractLoader(extractVendorStyle, {
           type: 'sass',
           useCssModule: true
@@ -84,18 +86,20 @@ module.exports = {
       // --------------------------- 处理 Project / Prefix 样式文件 ----------------------
       {
         test: /.*src.*(project|__prefix__).*\.css$/,
+        exclude: /\.m\.css$/,
         use: getExtractLoader(extractProjectStyle)
       },
       {
         test: /.*src.*(project|__prefix__).*\.(scss|sass)$/,
+        exclude: /\.m\.(scss|sass)$/,
         use: getExtractLoader(extractProjectStyle, { type: 'sass' })
       },
       {
-        test: /.*src.*(project|__prefix__).*\.cssm$/,
-        use: getExtractLoader(extractProjectStyle)
+        test: /.*src.*(project|__prefix__).*\.m\.css$/,
+        use: getExtractLoader(extractProjectStyle, { useCssModule: true })
       },
       {
-        test: /.*src.*(project|__prefix__).*\.(scss|sass)m$/,
+        test: /.*src.*(project|__prefix__).*\.m\.(scss|sass)$/,
         use: getExtractLoader(extractProjectStyle, {
           type: 'sass',
           useCssModule: true

@@ -1,0 +1,25 @@
+
+:global(.icon) {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: visible;
+  position: relative;
+  font-size: 46px;
+
+  &::before, &::after {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: inherit;
+  }
+}
+
+:global(i.icon) {
+  font-size: 46px;
+}
+
+

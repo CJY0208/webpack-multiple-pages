@@ -1,0 +1,28 @@
+
+.scrollView {
+  flex: 1;
+  height: 100%;
+  max-height: 100vh;
+  overflow: auto;
+}
+
+.footer {
+  width: 720px;
+  height: 138px;
+  font-size: 30px;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+}
+
+.indicator {
+  width: 720px;
+  height: 48px;
+  font-size: 30px;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

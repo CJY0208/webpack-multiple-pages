@@ -27,6 +27,14 @@ module.exports = {
         test: /\.css$/,
         use: ['style-loader', 'css-loader?minimize']
       },
+      // {
+      //   test: /\.less$/,
+      //   use: [
+      //     'style-loader',
+      //     'css-loader?minimize',
+      //     'less-loader?javascriptEnabled'
+      //   ]
+      // },
       {
         test: /.*node_modules.*antd-mobile.*\.less$/,
         use: [

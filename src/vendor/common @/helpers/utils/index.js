@@ -1,49 +1,43 @@
-import { run } from '../try'
-
 export tween from './tween'
 export classNames from './classNames'
+export ScrollListener from './ScrollListener'
+export * from './helpers'
 
-/**
- * [mountScrollEvent 加载滚动触底事件]
- * @param  {Number}   options.distance        [触底响应距离]
- * @param  {Function} options.onReachBottom   [触底后的回调]
- * @param  {[Element]}   options.scrollContainer [监听的DOM节点]
- */
-export function mountScrollEvent({
-  distance = 100,
-  onReachBottom = () => console.log('reach the bottom'),
-  scrollContainer
-}) {
-  if (typeof scrollContainer === 'undefined')
-    throw Error('Need Scroll-Container!')
-  let rAFLock = false,
-    scrollHandler
-  const $controller = {
-    pausing: false,
-    pause() {
-      this.pausing = true
-    },
-    continue() {
-      this.pausing = false
-    },
-    unmount() {
-      scrollContainer.removeEventListener('scroll', scrollHandler)
-    }
-  }
-  function onScroll(e) {
-    run(e, 'stopPropagation')
-    if ($controller.pausing) return
-    if (this.scrollTop + this.offsetHeight + distance > this.scrollHeight)
-      onReachBottom.call($controller, $controller)
+export const hot = module => Component =>
+  process.env.NODE_ENV === 'development'
+    ? require('react-hot-loader').hot(module)(Component)
+    : Component
+
+export const __ = fn => (...preArgs) =>
+  function(...args) {
+    return fn.apply(
+      this,
+      preArgs.map(pr => (pr === __ ? args.shift() : pr)).concat(args)
+    )
   }
 
-  scrollHandler = e => {
-    if (rAFLock) return
-    requestAnimationFrame(() => {
-      onScroll.call(scrollContainer, e)
-      rAFLock = false
-    })
-    rAFLock = true
-  }
-  scrollContainer.addEventListener('scroll', scrollHandler)
+export const getFormatter = ({ separator = ' ', length = 3 }) => text => {
+  text = typeof text === 'number' ? Math.floor(text) : text
+  return typeof text !== 'undefined'
+    ? String(text)
+        .split('')
+        .reverse()
+        .reduce(
+          (result, letter, index) => (
+            result.unshift(
+              letter,
+              index > 0 && index % length === 0 ? separator : undefined
+            ),
+            result
+          ),
+          []
+        )
+        .join('')
+    : text
 }
+
+export const preloadImage = srcList =>
+  srcList.forEach(src => {
+    const img = new Image()
+    img.src = src
+  })

@@ -15,6 +15,16 @@ app.use(
   })
 )
 
+app.use(
+  ['/installment', '/macaron', '/risk'],
+  proxy({
+    target: 'https://test.mall.akulaku.com/',
+    secure: false,
+    changeOrigin: true,
+    cookieDomainRewrite: 'localhost'
+  })
+)
+
 app.listen(port, () => {
   console.log(`Server-dist is Running at http://localhost:${port}`)
 })

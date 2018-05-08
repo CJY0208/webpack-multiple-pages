@@ -2,14 +2,29 @@ const { project, lib } = require('../../../../entries')
 const project_names = Object.keys(project)
 const lib_entries = Object.entries(lib)
 
+const cacheController = require('./cache')
+
 const isDependentBy = (
   libName,
   { resource = '', sourceRequest = '', reasons = [] } = {}
-) =>
-  ((new RegExp(libName).test(resource) &&
-    /(node_modules|build\/utils|build\\utils)/.test(resource)) ||
-    reasons.some(({ module }) => isDependentBy(libName, module))) &&
-  !/dll-reference/.test(sourceRequest)
+) => {
+  let cacheKey = `${sourceRequest}_${resource}:${libName}`
+  let res = cacheController.find(cacheKey)
+
+  if (typeof res !== 'undefined') {
+    return res
+  }
+
+  res =
+    !/dll-reference/.test(sourceRequest) &&
+    ((new RegExp(libName).test(resource) &&
+      /(node_modules|build\/utils|build\\utils)/.test(resource)) ||
+      reasons.some(({ module }) => isDependentBy(libName, module)))
+
+  cacheController.save(cacheKey, res)
+
+  return res
+}
 
 const checkIsDependentByMultipleProject = ({ reasons = [] }) =>
   reasons
@@ -24,6 +39,7 @@ const getLibSplitter = (key, value) => module => {
   const {
     isDependentByMultipleLib: __isDependentByMultipleLib,
     isDependentByMultipleProject: __isDependentByMultipleProject,
+    dependentLibrary = {},
     resource = '',
     rawRequest = ''
   } = module
@@ -36,34 +52,61 @@ const getLibSplitter = (key, value) => module => {
   /**
    * 是否被多个 Lib 引用
    */
-  let isDependentByMultipleLib
+  let isDependentByMultipleLib = __isDependentByMultipleLib
 
   switch (__isDependentByMultipleLib) {
     case true:
     case false:
-      isDependentByCurrentLib = value.some(libName =>
-        isDependentBy(libName, module)
-      )
-      isDependentByMultipleLib = __isDependentByMultipleLib
+      if (typeof dependentLibrary[key] === 'undefined') {
+        isDependentByCurrentLib = value.some(libName =>
+          isDependentBy(libName, module)
+        )
+
+        dependentLibrary[key] = isDependentByCurrentLib
+
+        Object.assign(module, {
+          dependentLibrary
+        })
+      } else {
+        isDependentByCurrentLib = dependentLibrary[key] === true
+      }
       break
     default:
-      isDependentByCurrentLib = false
-      const dependentTimes = lib_entries
-        .map(([__key, value]) => {
-          const __isDependentByCurrentLib = value.some(libName =>
-            isDependentBy(libName, module)
-          )
-          if (__key === key) isDependentByCurrentLib = __isDependentByCurrentLib
-          return __isDependentByCurrentLib
-        })
-        .filter(res => res).length
+      let dependentTimes = 0
+
+      lib_entries.some(([__key, value]) => {
+        const __isDependentByCurrentLib = value.some(libName =>
+          isDependentBy(libName, module)
+        )
+        if (__key === key) isDependentByCurrentLib = __isDependentByCurrentLib
+
+        if (__isDependentByCurrentLib) {
+          dependentTimes += 1
+        }
+
+        dependentLibrary[__key] = __isDependentByCurrentLib
+
+        return dependentTimes >= 2
+      })
 
       isDependentByMultipleLib = dependentTimes >= 2
+
+      if (
+        !isDependentByMultipleLib &&
+        typeof isDependentByCurrentLib === 'undefined'
+      ) {
+        isDependentByCurrentLib = value.some(libName =>
+          isDependentBy(libName, module)
+        )
+
+        dependentLibrary[key] = isDependentByCurrentLib
+      }
 
       // 缓存 “是否被多个 Lib 引用” 统计结果
       Object.assign(module, {
         isDependentByMultipleLib,
-        isDependentByLib: dependentTimes >= 1
+        isDependentByLib: dependentTimes >= 1,
+        dependentLibrary
       })
   }
 
@@ -93,11 +136,11 @@ const getLibSplitter = (key, value) => module => {
 
   return (
     isCurrentLib ||
-    (isDependentByCurrentLib &&
+    (!isDependentByMultipleLib &&
+    isDependentByCurrentLib &&
+    !isDependentByMultipleProject &&
     !/node_modules\W+.*-loader/.test(resource) && // 不抽离-loader类型依赖
-    !/node_modules\W+webpack\W+/.test(resource) && // 不抽离webpack目录下的依赖
-      !isDependentByMultipleLib &&
-      !isDependentByMultipleProject)
+      !/node_modules\W+webpack\W+/.test(resource)) // 不抽离webpack目录下的依赖
   )
 }
 

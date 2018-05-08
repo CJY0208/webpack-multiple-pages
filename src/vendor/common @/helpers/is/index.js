@@ -17,6 +17,8 @@ export const isBoolean = val => typeof val === 'boolean'
 export const isString = val => typeof val === 'string'
 
 export const isExist = val => !(isUndefined(val) || isNull(val))
+
+export const isNaN = val => val !== val
 // 值类型判断 -------------------------------------------------------------
 
 // 环境判断 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -34,4 +36,11 @@ export const isDesktop = () =>
   /(Win32|Win64|MacIntel|Linux x86_64)/i.test(window.navigator.platform)
 
 export const isMobile = () => !isDesktop() && (isAndroid() || isIOS())
+
+export const isAkulakuIOS = () =>
+  isWKWebview() &&
+  isExist(window.webkit.messageHandlers) &&
+  isExist(window.webkit.messageHandlers.changeLanguage)
+
+export const isAkulaku = () => isAkulakuIOS() || isAkulakuAndroid()
 // 环境判断 -------------------------------------------------------------

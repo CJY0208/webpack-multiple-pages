@@ -9,7 +9,7 @@ const easeFormula = {
         ? 0.5 * Math.pow(pos, 3)
         : 0.5 * (Math.pow(pos - 2, 3) + 2)
   },
-  { requestAnimationFrame } = window
+  { requestAnimationFrame } = global || window
 
 /**
  * 缓动进程

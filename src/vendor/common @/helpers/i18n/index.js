@@ -1,4 +1,4 @@
-import { get } from '../try'
+import { get, run } from '../try'
 import { isUndefined, isObject } from '../is'
 
 /**
@@ -8,28 +8,31 @@ import { isUndefined, isObject } from '../is'
  * @param  {[type]} data [description]
  * @return {[type]}      [description]
  */
-export function template(str = '', data) {
+export const template = (str = '', data) => {
   const exp = /\$\{\w*\}/g,
     keys = str.match(exp) || {}
+
   Object.keys(keys).forEach(_k => {
     const key = keys[_k].replace('${', '').replace('}', '')
     str = str.replace(new RegExp(`\\$\{${key}\}`, 'g'), get(data, key))
   })
+
   return str
 }
 
-export function i18n(locale) {
-  return (keys, data) => {
-    let text = get(locale, keys)
+export const i18n = locale => (keys, data) => {
+  let text = get(locale, keys)
 
-    if (isUndefined(text)) {
-      return keys
-    }
-
-    if (isObject(data)) {
-      text = template(text, data)
-    }
-
-    return text
+  if (isUndefined(text)) {
+    return keys
   }
+
+  if (isObject(data)) {
+    text = template(text, data)
+  }
+
+  return text
 }
+
+export const i18nLoader = loaders => async () =>
+  Object.assign({}, ...(await Promise.all(loaders.map(loader => run(loader)))))

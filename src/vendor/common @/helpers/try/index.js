@@ -8,12 +8,32 @@ import {
 } from '../is'
 
 export const get = (obj, keys = [], defaultValue) => {
-  const result = (isString(keys) ? keys.split('.') : keys).reduce(
-    (res, key) => {
-      return isExist(res) ? res[key] : res
-    },
-    obj
-  )
+  // const result = (isString(keys) ? keys.split('.') : keys).reduce(
+  //   (res, key) => {
+  //     return isExist(res) ? res[key] : res
+  //   },
+  //   obj
+  // )
+
+  keys = isString(keys) ? keys.split('.') : keys
+
+  let result
+  let res = obj
+  let idx = 0
+
+  for (; idx < keys.length; idx++) {
+    let key = keys[idx]
+
+    if (isExist(res)) {
+      res = res[key]
+    } else {
+      break
+    }
+  }
+
+  if (idx === keys.length) {
+    result = res
+  }
 
   return isUndefined(result) ? defaultValue : result
 }
@@ -54,8 +74,8 @@ export const run = (obj, keys = [], ...args) => {
 
 export const value = (...values) =>
   values.reduce(
-    (value, defaultValue) =>
-      isUndefined(value) ? run(defaultValue) : run(value)
+    (value, nextValue) => (isUndefined(value) ? run(nextValue) : run(value)),
+    undefined
   )
 
 // export const valueRight = (...args) => value.apply(undefined, args.reverse())

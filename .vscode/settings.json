@@ -13,8 +13,16 @@
     ".babelrc": "jsonc",
     ".eslintrc.json": "jsonc",
     ".prettierrc": "jsonc",
-    "*.css": "postcss",
-    "*.cssm": "postcss",
-    "*.scssm": "scss"
-  }
+    "*.css": "css"
+  },
+  "css.validate": false,
+  "scss.validate": false,
+  "editor.foldingStrategy": "indentation",
+  "emmet.triggerExpansionOnTab": true,
+  "javascript.validate.enable": false,
+  "emmet.includeLanguages": {
+    "vue-html": "html",
+    "javascript": "javascriptreact"
+  },
+  "cSpell.ignoreWords": ["Arui", "antd"]
 }

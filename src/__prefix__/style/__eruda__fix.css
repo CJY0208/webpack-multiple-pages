@@ -1,6 +1,6 @@
 
 #eruda {
   & ::after, & ::before {
-    color: unset;
+    color: inherit;
   }
 }
