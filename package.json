@@ -17,14 +17,13 @@
       "cross-env BABEL_ENV=production webpack --config ./build/config/prod/webpack.config.js --progress --watch",
     "build:debug":
       "cross-env BABEL_ENV=production node-nightly --inspect ./node_modules/webpack/bin/webpack.js --config ./build/config/prod/webpack.config.js --progress",
-    "build:i18n": "node build/language",
     "format": "prettier --write \"./**/*.js\" \"./**/*.jsx\"",
     "test":
       "mocha --require babel-core/register \"./@(src|tests)/**/*.test.@(js|jsx)\"",
     "fix:node-sass": "npm rebuild --force node-sass",
     "precommit": "lint-staged",
     "dep:init": "npm install yarn --save-dev && npm run dep:install",
-    "dep:install": "npm run remove:cache && yarn install",
+    "dep:install": "yarn install",
     "dep:clear": "rm -rf ./node_modules",
     "git:reset": "git checkout .",
     "test:target": "mocha --require babel-core/register ",

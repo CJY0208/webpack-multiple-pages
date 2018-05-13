@@ -1,7 +1,5 @@
 import '__prefix__'
 
-import 'axios'
-
 import React from 'react'
 import { render } from 'react-dom'
 
