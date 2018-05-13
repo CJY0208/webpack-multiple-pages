@@ -91,6 +91,7 @@
 
 9. 高清方案方面，[`flexible.js`](https://github.com/amfe/lib-flexible)官方推荐使用viewport方案代替rem，参考[《如何在Vue项目中使用vw实现移动端适配》](https://www.w3cplus.com/mobile/vw-layout-in-vue.html)，目前脚手架中已经**默认启用了此方案，如使用px单位会自动转为vw，设计稿尺寸为750px**，原`flexible.js`方案可使用但未开启
 
+10. 默认采用根目录下的`template.html`作为各入口html模板，可在入口目录下使用`index.html`文件自定义html，需要注意保留资源的动态注入模板
 - - -
 
 ### 业务入口约定
