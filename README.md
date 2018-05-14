@@ -56,7 +56,7 @@ webpack中无法直接得知每个资源之间的引用关系，且html-webpack-
 	- 多页面（*project*），每个页面一个js
 	- 不同第三方库（*lib*）可定制化打包成某个js
 	- 支持多个公共业务库（*vendor*），每个库一个js
-	- 使用了[`AutoDllPlugin`](https://github.com/asfktz/autodll-webpack-plugin)功能加快编译速度，**但dll文件可能会对lib文件依赖造成影响，未了解其中原理需慎用，在不明确**
+	- 使用了[`AutoDllPlugin`](https://github.com/asfktz/autodll-webpack-plugin)功能加快编译速度，**但dll文件可能会对lib文件依赖造成影响，未了解其中原理需慎用**
 
 2. 稳定的模块版本控制，各模块改动时，尽可能不影响其他模块的hash值，保证对资源缓存的最大利用
 
