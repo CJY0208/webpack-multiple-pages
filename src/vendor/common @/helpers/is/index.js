@@ -24,9 +24,6 @@ export const isNaN = val => val !== val
 // 环境判断 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 export const isAndroid = () => /(Android)/i.test(window.navigator.userAgent)
 
-export const isAkulakuAndroid = () =>
-  isAndroid() && isExist(window.InstallmentJsObj)
-
 export const isIOS = () =>
   /(iPhone|iPad|iPod|iOS)/i.test(window.navigator.userAgent)
 
@@ -37,10 +34,4 @@ export const isDesktop = () =>
 
 export const isMobile = () => !isDesktop() && (isAndroid() || isIOS())
 
-export const isAkulakuIOS = () =>
-  isWKWebview() &&
-  isExist(window.webkit.messageHandlers) &&
-  isExist(window.webkit.messageHandlers.changeLanguage)
-
-export const isAkulaku = () => isAkulakuIOS() || isAkulakuAndroid()
 // 环境判断 -------------------------------------------------------------
