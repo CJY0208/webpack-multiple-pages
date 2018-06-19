@@ -92,7 +92,7 @@ module.exports = class autoInjectPlugin {
       let libName = value
       return allLib.some(__libName => {
         libName = __libName
-        return new RegExp(`^${__libName}`).test(value)
+        return value.startsWith(__libName) // new RegExp(`^${__libName}`).test(value)
       })
         ? libName
         : value

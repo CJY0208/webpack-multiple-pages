@@ -1,8 +1,11 @@
+const path = require('path')
 const { project, lib } = require('../../../../entries')
 const project_names = Object.keys(project)
 const lib_entries = Object.entries(lib)
 
 const cacheController = require('./cache')
+
+const __rootName = path.resolve(__dirname, '../../../../../')
 
 const isDependentBy = (
   libName,
@@ -129,10 +132,19 @@ const getLibSplitter = (key, value) => module => {
   /**
    * 是否当前的 Lib
    */
-  const isCurrentLib = value.some(
-    libName =>
-      libName === rawRequest || new RegExp(`^${libName}\/`).test(rawRequest)
-  )
+  const isCurrentLib = value.some(libName => {
+    const __reg__check__isStartWith = new RegExp(
+      JSON.stringify(`^${libName}${path.sep}`).replace(/"/g, '')
+    )
+
+    return (
+      libName === rawRequest ||
+      [
+        rawRequest,
+        resource.replace(`${__rootName}${path.sep}node_modules${path.sep}`, '')
+      ].some(str => __reg__check__isStartWith.test(str))
+    )
+  })
 
   return (
     isCurrentLib ||
