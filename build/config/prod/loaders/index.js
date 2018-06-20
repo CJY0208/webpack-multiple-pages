@@ -1,5 +1,5 @@
-const HappyPack = require('happypack')
-const happyThreadPool = HappyPack.ThreadPool({ size: 4 })
+// const HappyPack = require('happypack')
+// const happyThreadPool = HappyPack.ThreadPool({ size: 2 })
 const styleConfig = require('../style')
 const marked = require('marked')
 const markdownRenderer = new marked.Renderer()
@@ -44,9 +44,15 @@ module.exports = {
   plugins: [
     // new HappyPack({
     //   id: 'js',
-    //   threads: 4,
-    //   // threadPool: happyThreadPool,
+    //   // threads: 4,
+    //   threadPool: happyThreadPool,
     //   loaders: ['babel-loader?cacheDirectory', 'eslint-loader']
+    // }),
+    // new HappyPack({
+    //   id: 'vue',
+    //   // threads: 4,
+    //   threadPool: happyThreadPool,
+    //   loaders: ['babel-loader?cacheDirectory']
     // })
   ]
 }

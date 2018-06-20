@@ -10,24 +10,25 @@
       "webpack --config ./build/config/__dll__check/webpack.config.js --progress",
     "build":
       "cross-env BABEL_ENV=production webpack --config ./build/config/prod/webpack.config.js",
-    "build:progress":
-      "cross-env BABEL_ENV=production webpack --config ./build/config/prod/webpack.config.js --progress",
+    "build:progress": "npm run build -- --progress",
+    "build:analyze": "npm run build:progress -- --env=ANALYZE",
     "build:server": "npm run build:progress && npm run server:dist",
-    "build:watch":
-      "cross-env BABEL_ENV=production webpack --config ./build/config/prod/webpack.config.js --progress --watch",
+    "build:watch": "npm run build:progress -- --watch",
     "build:debug":
       "cross-env BABEL_ENV=production node-nightly --inspect ./node_modules/webpack/bin/webpack.js --config ./build/config/prod/webpack.config.js --progress",
+    "build:i18n": "node build/language",
     "format": "prettier --write \"./**/*.js\" \"./**/*.jsx\"",
-    "test":
-      "mocha --require babel-core/register \"./@(src|tests)/**/*.test.@(js|jsx)\"",
     "fix:node-sass": "npm rebuild --force node-sass",
     "precommit": "lint-staged",
     "dep:init": "npm install yarn --save-dev && npm run dep:install",
-    "dep:install": "yarn install",
+    "dep:install": "yarn install && cache:clear",
     "dep:clear": "rm -rf ./node_modules",
     "git:reset": "git checkout .",
+    "test":
+      "mocha --require babel-core/register \"./@(src|tests)/**/*.test.@(js|jsx)\"",
     "test:target": "mocha --require babel-core/register ",
-    "remove:cache": "rm ./build/config/prod/plugins/code-splitting/.cache"
+    "cache:clear":
+      "rm ./build/config/prod/plugins/code-splitting/.cache && rm ./build/utils/auto-inject-plugin/.cache"
   },
   "eslintIgnore": [
     "dist",
@@ -132,6 +133,7 @@
     "vue-style-loader": "^4.0.2",
     "vue-template-compiler": "^2.5.13",
     "webpack": "^3.10.0",
+    "webpack-bundle-analyzer": "^2.13.1",
     "webpack-cli": "^2.0.10",
     "webpack-dev-server": "^2.11.1",
     "webpack-parallel-uglify-plugin": "^1.0.2",

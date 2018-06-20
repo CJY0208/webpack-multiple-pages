@@ -1,8 +1,24 @@
+const { get, isRegExp, isUndefined } = require('lodash')
+const cacheController = require('./cache')
+const cacheableConfig = require('./cacheable.config')
+
 let isDll = () => false
 let isLib = () => false
 let libMapper = value => value
+
+const __dll__cache = {}
+
 const isNotFromNodeModules = path => !/node_modules/.test(path)
-const isDllReference = value => /^dll-reference/.test(value)
+const isDllReference = value => {
+  const isDll = /^dll-reference/.test(value)
+
+  if (isDll) {
+    const __dll__name = value.split(' ')[1].split('_')[0]
+    __dll__cache[__dll__name] = value
+  }
+
+  return isDll
+}
 const isVendor = value => /^@/.test(value)
 const parseEntries = entries =>
   Object.entries(entries).reduce((res, [key, value]) => {
@@ -14,6 +30,8 @@ const parseEntries = entries =>
     )
     return res
   }, {})
+
+const __cache = {}
 const queryDependencies = dep => {
   let result = []
   const { userRequest, module } = dep
@@ -21,9 +39,18 @@ const queryDependencies = dep => {
     dependencies = [],
     fileDependencies: [filepath = ''] = [],
     id,
-    variables
+    variables,
+    resource
   } =
     module || {}
+
+  if (!isUndefined(resource)) {
+    const cache = __cache[resource]
+
+    if (!isUndefined(cache)) {
+      return cache
+    }
+  }
 
   if (typeof userRequest !== 'undefined') {
     result.push(userRequest)
@@ -40,6 +67,10 @@ const queryDependencies = dep => {
       (res, dep) => [...res, ...queryDependencies(dep)],
       result
     )
+  }
+
+  if (!isUndefined(resource) && !isUndefined(result)) {
+    __cache[resource] = result
   }
 
   return result
@@ -79,8 +110,9 @@ const dependenciesGenerator = (dependencies, __lib) =>
   )
 
 module.exports = class autoInjectPlugin {
-  constructor({ entries, dllPath }) {
+  constructor({ entries, dllPath, cacheable }) {
     this.__dllPath = dllPath
+    this.__cacheable = cacheable || cacheableConfig
 
     const { lib, project, dll } = entries
     this.__lib = parseEntries(lib)
@@ -114,8 +146,44 @@ module.exports = class autoInjectPlugin {
     compiler.plugin('after-compile', (compilation, cb) => {
       compilation.chunks.forEach(chunk => {
         if (!__project.includes(chunk.name)) return
+        // console.time(chunk.name)
 
+        if (
+          (this.__cacheable.length > 0 &&
+            this.__cacheable.includes(chunk.name)) ||
+          this.__cacheable
+            .filter(isRegExp)
+            .some(item => item.test(get(chunk, 'entryModule.context')))
+        ) {
+          try {
+            let cache = JSON.parse(cacheController.find(chunk.name))
+
+            cache.dll = cache.dll.map(item => {
+              const dllName = item.split('.')[0]
+
+              if (dllName in __dll__cache) {
+                return __dll__cache[dllName]
+                  .split(' ')
+                  .pop()
+                  .replace('_', '.')
+                  .concat('.js')
+              }
+
+              return item
+            })
+
+            this.recordDependencies(chunk.name, cache)
+            // console.timeEnd(chunk.name)
+            return cache
+          } catch (error) {
+            // nothing
+          }
+        }
+
+        // 收集同步入口依赖
         const originDependencies = queryChunkDependencies(chunk.origins)
+
+        // 收集异步入口依赖
         const chunksDependencies = collect(chunk.chunks, chunk =>
           collect(chunk.blocks, block =>
             queryChunkDependencies(block.dependencies)
@@ -128,9 +196,15 @@ module.exports = class autoInjectPlugin {
         )
 
         this.recordDependencies(chunk.name, dependencies)
+
+        cacheController.save(chunk.name, JSON.stringify(dependencies))
+        // console.timeEnd(chunk.name)
       })
 
+      cacheController.write()
+
       if (typeof this.__record !== 'undefined') {
+        // debugger
         const allChunks = compilation.getStats().toJson().chunks
         const chunkFilesMap = allChunks.reduce(
           (res, { id, files }) =>
