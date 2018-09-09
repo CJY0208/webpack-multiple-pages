@@ -1,0 +1,24 @@
+
+@font-face {
+  font-family: 'Roboto-Light';
+  src: url(~__assets__/font/Roboto-Light.ttf) format('truetype'); 
+}
+
+@font-face {
+  font-family: 'Roboto-Regular';
+  src: url(~__assets__/font/Roboto-Regular.ttf) format('truetype'); 
+}
+
+@font-face {
+  font-family: 'DIN-Bold';
+  src: url(~__assets__/font/din-bold.otf) format('truetype'); 
+}
+
+* {
+  font-family: 'Roboto-Regular';
+}
+
+.__CacheRoute__wrapper {
+  width: 100%;
+  height: 100%;
+}

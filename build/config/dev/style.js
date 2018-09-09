@@ -50,24 +50,24 @@ module.exports = {
     loaders: {
       scss: [
         'vue-style-loader?sourceMap',
-        'css-loader?sourceMap&modules&localIdentName=[local]_[hash:base64:4]',
+        'css-loader?sourceMap',
         'postcss-loader?sourceMap',
         'sass-loader?sourceMap'
       ],
       sass: [
         'vue-style-loader?sourceMap',
-        'css-loader?sourceMap&modules&localIdentName=[local]_[hash:base64:4]',
+        'css-loader?sourceMap',
         'postcss-loader?sourceMap',
         'sass-loader?sourceMap'
       ],
       css: [
         'vue-style-loader?sourceMap',
-        'css-loader?sourceMap&modules&localIdentName=[local]_[hash:base64:4]',
+        'css-loader?sourceMap',
         'postcss-loader?sourceMap'
       ],
       postcss: [
         'vue-style-loader?sourceMap',
-        'css-loader?sourceMap&modules&localIdentName=[local]_[hash:base64:4]',
+        'css-loader?sourceMap',
         'postcss-loader?sourceMap'
       ]
     }

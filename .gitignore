@@ -6,7 +6,8 @@ build/config/__dll__check/manifest
 build/config/__dll__check/files
 .uglify_cache
 .cache
+.cache-loader
 yarn-error.log
-__entry.config.js
-build/language/i18n
-build/language/.txt
+/__entry.config.js
+package-lock.json
+npm-debug.log

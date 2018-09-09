@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="test">
     Hello Vue, I am {{name}} lalala
   </div>
 </template>
@@ -14,7 +14,7 @@ export default {
 // var a = 1
 </script>
 
-<style lang="postcss">
+<style lang="scss">
 
 :root {
   --mainColor: gray(70);
@@ -27,5 +27,9 @@ export default {
   & div {
     color: red;
   }
+}
+
+.test {
+  background-color: pink;
 }
 </style>

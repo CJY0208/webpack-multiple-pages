@@ -1,0 +1,33 @@
+
+.content {
+  width: 500px;
+  height: 500px;
+
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.roll {
+  width: 100%;
+  height: 100%;
+  border: solid 10px;
+  border-radius: 50%;
+
+  border-top-color: red;
+  border-bottom-color: blue;
+  border-left-color: green;
+  border-right-color: orange;
+  position: absolute;
+  left: 0;
+  opacity: .3;
+}
+
+.line {
+  width: 50%;
+  height: 1px;
+  background-color: #333;
+
+  transform-origin: right;
+}

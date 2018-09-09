@@ -1,5 +1,7 @@
 
-#eruda {
+div[data-eruda] {
+  display: none;
+
   & ::after, & ::before {
     color: inherit;
   }

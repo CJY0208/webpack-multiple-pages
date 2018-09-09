@@ -1,5 +1,5 @@
 const path = require('path')
-const { project, lib } = require('../../../../entries')
+const { project, lib } = require('../../__entries')
 const project_names = Object.keys(project)
 const lib_entries = Object.entries(lib)
 

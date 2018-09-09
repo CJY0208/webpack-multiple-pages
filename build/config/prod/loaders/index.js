@@ -1,8 +1,17 @@
 // const HappyPack = require('happypack')
 // const happyThreadPool = HappyPack.ThreadPool({ size: 2 })
-const styleConfig = require('../style')
+const path = require('path')
+const glob = require('glob')
 const marked = require('marked')
+
+const { project, vendor } = require('../__entries')
+const styleConfig = require('../style')
+
 const markdownRenderer = new marked.Renderer()
+
+const getCacheDirectory = require('../../../utils/helpers/getCacheDirectory')
+
+const __directory = getCacheDirectory('cache-loader')
 
 module.exports = {
   module: {
@@ -12,7 +21,17 @@ module.exports = {
       {
         test: /\.js(x?)$/,
         exclude: /node_modules/,
-        use: ['babel-loader?cacheDirectory', 'eslint-loader'] // 'happypack/loader?id=js'
+        use: [
+          'thread-loader',
+          {
+            loader: 'cache-loader',
+            options: {
+              cacheDirectory: __directory
+            }
+          },
+          'babel-loader?cacheDirectory',
+          'eslint-loader'
+        ] // 'happypack/loader?id=js'
       },
       {
         test: /\.vue$/,
@@ -20,7 +39,16 @@ module.exports = {
           {
             loader: 'vue-loader',
             options: Object.assign(styleConfig.vue, {
-              js: ['babel-loader?cacheDirectory'] // 'happypack/loader?id=js'
+              js: [
+                'thread-loader',
+                {
+                  loader: 'cache-loader',
+                  options: {
+                    cacheDirectory: __directory
+                  }
+                },
+                'babel-loader?cacheDirectory'
+              ] // 'happypack/loader?id=js'
             })
           },
           'eslint-loader'

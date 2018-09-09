@@ -10,7 +10,9 @@ const {
 } = require('webpack')
 const AutoDllPlugin = require('autodll-webpack-plugin')
 
-const { dll } = require('../../../entries')
+const { dll } = require('../__entries')
+const getCacheDirectory = require('../../../utils/helpers/getCacheDirectory')
+const __uglify__cache__directory = getCacheDirectory('parallel-uglify-plugin')
 
 module.exports = [
   /**
@@ -50,7 +52,7 @@ module.exports = [
        * 此处与 Tree Shaking 无关，单纯对第三方模块做压缩处理
        */
       new ParallelUglifyPlugin({
-        cacheDir: path.resolve(__dirname, './.uglify_cache'),
+        cacheDir: __uglify__cache__directory,
         uglifyJs: {
           compress: {
             warnings: false

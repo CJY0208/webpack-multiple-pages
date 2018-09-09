@@ -1,126 +1,27 @@
-const { get, isRegExp, isUndefined } = require('lodash')
+const { get, isRegExp } = require('lodash')
+
 const cacheController = require('./cache')
-const cacheableConfig = require('./cacheable.config')
+const cacheableConfig = require('./cache/cacheable.config')
 
-let isDll = () => false
-let isLib = () => false
-let libMapper = value => value
+const helpers = require('./helpers')
 
-const __dll__cache = {}
+const { parseEntries, dllCache, queryChunkDependencies } = helpers
 
-const isNotFromNodeModules = path => !/node_modules/.test(path)
-const isDllReference = value => {
-  const isDll = /^dll-reference/.test(value)
-
-  if (isDll) {
-    const __dll__name = value.split(' ')[1].split('_')[0]
-    __dll__cache[__dll__name] = value
-  }
-
-  return isDll
-}
-const isVendor = value => /^@/.test(value)
-const parseEntries = entries =>
-  Object.entries(entries).reduce((res, [key, value]) => {
-    if (!Array.isArray(value)) return res
-    value.forEach(module =>
-      Object.assign(res, {
-        [module]: key
-      })
-    )
-    return res
-  }, {})
-
-const __cache = {}
-const queryDependencies = dep => {
-  let result = []
-  const { userRequest, module } = dep
-  const {
-    dependencies = [],
-    fileDependencies: [filepath = ''] = [],
-    id,
-    variables,
-    resource
-  } =
-    module || {}
-
-  if (!isUndefined(resource)) {
-    const cache = __cache[resource]
-
-    if (!isUndefined(cache)) {
-      return cache
-    }
-  }
-
-  if (typeof userRequest !== 'undefined') {
-    result.push(userRequest)
-  }
-
-  if (
-    typeof userRequest === 'undefined' ||
-    isLib(userRequest) ||
-    isDll(userRequest) ||
-    isVendor(userRequest) ||
-    isNotFromNodeModules(filepath)
-  ) {
-    result = dependencies.reduce(
-      (res, dep) => [...res, ...queryDependencies(dep)],
-      result
-    )
-  }
-
-  if (!isUndefined(resource) && !isUndefined(result)) {
-    __cache[resource] = result
-  }
-
-  return result
-}
-
-const collect = (arr, collector) =>
-  arr.reduce((res, item) => [...res, ...collector(item)], [])
-
-const queryChunkDependencies = chunk => [
-  ...new Set(
-    collect(chunk, queryDependencies)
-      .map(libMapper)
-      .filter(dep => isLib(dep) || isDllReference(dep) || isVendor(dep))
-  )
-]
-
-const dependenciesGenerator = (dependencies, __lib) =>
-  [...new Set(dependencies)].reduce(
-    (res, dep) => {
-      if (isDllReference(dep))
-        res.dll.push(
-          dep
-            .split(' ')
-            .pop()
-            .replace('_', '.')
-            .concat('.js')
-        )
-      if (isVendor(dep)) res.vendor.push(`v-${dep.replace('@', '')}`)
-      if (isLib(dep)) res.lib.push(`l-${__lib[dep]}`)
-      return res
-    },
-    {
-      dll: [],
-      lib: [],
-      vendor: []
-    }
-  )
-
-module.exports = class autoInjectPlugin {
+module.exports = class AutoInjectPlugin {
   constructor({ entries, dllPath, cacheable }) {
+    const { lib, project, dll } = entries
+
     this.__dllPath = dllPath
     this.__cacheable = cacheable || cacheableConfig
-
-    const { lib, project, dll } = entries
     this.__lib = parseEntries(lib)
+
     const allLib = Object.keys(this.__lib)
+
     this.__dll = parseEntries(dll)
-    isDll = value => value in this.__dll
-    isLib = value => value in this.__lib
-    libMapper = value => {
+
+    helpers.set.__is__dll(value => value in this.__dll)
+    helpers.set.__is__lib(value => value in this.__lib)
+    helpers.set.__lib__mapper(value => {
       let libName = value
       return allLib.some(__libName => {
         libName = __libName
@@ -128,7 +29,7 @@ module.exports = class autoInjectPlugin {
       })
         ? libName
         : value
-    }
+    })
 
     this.__project = Object.keys(project)
   }
@@ -144,98 +45,98 @@ module.exports = class autoInjectPlugin {
     const { __project, __lib } = this
 
     compiler.plugin('after-compile', (compilation, cb) => {
-      compilation.chunks.forEach(chunk => {
-        if (!__project.includes(chunk.name)) return
-        // console.time(chunk.name)
+      Promise.all(
+        compilation.chunks
+          .filter(chunk => __project.includes(chunk.name))
+          .map(chunk => {
+            // console.time(chunk.name)
 
-        if (
-          (this.__cacheable.length > 0 &&
-            this.__cacheable.includes(chunk.name)) ||
-          this.__cacheable
-            .filter(isRegExp)
-            .some(item => item.test(get(chunk, 'entryModule.context')))
-        ) {
-          try {
-            let cache = JSON.parse(cacheController.find(chunk.name))
+            if (
+              (this.__cacheable.length > 0 &&
+                this.__cacheable.includes(chunk.name)) ||
+              this.__cacheable
+                .filter(isRegExp)
+                .some(item => item.test(get(chunk, 'entryModule.context')))
+            ) {
+              try {
+                let cache = JSON.parse(cacheController.find(chunk.name))
 
-            cache.dll = cache.dll.map(item => {
-              const dllName = item.split('.')[0]
+                cache.dll = cache.dll.map(item => {
+                  const dllName = item.split('.')[0]
 
-              if (dllName in __dll__cache) {
-                return __dll__cache[dllName]
-                  .split(' ')
-                  .pop()
-                  .replace('_', '.')
-                  .concat('.js')
+                  if (dllName in dllCache) {
+                    return dllCache[dllName]
+                      .split(' ')
+                      .pop()
+                      .replace('_', '.')
+                      .concat('.js')
+                  }
+
+                  return item
+                })
+
+                //console.timeEnd(chunk.name)
+                return Promise.resolve({
+                  name: chunk.name,
+                  dependencies: cache
+                })
+              } catch (error) {
+                // nothing
               }
+            }
 
-              return item
+            return new Promise(resolve => {
+              const dependencies = queryChunkDependencies(chunk, __lib)
+
+              resolve({
+                name: chunk.name,
+                dependencies
+              })
             })
 
-            this.recordDependencies(chunk.name, cache)
             // console.timeEnd(chunk.name)
-            return cache
-          } catch (error) {
-            // nothing
-          }
+          })
+      ).then(allData => {
+        allData.filter(res => !!res).forEach(({ name, dependencies }) => {
+          cacheController.save(name, JSON.stringify(dependencies))
+          this.recordDependencies(name, dependencies)
+        })
+
+        if (typeof this.__record !== 'undefined') {
+          // cacheController.write()
+          // debugger
+          const allChunks = compilation.getStats().toJson().chunks
+          const chunkFilesMap = allChunks.reduce(
+            (res, { id, files }) =>
+              Object.assign(res, {
+                [id]: files
+              }),
+            {}
+          )
+          const getFiles = reg => (files, chunk) => [
+            ...files,
+            ...(chunkFilesMap[chunk] || []).filter(file => reg.test(file))
+          ]
+          const getJs = getFiles(/\.js$/)
+          const getCss = getFiles(/\.css$/)
+
+          Object.entries(this.__record).forEach(([key, value]) => {
+            this.__record[key].assetsDll = [
+              ...value.dll.map(dll => `${this.__dllPath}${dll}`)
+            ]
+            this.__record[key].assetsJs = [
+              ...value.lib.reduce(getJs, []),
+              ...value.vendor.reduce(getJs, [])
+            ]
+            this.__record[key].assetsCss = [
+              ...value.lib.reduce(getCss, []),
+              ...value.vendor.reduce(getCss, [])
+            ]
+          })
         }
 
-        // 收集同步入口依赖
-        const originDependencies = queryChunkDependencies(chunk.origins)
-
-        // 收集异步入口依赖
-        const chunksDependencies = collect(chunk.chunks, chunk =>
-          collect(chunk.blocks, block =>
-            queryChunkDependencies(block.dependencies)
-          )
-        )
-
-        const dependencies = dependenciesGenerator(
-          [...originDependencies, ...chunksDependencies],
-          __lib
-        )
-
-        this.recordDependencies(chunk.name, dependencies)
-
-        cacheController.save(chunk.name, JSON.stringify(dependencies))
-        // console.timeEnd(chunk.name)
+        cb()
       })
-
-      cacheController.write()
-
-      if (typeof this.__record !== 'undefined') {
-        // debugger
-        const allChunks = compilation.getStats().toJson().chunks
-        const chunkFilesMap = allChunks.reduce(
-          (res, { id, files }) =>
-            Object.assign(res, {
-              [id]: files
-            }),
-          {}
-        )
-        const getFiles = reg => (files, chunk) => [
-          ...files,
-          ...(chunkFilesMap[chunk] || []).filter(file => reg.test(file))
-        ]
-        const getJs = getFiles(/\.js$/)
-        const getCss = getFiles(/\.css$/)
-
-        Object.entries(this.__record).forEach(([key, value]) => {
-          this.__record[key].assetsDll = [
-            ...value.dll.map(dll => `${this.__dllPath}${dll}`)
-          ]
-          this.__record[key].assetsJs = [
-            ...value.lib.reduce(getJs, []),
-            ...value.vendor.reduce(getJs, [])
-          ]
-          this.__record[key].assetsCss = [
-            ...value.lib.reduce(getCss, []),
-            ...value.vendor.reduce(getCss, [])
-          ]
-        })
-      }
-
-      cb()
     })
 
     compiler.plugin('compilation', compilation => {

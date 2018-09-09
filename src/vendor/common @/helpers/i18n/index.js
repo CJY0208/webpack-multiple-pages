@@ -36,3 +36,5 @@ export const i18n = locale => (keys, data) => {
 
 export const i18nLoader = loaders => async () =>
   Object.assign({}, ...(await Promise.all(loaders.map(loader => run(loader)))))
+
+i18n.load = i18nLoader

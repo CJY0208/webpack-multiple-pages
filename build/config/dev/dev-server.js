@@ -7,6 +7,7 @@ module.exports = {
     port: 10001,
     hot: true,
     quiet: true,
+    host: '0.0.0.0',
     progress: true,
     inline: true,
     publicPath: '/wmp/',
@@ -17,7 +18,6 @@ module.exports = {
           to: ({ match }) => `${match.input}.html`
         }
       ]
-    },
-    proxy: {}
+    }
   }
 }

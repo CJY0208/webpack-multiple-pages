@@ -1,9 +1,10 @@
 const fs = require('fs')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const entries = require('../../../entries')
-const { project } = entries
 
+const entries = require('../__entries')
 const AutoInjectPlugin = require('../../../utils/auto-inject-plugin')
+
+const { project } = entries
 
 module.exports = [
   /**

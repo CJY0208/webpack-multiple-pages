@@ -1,4 +1,5 @@
 {
+  "价格": "Giá bán",
   "首付": "Số tiền đặt cọc",
   "月付": "Thanh toán hàng tháng",
   "月": "Tháng",
@@ -6,7 +7,7 @@
   "Credit Pay说明":
     "Bạn có thể mua hàng bằng tín dụng mà không cần trả trước. Vui lòng thanh toán ( hóa đơn ) đúng hạn trước ngày ghi trên hóa đơn của bạn trong kế hoạch thanh toán.",
   "不分期": "Không kỳ hạn",
-  "选择分期": "Chọn Thời lượng",
+  "选择分期": "Chọn kỳ hạn",
   "现在购买": "MUA NGAY",
   "支付": "TRẢ",
   "如果您在当月的账单日期未能偿还，将扣除逾期款 XX":
@@ -51,5 +52,8 @@
   "以后再说": "Không phải bây giờ",
   "审核中": "Dưới Kiểm toán",
   "我们正在处理您的申请，请等待。":
-    "Chúng tôi đang xử lý tài liệu của bạn ngay bây giờ, xin vui lòng chờ đợi."
+    "Chúng tôi đang xử lý tài liệu của bạn ngay bây giờ, xin vui lòng chờ đợi.",
+  "请提供XX": "Vui lòng cung cấp ${XX}",
+  "XX有误": "${XX} sai",
+  "分享": "Chia sẻ"
 }

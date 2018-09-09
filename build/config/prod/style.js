@@ -1,10 +1,18 @@
+const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+
+const getCacheDirectory = require('../../utils/helpers/getCacheDirectory')
+
+const __cache__loader__directory = getCacheDirectory('cache-loader')
 
 const emitFilename = '[name].[chunkhash:6].css'
 const [extractLibStyle, extractVendorStyle, extractProjectStyle] = [
   new ExtractTextPlugin(`lib/${emitFilename}`),
   new ExtractTextPlugin(`vendor/${emitFilename}`),
-  new ExtractTextPlugin(`project/${emitFilename}`)
+  new ExtractTextPlugin({
+    filename: `project/${emitFilename}`
+    // allChunks: true
+  })
 ]
 
 const getExtractLoader = (
@@ -15,9 +23,24 @@ const getExtractLoader = (
     fallback,
     publicPath: '../',
     use: [
-      `css-loader?minimize${
-        useCssModule ? '&modules&localIdentName=[local]_[hash:base64:4]' : ''
-      }`,
+      {
+        loader: 'cache-loader',
+        options: {
+          cacheDirectory: __cache__loader__directory
+        }
+      },
+      {
+        loader: 'css-loader',
+        options: {
+          minimize: false,
+          ...(useCssModule
+            ? {
+                modules: true,
+                localIdentName: '[local]_[hash:base64:4]'
+              }
+            : {})
+        }
+      },
       'postcss-loader',
       ...{
         sass: ['sass-loader'],
@@ -34,7 +57,14 @@ module.exports = {
       {
         test: /.*node_modules.*antd-mobile.*\.less$/,
         use: extractLibStyle.extract([
-          'css-loader?minimize',
+          // 'thread-loader',
+          {
+            loader: 'cache-loader',
+            options: {
+              cacheDirectory: __cache__loader__directory
+            }
+          },
+          'css-loader?minimize=false',
           'postcss-loader',
           {
             loader: 'less-loader',
@@ -49,13 +79,20 @@ module.exports = {
         test: /.*node_modules.*\.less$/,
         exclude: [/antd-mobile/],
         use: extractLibStyle.extract([
-          'css-loader?minimize',
+          // 'thread-loader',
+          {
+            loader: 'cache-loader',
+            options: {
+              cacheDirectory: __cache__loader__directory
+            }
+          },
+          'css-loader?minimize=false',
           'less-loader?javascriptEnabled'
         ])
       },
       {
         test: /.*node_modules.*\.css$/,
-        use: extractLibStyle.extract(['css-loader?minimize'])
+        use: extractLibStyle.extract(['css-loader?minimize=false'])
       },
       // --------------------------- 处理 Lib 样式文件 -----------------------------------
 

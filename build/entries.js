@@ -19,7 +19,12 @@ module.exports = Object.assign(
        * react-router 与 react-router-dom 异同：https://github.com/ReactTraining/react-router/issues/4648
        * 民间中文资料：http://blog.csdn.net/sinat_17775997/article/details/69218382
        */
-      reactRouter: ['react-router-dom', 'history'],
+      reactRouter: [
+        'react-router',
+        'react-router-dom',
+        'history',
+        'react-router-cache-route'
+      ],
       mobx: ['mobx', 'mobx-react'],
       redux: [
         'redux',
@@ -27,27 +32,36 @@ module.exports = Object.assign(
         'redux-thunk',
         'redux-promise',
         'react-redux',
-        'redux-persist'
+        'redux-persist',
+        'react-router-redux',
+        're-modulex'
       ]
     },
     dll: {
       polyfill: [
         'babel-polyfill',
         /**
-         * 使用 Viewport Units Buggyfill 插件来兼容 vw、vh、vmin、vmax 等css单位，参考：https://www.w3cplus.com/mobile/vw-layout-in-vue.html
+         * 使用 Viewport Units Buggyfill 插件来兼容 vw、vh、vmin、vmax 等 css 单位，参考：https://www.w3cplus.com/mobile/vw-layout-in-vue.html
          */
         'viewport-units-buggyfill',
         'fastclick',
         'amfe-flexible',
         /**
-         * Css Modules 处理的样式暂时无法抽离成单独的css文件，需要补齐css-loader和style-loader的必要脚本以生成style标签
+         * 异步模块的样式暂未抽离成单独的 css 文件，需要补齐 css-loader 和 style-loader 的必要脚本以生成 style 标签
          */
         './node_modules/style-loader/lib/addStyles.js',
         './node_modules/css-loader/lib/css-base.js'
       ],
-      helpers: ['immutable', 'date-fns'],
-      // eruda: ['eruda'],
-      react: ['react', 'react-dom', 'prop-types'],
+      immutable: ['immutable'],
+      helpers: ['date-fns', 'dayjs'],
+      eruda: ['eruda'],
+      react: [
+        'react',
+        'react-dom',
+        'prop-types',
+        'hoist-non-react-statics',
+        'invariant'
+      ],
       vueTools: ['vuex', 'vue-router']
     }
   },
@@ -66,17 +80,25 @@ module.exports = Object.assign(
 
       if (projectName in entries[type]) {
         throw new Error(`
-          Duplicated entry named '${projectName}' 
-          Found in '${path.resolve(filepath).replace(srcDir, 'src')}' 
-          Agains with '${path
-            .resolve(entries[type][projectName])
+            Duplicated entry named '${projectName}' 
+            Found in '${path.resolve(filepath).replace(srcDir, 'src')}' 
+            Agains with '${path
+              .resolve(entries[type][projectName])
+              .replace(srcDir, 'src')}'
+          `)
+      }
+
+      if (glob.sync(`${filepath}/index.js`).length === 0) {
+        throw new Error(`
+          No entry point found in '${path
+            .resolve(filepath)
             .replace(srcDir, 'src')}'
         `)
       }
 
       return Object.assign(entries, {
         [type]: Object.assign({}, entries[type], {
-          [alias || name]: filepath
+          [projectName]: filepath
         })
       })
     },

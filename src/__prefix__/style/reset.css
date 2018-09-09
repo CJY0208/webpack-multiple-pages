@@ -10,6 +10,7 @@
   margin: 0;
   border: 0;
   color: inherit;
+  flex-basis: auto;
 
   box-sizing: border-box;
   -webkit-overflow-scrolling: touch;
@@ -27,8 +28,8 @@
 }
 
 html,
-body {
-  width: 100vw;
-  height: 100vh;
+body, {
+  width: 100%;
+  height: 100%;
   overflow: hidden;
 }

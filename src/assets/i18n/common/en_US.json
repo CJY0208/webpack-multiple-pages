@@ -1,4 +1,5 @@
 {
+  "价格": "Price",
   "首付": "Downpayment ",
   "月付": "Monthly Pay",
   "月": "Month",
@@ -31,14 +32,15 @@
   "暂无地址，前往新建": "No shipping address yet. Go add one.",
   "您未同意条款协议": "You are disagree with the installment!",
   "您有未完成的退款订单，请前往“账单”页面完成退款流程并继续购物。":
-    "You have pending refund order(s). Please go to ",
+    "You have pending refund order(s). Please go to ”Bills” page to complete refund process and continue shopping.",
   "您的帐户仍然有未完成的余额，请先偿还，继续购物。":
     "Your account still have outstanding balance. Please repay first to continue shopping.",
   "您未获取信用支付授权，请先完成分期或全额付款":
     "In order to purchase credit pay items with 0 downpayment, you need to complete an installment or full pay order first.",
   "额度不足": "Not enough balance",
   "分期付款申请": "Installment Application",
-  "您现在没有信用额度，请先申请信用额度以启用分期付款购物。": "You don",
+  "您现在没有信用额度，请先申请信用额度以启用分期付款购物。":
+    "You don't have credit limit now. Please apply for credit limit first to enable installment shopping.",
   "立即申请": "Apply Now",
   "激活受理中": "Activation Processing",
   "激活受理中！请于额度激活成功后选择信用支付！":
@@ -50,5 +52,8 @@
   "以后再说": "Not Now",
   "审核中": "Under Auditing",
   "我们正在处理您的申请，请等待。":
-    "We are processing your documents now, please kindly wait."
+    "We are processing your documents now, please kindly wait.",
+  "请提供XX": "Please provide ${XX}",
+  "XX有误": "${XX} is wrong",
+  "分享": "Share"
 }

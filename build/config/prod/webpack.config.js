@@ -1,7 +1,12 @@
 const path = require('path')
-const { project, vendor } = require('../../entries')
 
-module.exports = Object.assign(
+// 分析 webpack 打包速度
+const SpeedMeasurePlugin = require('speed-measure-webpack-plugin')
+
+const smp = new SpeedMeasurePlugin()
+const { project, vendor } = require('./__entries')
+
+const webpackConfig = Object.assign(
   require('./loaders'),
   require('./log-config'),
   require('./plugins'),
@@ -22,6 +27,8 @@ module.exports = Object.assign(
       chunkFilename: 'async/[name].[chunkhash:6].js'
     },
     resolve: {
+      symlinks: false,
+      cacheWithContext: false,
       extensions: [
         '.js',
         '.jsx',
@@ -36,7 +43,8 @@ module.exports = Object.assign(
         {
           // 'vue': 'vue/dist/vue.esm.js',
           'lodash/fp': path.resolve(__dirname, '../../utils/lodash/fp'),
-          __prefix__: path.resolve(__dirname, '../../../src/__prefix__')
+          __prefix__: path.resolve(__dirname, '../../../src/__prefix__'),
+          __assets__: path.resolve(__dirname, '../../../src/assets')
         },
         Object.entries(vendor).reduce(
           (alias, [key, value]) =>
@@ -53,3 +61,5 @@ module.exports = Object.assign(
     context: path.resolve(__dirname, '../../../')
   }
 )
+
+module.exports = smp.wrap(webpackConfig)
