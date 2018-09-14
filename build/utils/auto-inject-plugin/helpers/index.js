@@ -55,13 +55,13 @@ const __query__dependencies = dep => {
     result.push(userRequest)
   }
 
-  if (!isUndefined(resource)) {
-    let cache = __cache[resource]
+  if (!isUndefined(id)) {
+    let cache = __cache[id]
 
     if (!isUndefined(cache)) {
       cache = [...result, ...cache]
 
-      __cache[resource] = cache
+      __cache[id] = cache
 
       return cache
     }
@@ -84,8 +84,8 @@ const __query__dependencies = dep => {
     ]
   }
 
-  if (!isUndefined(resource)) {
-    __cache[resource] = result
+  if (!isUndefined(id)) {
+    __cache[id] = result
   }
 
   return result
