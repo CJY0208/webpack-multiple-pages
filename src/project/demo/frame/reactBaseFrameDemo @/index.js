@@ -1,8 +1,11 @@
 import '__prefix__'
 import 'css-loader/lib/css-base'
 import 'style-loader/lib/addStyles'
+import 'antd-mobile/dist/antd-mobile.less'
+
 import React from 'react'
 import { render } from 'react-dom'
+import { HashRouter as Router } from 'react-router-dom'
 import { PersistGate } from 'redux-persist/integration/react'
 import { ModuleProvider } from 're-modulex'
 
@@ -21,7 +24,9 @@ Object.assign(window, { common })
 render(
   <ModuleProvider {...{ store }}>
     <PersistGate {...{ persistor }} Loading={null}>
-      <AppRouter />
+      <Router>
+        <AppRouter />
+      </Router>
     </PersistGate>
   </ModuleProvider>,
   document.getElementById('app')

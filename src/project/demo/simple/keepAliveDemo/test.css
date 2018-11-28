@@ -1,0 +1,8 @@
+
+:root {
+  --mainColor: gray(85);
+}
+
+* {
+  color: var(--mainColor);
+}

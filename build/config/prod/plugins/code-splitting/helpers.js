@@ -7,15 +7,34 @@ const cacheController = require('./cache')
 
 const __rootName = path.resolve(__dirname, '../../../../../')
 
+// 当前递归遍历的记录，用以监测循环引用情景
+const __query__record = {}
+
 const isDependentBy = (
   libName,
-  { resource = '', sourceRequest = '', reasons = [] } = {}
+  {
+    resource = '',
+    sourceRequest = '',
+    reasons = [],
+    userRequest,
+    ...module
+  } = {}
 ) => {
   let cacheKey = `${sourceRequest}_${resource}:${libName}`
   let res = cacheController.find(cacheKey)
 
   if (typeof res !== 'undefined') {
     return res
+  }
+
+  if (userRequest) {
+    if (userRequest in __query__record) {
+      // 当检测到循环引用时，废除本次遍历
+      return false
+    }
+
+    // 对当前递归抵达的模块做记录
+    __query__record[userRequest] = true
   }
 
   res =
@@ -25,6 +44,11 @@ const isDependentBy = (
       reasons.some(({ module }) => isDependentBy(libName, module)))
 
   cacheController.save(cacheKey, res)
+
+  if (userRequest) {
+    // 在当前模块递归任务结束时删除记录
+    delete __query__record[userRequest]
+  }
 
   return res
 }

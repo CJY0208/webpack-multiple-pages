@@ -30,7 +30,8 @@ function fixIOSZIndexBug() {
   setTimeout(() => document.body.removeChild(IOSZIndexBugFixDom), 320)
 }
 
-function call() {
+function call(e) {
+  // console.log(e, 'popevent')
   run(callStack.pop())
 
   callStack.length === 0 && window.removeEventListener('popstate', call)
@@ -51,6 +52,7 @@ export function cover(fn) {
 export function silenceBack() {
   callStack.pop()
   callStack.push(undefined)
+  // console.log('执行了back')
   history.back()
 }
 

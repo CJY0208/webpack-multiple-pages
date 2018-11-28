@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import { helpers } from '@common'
+// import Arui, {  } from '@Arui'
 
 import './style.scss'
 import Divider from '../helpers/divider'

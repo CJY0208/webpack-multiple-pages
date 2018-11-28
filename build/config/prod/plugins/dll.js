@@ -14,6 +14,8 @@ const { dll } = require('../__entries')
 const getCacheDirectory = require('../../../utils/helpers/getCacheDirectory')
 const __uglify__cache__directory = getCacheDirectory('parallel-uglify-plugin')
 
+const NamedDllEntryModuleIdsPlugin = require('../../../utils/NamedDllEntryModuleIdsPlugin')
+
 module.exports = [
   /**
    * 自动构建 Dll 库
@@ -33,6 +35,7 @@ module.exports = [
       new NamedChunksPlugin(),
       // new NamedModulesPlugin(),
       new HashedModuleIdsPlugin(),
+      new NamedDllEntryModuleIdsPlugin(),
 
       // /**
       //  * 忽略国际化部分以减小 moment.js 体积，参考：https://github.com/jmblog/how-to-optimize-momentjs-with-webpack

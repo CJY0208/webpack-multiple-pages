@@ -26,5 +26,9 @@ describe('i18n 单元测试', () => {
         `Hello ${data['XX']}, I'm ${data['YY']}`
       )
     })
+
+    it('异常翻译', () => {
+      expect(translate(undefined)).to.be.equal('')
+    })
   })
 })

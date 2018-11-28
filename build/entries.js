@@ -44,7 +44,8 @@ module.exports = Object.assign(
          * 使用 Viewport Units Buggyfill 插件来兼容 vw、vh、vmin、vmax 等 css 单位，参考：https://www.w3cplus.com/mobile/vw-layout-in-vue.html
          */
         'viewport-units-buggyfill',
-        'fastclick',
+        'viewport-units-buggyfill/viewport-units-buggyfill.hacks',
+        '@cjy0208/fastclick',
         'amfe-flexible',
         /**
          * 异步模块的样式暂未抽离成单独的 css 文件，需要补齐 css-loader 和 style-loader 的必要脚本以生成 style 标签
@@ -53,8 +54,7 @@ module.exports = Object.assign(
         './node_modules/css-loader/lib/css-base.js'
       ],
       immutable: ['immutable'],
-      helpers: ['date-fns', 'dayjs'],
-      eruda: ['eruda'],
+      helpers: ['dayjs'],
       react: [
         'react',
         'react-dom',
@@ -62,51 +62,63 @@ module.exports = Object.assign(
         'hoist-non-react-statics',
         'invariant'
       ],
-      vueTools: ['vuex', 'vue-router']
+      vueTools: [
+        'vuex',
+        'vue-router',
+        './node_modules/vue-loader/lib/runtime/component-normalizer.js',
+        './node_modules/vue-style-loader/lib/listToStyles.js',
+        './node_modules/vue-style-loader/lib/addStylesClient.js'
+      ]
     }
   },
-  glob.sync(`${srcDir}/**/* @*`).reduce(
-    (entries, filepath) => {
-      const type = path
-        .resolve(filepath)
-        .replace(srcDir, '')
-        .split(path.sep)[1]
-      const [name, alias] = filepath
-        .split('/')
-        .pop()
-        .split(' @')
+  glob
+    .sync(`${srcDir}/**/* @*`)
+    .filter(filepath => {
+      if (glob.sync(`${filepath}/index.js`).length === 0) {
+        return false
+        // throw new Error(`
+        //   No entry point found in '${path
+        //     .resolve(filepath)
+        //     .replace(srcDir, 'src')}'
+        // `)
+      }
 
-      const projectName = alias || name
+      return true
+    })
+    .reduce(
+      (entries, filepath) => {
+        const type = path
+          .resolve(filepath)
+          .replace(srcDir, '')
+          .split(path.sep)[1]
+        const [name, alias] = filepath
+          .split('/')
+          .pop()
+          .split(' @')
 
-      if (projectName in entries[type]) {
-        throw new Error(`
+        const projectName = alias || name
+
+        if (projectName in entries[type]) {
+          throw new Error(`
             Duplicated entry named '${projectName}' 
             Found in '${path.resolve(filepath).replace(srcDir, 'src')}' 
             Agains with '${path
               .resolve(entries[type][projectName])
               .replace(srcDir, 'src')}'
           `)
-      }
+        }
 
-      if (glob.sync(`${filepath}/index.js`).length === 0) {
-        throw new Error(`
-          No entry point found in '${path
-            .resolve(filepath)
-            .replace(srcDir, 'src')}'
-        `)
-      }
-
-      return Object.assign(entries, {
-        [type]: Object.assign({}, entries[type], {
-          [projectName]: filepath
+        return Object.assign(entries, {
+          [type]: Object.assign({}, entries[type], {
+            [projectName]: filepath
+          })
         })
-      })
-    },
-    {
-      project: {},
-      vendor: {}
-    }
-  ),
+      },
+      {
+        project: {},
+        vendor: {}
+      }
+    ),
   {
     // 此处勿改动，仅作优化dev速度使用
     __dev: {

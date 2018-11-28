@@ -7,12 +7,14 @@ const {
   DefinePlugin,
   HotModuleReplacementPlugin
 } = require('webpack')
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+//   .BundleAnalyzerPlugin
 
 module.exports = {
   plugins: [
     new FriendlyErrorsWebpackPlugin(),
     new HotModuleReplacementPlugin(),
-
+    // new BundleAnalyzerPlugin(),
     ...require('../loaders').plugins,
     ...require('../style').plugins,
     ...require('./dll'),

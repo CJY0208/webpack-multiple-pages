@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      // vsc 识别 webpack alias
+      "__prefix__": ["src/__prefix__"],
+      "__assets__": ["src/assets"],
+      "@common": ["src/vendor/common @"],
+      "@CacheRoute": ["src/vendor/demo/CacheRoute @"],
+      "@commonDemo": ["src/vendor/demo/commonDemo @"],
+      "@EasyStore": ["src/vendor/demo/EasyStore @"],
+      "@ReModulex": ["src/vendor/demo/ReModulex @"],
+
+      "__prefix__/*": ["src/__prefix__/*"],
+      "__assets__/*": ["src/assets/*"],
+      "@common/*": ["src/vendor/common @/*"],
+      "@CacheRoute/*": ["src/vendor/demo/CacheRoute @/*"],
+      "@commonDemo/*": ["src/vendor/demo/commonDemo @/*"],
+      "@EasyStore/*": ["src/vendor/demo/EasyStore @/*"],
+      "@ReModulex/*": ["src/vendor/demo/ReModulex @/*"]
+    }
+  },
+  "exclude": ["node_modules", "dist"]
+}

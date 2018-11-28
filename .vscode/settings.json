@@ -4,10 +4,10 @@
     "**/.vscode": true,
     // "node_modules": true,
     // "yarn.lock": true,
-    "**/.uglify_cache": true,
     // "package-lock.json": true,
     "**/*.map": true,
-    "yarn-error.log": true
+    "yarn-error.log": true,
+    ".dirty-branch": true
   },
   "files.associations": {
     ".babelrc": "jsonc",
@@ -23,6 +23,5 @@
   "emmet.includeLanguages": {
     "vue-html": "html",
     "javascript": "javascriptreact"
-  },
-  "cSpell.ignoreWords": ["Arui", "antd"]
+  }
 }

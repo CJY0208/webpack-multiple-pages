@@ -1,3 +1,5 @@
 import '__prefix__'
 
-export * as helpers from './helpers'
+import * as helpers from './helpers'
+
+export { helpers }

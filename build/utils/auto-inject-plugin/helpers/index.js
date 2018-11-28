@@ -37,6 +37,9 @@ const collect = (arr, collector) =>
 const recursiveCollect = (arr, key) =>
   collect(get(arr, key, []), arr => [arr, ...recursiveCollect(arr, key)])
 
+// 当前递归遍历的记录，用以监测循环引用情景
+const __query__record = {}
+
 const __cache = {}
 const __query__dependencies = dep => {
   let result = []
@@ -46,8 +49,8 @@ const __query__dependencies = dep => {
     fileDependencies: [filepath = ''] = [],
     id,
     variables,
-    resource,
-    _cachedSource: { hash } = {}
+    resource
+    // _cachedSource: { hash } = {}
   } =
     module || {}
 
@@ -65,6 +68,14 @@ const __query__dependencies = dep => {
 
       return cache
     }
+
+    if (id in __query__record) {
+      // 当检测到循环引用时，废除本次遍历
+      return []
+    }
+
+    // 对当前递归抵达的模块做记录
+    __query__record[id] = true
   }
 
   if (
@@ -86,6 +97,9 @@ const __query__dependencies = dep => {
 
   if (!isUndefined(id)) {
     __cache[id] = result
+
+    // 在当前模块递归任务结束时删除记录
+    delete __query__record[id]
   }
 
   return result
@@ -144,6 +158,10 @@ const queryChunkDependencies = (chunk, lib) => {
     [...originDependencies, ...chunksDependencies],
     lib
   )
+
+  // __query__dependencies({ __cache })
+
+  // debugger
 
   return dependencies
 }

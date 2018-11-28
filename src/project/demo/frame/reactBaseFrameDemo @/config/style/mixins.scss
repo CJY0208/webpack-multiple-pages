@@ -1,0 +1,38 @@
+
+@mixin mid($pos: false, $way: false, $extra: false) {
+  @if $pos {
+    position: $pos;
+    $transform: translate(-50%, 0);
+    @if $way == both {
+      top: 50%;
+      left: 50%;
+      $transform: translate(-50%, -50%);
+    } @else if $way == middle {
+      top: 50%;
+      $transform: translate(0, -50%);
+    } @else {
+      left: 50%;
+    }
+
+    @if $extra {
+      $transform: $transform $extra;
+    }
+
+    transform: $transform;
+  } @else {
+    margin: 0 auto;
+  }
+}
+
+@mixin dot($line: 1) {
+  @if $line <= 1 {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  } @else if {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: $line;
+    overflow: hidden;
+  }
+}

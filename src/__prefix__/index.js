@@ -1,12 +1,14 @@
 import 'babel-polyfill'
+import 'css-loader/lib/css-base'
+import 'style-loader/lib/addStyles'
 import viewportUnitsBuggyfill from 'viewport-units-buggyfill'
 import viewportUnitsBuggyfillHack from 'viewport-units-buggyfill/viewport-units-buggyfill.hacks'
-import FastClick from 'fastclick'
+import FastClick from '@cjy0208/fastclick'
 
 import './style/reset.css'
 import './style/__postcss-viewport-units__fix.css'
 import './style/__antd__fix.scss'
-import './console'
+import './eruda'
 
 viewportUnitsBuggyfill.init({
   hacks: viewportUnitsBuggyfillHack,

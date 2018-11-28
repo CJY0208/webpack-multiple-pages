@@ -29,52 +29,47 @@
     "clean:dep": "node ./build/scripts/clean/dep.js",
     "git:reset": "git checkout .",
     "git:status": "git status",
-    "format": "prettier --write \"./**/*.js\" \"./**/*.jsx\"",
+    "format": "prettier --write \"./**/*.js\" \"./**/*.jsx\" \"./**/*.vue\"",
     "remote:dep:reset":
       "npm run git:reset && npm run clean:dep && dep:init && npm run git:reset",
-    "fix:node-sass": "npm rebuild --force node-sass",
-    "precommit": "lint-staged"
+    "fix:node-sass": "npm rebuild --force node-sass"
   },
   "eslintIgnore": [
     "dist",
     "node_modules",
-    "*.test.js",
-    "build/language/helpers"
+    "*.test.js"
   ],
   "lint-staged": {
-    "*.{js,jsx,json}": [
+    "*.{js,jsx,json,.vue}": [
       "npm run clean:out-of-date ",
       "npm run format",
       "git add"
     ]
   },
   "dependencies": {
-    "fastclick": "^1.0.6",
+    "@cjy0208/fastclick": "^1.0.6",
     "amfe-flexible": "^2.2.1",
     "antd-mobile": "^2.1.6",
     "axios": "^0.17.1",
     "babel-core": "6.26.0",
     "babel-polyfill": "^6.26.0",
-    "date-fns": "^1.29.0",
     "dayjs": "^1.7.5",
-    "eruda": "^1.5.0",
     "history": "^4.7.2",
     "hoist-non-react-statics": "^2.5.0",
     "immutable": "^3.8.2",
     "invariant": "^2.2.4",
-    "jsencrypt": "^3.0.0-beta.1",
     "lodash": "^4.17.5",
     "md5": "^2.2.1",
     "mint-ui": "^2.2.13",
     "mobx": "^3.5.1",
     "mobx-react": "^4.4.2",
     "prop-types": "^15.6.0",
-    "re-modulex": "^1.0.0",
+    "re-modulex": "^1.0.3",
     "react": "^16.x",
     "react-dom": "^16.x",
     "react-redux": "^5.0.7",
     "react-router": "^4.x",
-    "react-router-cache-route": "^1.2.0",
+    "react-router-cache-route": "^1.3.1",
     "react-router-dom": "^4.x",
     "react-router-redux": "^4.0.8",
     "redux": "^3.7.2",
@@ -154,13 +149,13 @@
     "vue-loader": "^14.1.1",
     "vue-style-loader": "^4.0.2",
     "vue-template-compiler": "^2.5.13",
-    "webpack": "^3.10.0",
+    "webpack": "^3.12.0",
     "webpack-bundle-analyzer": "^2.13.1",
     "webpack-cli": "^2.0.10",
     "webpack-dev-server": "^2.11.1",
     "webpack-parallel-uglify-plugin": "^1.0.2",
     "webpack-plugin-hash-output": "^1.3.0",
     "yargs": "^11.0.0",
-    "yarn": "^1.3.2"
+    "yarn": "^1.12.3"
   }
 }

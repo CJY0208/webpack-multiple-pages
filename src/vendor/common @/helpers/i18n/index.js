@@ -21,6 +21,10 @@ export const template = (str = '', data) => {
 }
 
 export const i18n = locale => (keys, data) => {
+  if (isUndefined(keys)) {
+    return ''
+  }
+
   let text = get(locale, keys)
 
   if (isUndefined(text)) {
