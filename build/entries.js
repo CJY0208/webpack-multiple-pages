@@ -10,7 +10,7 @@ const srcDir = path.resolve(__dirname, '../src')
 module.exports = Object.assign(
   {
     lib: {
-      vue: ['vue'],
+      // vue: ['vue'],
       utils: ['axios', 'md5'],
       lodash: ['lodash', 'lodash/fp'],
       antdMobile: ['antd-mobile'],
@@ -35,6 +35,13 @@ module.exports = Object.assign(
         'redux-persist',
         'react-router-redux',
         're-modulex'
+      ],
+      react: [
+        'react',
+        'react-dom',
+        'prop-types',
+        'hoist-non-react-statics',
+        'invariant'
       ]
     },
     dll: {
@@ -55,20 +62,20 @@ module.exports = Object.assign(
       ],
       immutable: ['immutable'],
       helpers: ['dayjs'],
-      react: [
-        'react',
-        'react-dom',
-        'prop-types',
-        'hoist-non-react-statics',
-        'invariant'
-      ],
-      vueTools: [
-        'vuex',
-        'vue-router',
-        './node_modules/vue-loader/lib/runtime/component-normalizer.js',
-        './node_modules/vue-style-loader/lib/listToStyles.js',
-        './node_modules/vue-style-loader/lib/addStylesClient.js'
-      ]
+      // react: [
+      //   'react',
+      //   'react-dom',
+      //   'prop-types',
+      //   'hoist-non-react-statics',
+      //   'invariant'
+      // ],
+      // vueTools: [
+      //   'vuex',
+      //   'vue-router',
+      //   // './node_modules/vue-loader/lib/runtime/component-normalizer.js',
+      //   // './node_modules/vue-style-loader/lib/listToStyles.js',
+      //   // './node_modules/vue-style-loader/lib/addStylesClient.js'
+      // ]
     }
   },
   glob
@@ -158,7 +165,7 @@ module.exports = Object.assign(
         './node_modules/mint-ui/lib/datetime-picker/index.js',
 
         './node_modules/vue-hot-reload-api/dist/index.js',
-        './node_modules/vue-loader/lib/runtime/component-normalizer.js',
+        // './node_modules/vue-loader/lib/runtime/component-normalizer.js',
         './node_modules/vue-style-loader/lib/addStylesClient.js',
         './node_modules/vue-style-loader/lib/listToStyles.js',
         './node_modules/webpack-dev-server/client/index.js'

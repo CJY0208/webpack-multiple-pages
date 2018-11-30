@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 
 import { helpers } from '@common'
 
+import { get } from 'lodash/fp'
+
 import styles from './style.m.scss'
 
 const className = helpers.classNames.react(styles)

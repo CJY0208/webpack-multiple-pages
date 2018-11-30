@@ -1,7 +1,7 @@
 const fs = require('fs')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin')
-const { project } = require('../__entries')
+const { project, vendor, lib } = require('../__entries')
 
 module.exports = [
   /**
@@ -15,7 +15,21 @@ module.exports = [
         template: fs.readdirSync(filepath).includes('index.html')
           ? `${filepath}/index.html`
           : 'template.html',
-        chunks: ['__runtime', '__vendor', projectName],
+        chunks: [
+          // `runtime~project/${projectName}`,
+          '__vendor',
+          ...Object.keys(lib)
+            // .filter(name =>
+            //   ['reactRouter', 'redux', 'antdMobile', 'utils', 'react'].includes(name)
+            // )
+            .map(name => `lib/${name}`),
+          ...Object.keys(vendor)
+            .filter(name =>
+              ['common'].includes(name)
+            )
+            .map(name => `vendor/${name}`),
+          `project/${projectName}`
+        ],
         chunksSortMode: 'dependency'
       })
   ),

@@ -46,32 +46,32 @@ module.exports = {
       }
     ]
   },
-  vue: {
-    loaders: {
-      scss: [
-        'vue-style-loader?sourceMap',
-        'css-loader?sourceMap',
-        'postcss-loader?sourceMap',
-        'sass-loader?sourceMap'
-      ],
-      sass: [
-        'vue-style-loader?sourceMap',
-        'css-loader?sourceMap',
-        'postcss-loader?sourceMap',
-        'sass-loader?sourceMap'
-      ],
-      css: [
-        'vue-style-loader?sourceMap',
-        'css-loader?sourceMap',
-        'postcss-loader?sourceMap'
-      ],
-      postcss: [
-        'vue-style-loader?sourceMap',
-        'css-loader?sourceMap',
-        'postcss-loader?sourceMap'
-      ]
-    }
-  },
+  // vue: {
+  //   loaders: {
+  //     scss: [
+  //       'vue-style-loader?sourceMap',
+  //       'css-loader?sourceMap',
+  //       'postcss-loader?sourceMap',
+  //       'sass-loader?sourceMap'
+  //     ],
+  //     sass: [
+  //       'vue-style-loader?sourceMap',
+  //       'css-loader?sourceMap',
+  //       'postcss-loader?sourceMap',
+  //       'sass-loader?sourceMap'
+  //     ],
+  //     css: [
+  //       'vue-style-loader?sourceMap',
+  //       'css-loader?sourceMap',
+  //       'postcss-loader?sourceMap'
+  //     ],
+  //     postcss: [
+  //       'vue-style-loader?sourceMap',
+  //       'css-loader?sourceMap',
+  //       'postcss-loader?sourceMap'
+  //     ]
+  //   }
+  // },
   plugins: [
     new HappyPack({
       id: 'css',

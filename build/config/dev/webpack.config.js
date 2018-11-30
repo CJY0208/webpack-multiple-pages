@@ -2,19 +2,29 @@ const path = require('path')
 const { project, vendor, lib, dll } = require('./__entries')
 
 module.exports = {
+  mode: 'production',
   ...require('./dev-server'),
   ...require('./loaders'),
   ...require('./plugins'),
+  ...require('./code-splitting'),
 
-  devtool: 'cheap-module-eval-source-map',
-  entry: project,
+  // devtool: 'cheap-module-eval-source-map',
+  devtool: false,
+  entry: {
+    ...Object.entries(project).reduce((res, [name, value]) => ({
+      ...res,
+      [`project/${name}`]: value
+    }), {}),
+    // ...vendor,
+    // ...lib
+  },
   output: {
-    filename: 'project/[name].js',
+    filename: '[name].[hash:6].js',
     /**
      * chunkFilename 只用来打包 require.ensure 或 import() 方法中引入的异步模块，若无异步模块则不会生成任何 chunk 块文件
      * 民间资料：https://www.cnblogs.com/toward-the-sun/p/6147324.html?utm_source=itdadao&utm_medium=referral
      */
-    chunkFilename: 'async/[name].js'
+    chunkFilename: '[name].[chunkhash:6].js'
   },
   resolve: {
     extensions: [

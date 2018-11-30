@@ -13,7 +13,8 @@
   <link href="<%= htmlWebpackPlugin.files.css[i] %>" rel="stylesheet" /><% } %>
 </head>
 <body>
-  <div id="app"></div><% for (var i = 0; i < htmlWebpackPlugin.files.js.length; i++) {%>
+  <div id="app"></div>
+  <% for (var i = 0; i < htmlWebpackPlugin.files.js.length; i++) {%>
   <script src="<%= htmlWebpackPlugin.files.js[i] %>"></script><% } %>
 </body>
 </html>

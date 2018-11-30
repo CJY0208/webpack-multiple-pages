@@ -3,7 +3,13 @@ import { Route } from 'react-router-dom'
 import { CacheRoute, CacheSwitch as Switch } from 'react-router-cache-route'
 
 import Home from '../views/Home'
-import SubPage from '../views/SubPage'
+// import SubPage from '../views/SubPage'
+
+import { asyncComponent } from '../helpers'
+
+const SubPage = asyncComponent(() =>
+  import(/* webpackChunkName: 'async/reactBaseFrame/SubPage' */ '../views/SubPage')
+)
 
 const AppRouter = () => (
   <Switch>
