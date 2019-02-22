@@ -76,12 +76,12 @@ const remove = () => {
 
 if (!isDesktop()) {
   attach()
-}
 
-if (
-  __host__white__list.includes(window.location.host) ||
-  process.env.TEST ||
-  process.env.NODE_ENV === 'development'
-) {
-  showConsole()
+  if (
+    __host__white__list.includes(window.location.host) ||
+    process.env.TEST ||
+    process.env.NODE_ENV === 'development'
+  ) {
+    showConsole()
+  }
 }
