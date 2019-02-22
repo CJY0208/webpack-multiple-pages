@@ -15,7 +15,6 @@ export default {
 </script>
 
 <style lang="scss">
-
 :root {
   --mainColor: gray(70);
 }

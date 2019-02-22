@@ -25,8 +25,10 @@ export default class TinyScrollListener {
     }
 
     function onScroll(e) {
-      const scrollTop = isBody ? document.documentElement.scrollTop : this.scrollTop
-      
+      const scrollTop = isBody
+        ? document.documentElement.scrollTop
+        : this.scrollTop
+
       e.stopPropagation()
 
       distanceEvents.forEach(
@@ -84,13 +86,13 @@ export default class TinyScrollListener {
       })
       rAFLock = true
     }
-    
+
     // .addEventListener('scroll', 在 body 上无效
     if (isBody) {
       document.addEventListener('scroll', scrollHandler)
     } else {
       element.addEventListener('scroll', scrollHandler)
-    }    
+    }
 
     return self
   }

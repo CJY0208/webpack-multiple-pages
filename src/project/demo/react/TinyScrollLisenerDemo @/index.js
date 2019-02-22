@@ -52,18 +52,21 @@ class App extends Component {
         }
       ]
     })
-  }  
+  }
 
-  destroyListener = () => {    
+  destroyListener = () => {
     this.scrollListener.destroy()
     Toast.info('滚动监听已销毁', 2, null, false)
   }
 
   render() {
     return (
-      <div className="container" ref={scrollContainer => {
-        this.scrollContainer = scrollContainer
-      }}>
+      <div
+        className="container"
+        ref={scrollContainer => {
+          this.scrollContainer = scrollContainer
+        }}
+      >
         <ul>
           <li>1</li>
           <li>2</li>
