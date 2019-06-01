@@ -1,5 +1,5 @@
 
-#app,
+#root,
 .wrapper {
   width: 100%;
   height: 100%;
@@ -18,8 +18,8 @@
 
     a {
       flex: 1;
-      height: 50px;
-      line-height: 50px;
+      height: 50pt;
+      line-height: 50pt;
       text-align: center;
       outline: solid 1px;
 
@@ -36,8 +36,8 @@
 
   li {
     flex: 1;
-    height: 100px;
-    line-height: 100px;
+    height: 100pt;
+    line-height: 100pt;
     text-align: center;
     outline: solid 1px;
 

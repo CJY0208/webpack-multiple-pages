@@ -1,4 +1,4 @@
-import { helpers } from '@common'
+import * as helpers from '@helpers'
 
 import en_US_locale from '../assets/i18n/en_US.json'
 import in_locale from '../assets/i18n/in.json'

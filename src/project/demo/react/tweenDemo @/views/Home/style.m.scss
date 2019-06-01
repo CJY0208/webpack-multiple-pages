@@ -1,0 +1,59 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  color: white;
+  background: #18212d;
+}
+.view {
+  min-width: 400px;
+  position: relative;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.block {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: #fed477;
+  line-height: 40px;
+  text-align: center;
+}
+.progress {
+  margin-top: 100px;
+  width: 400px;
+  cursor: pointer;
+}
+.buttons {
+  margin-top: 10px;
+  text-align: center;
+
+  button {
+    background: #d97c98;
+    color: #fff;
+    padding: 1em 2em;
+    border: 1px solid #fff;
+    cursor: pointer;
+    outline: none;
+    margin-right: 5px;
+    font-size: 16px;
+  }
+}
+.info {
+  overflow: hidden;
+  font-size: 30px;
+  font-weight: 700;
+  margin: 20px 0;
+}
+.easing-link {
+  font-size: 16px; 
+  color: #fff;
+  text-decoration: underline;
+}

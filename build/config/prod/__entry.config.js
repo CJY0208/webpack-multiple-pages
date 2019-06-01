@@ -1,10 +1,9 @@
 module.exports = {
-  include: [
-    // /rollDemo2 @/,
-    // /commonDemo @/,
-    // /demo.*Ario/
-    // /nestedRouterDemo @/
+  include: [    
+    // /rollDemo @/,
+    // /tweenDemo @/
   ],
   exclude: [
+    // /src.*project.*demo/
   ]
 }

@@ -1,7 +1,0 @@
-::after, ::before {
-  color: transparent;
-}
-
-img {
-  content: normal !important;
-}

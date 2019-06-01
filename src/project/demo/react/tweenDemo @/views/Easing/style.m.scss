@@ -1,0 +1,16 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  color: white;
+  background: #18212d;
+
+  ul {
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    list-style: none;
+  }
+}
+

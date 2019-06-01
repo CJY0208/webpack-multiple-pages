@@ -43,6 +43,7 @@ const webpackConfig = Object.assign(
         {
           // 'vue': 'vue/dist/vue.esm.js',
           'lodash/fp': path.resolve(__dirname, '../../utils/lodash/fp'),
+          __src__: path.resolve(__dirname, '../../../src'),
           __prefix__: path.resolve(__dirname, '../../../src/__prefix__'),
           __assets__: path.resolve(__dirname, '../../../src/assets')
         },

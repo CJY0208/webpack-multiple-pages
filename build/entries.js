@@ -26,16 +26,8 @@ module.exports = Object.assign(
         'react-router-cache-route'
       ],
       mobx: ['mobx', 'mobx-react'],
-      redux: [
-        'redux',
-        'redux-actions',
-        'redux-thunk',
-        'redux-promise',
-        'react-redux',
-        'redux-persist',
-        'react-router-redux',
-        're-modulex'
-      ]
+      redux: ['redux', 'react-redux', 'redux-persist', 're-modulex'],
+      rcForm: ['rc-form']
     },
     dll: {
       polyfill: [
@@ -46,15 +38,13 @@ module.exports = Object.assign(
         'viewport-units-buggyfill',
         'viewport-units-buggyfill/viewport-units-buggyfill.hacks',
         '@cjy0208/fastclick',
-        'amfe-flexible',
         /**
          * 异步模块的样式暂未抽离成单独的 css 文件，需要补齐 css-loader 和 style-loader 的必要脚本以生成 style 标签
          */
         './node_modules/style-loader/lib/addStyles.js',
         './node_modules/css-loader/lib/css-base.js'
       ],
-      immutable: ['immutable'],
-      helpers: ['dayjs'],
+      helpers: ['tiny-scroll-listener', 'dayjs', 'qs', 'js-bridge-adapter'],
       react: [
         'react',
         'react-dom',
@@ -65,6 +55,7 @@ module.exports = Object.assign(
       vueTools: [
         'vuex',
         'vue-router',
+        'vue-i18n',
         './node_modules/vue-loader/lib/runtime/component-normalizer.js',
         './node_modules/vue-style-loader/lib/listToStyles.js',
         './node_modules/vue-style-loader/lib/addStylesClient.js'
@@ -123,6 +114,7 @@ module.exports = Object.assign(
     // 此处勿改动，仅作优化dev速度使用
     __dev: {
       __devTools: [
+        '@hot-loader/react-dom',
         './node_modules/sockjs-client/dist/sockjs.js',
         'html-entities',
         'events',

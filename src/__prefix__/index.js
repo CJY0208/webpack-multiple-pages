@@ -5,8 +5,8 @@ import viewportUnitsBuggyfill from 'viewport-units-buggyfill'
 import viewportUnitsBuggyfillHack from 'viewport-units-buggyfill/viewport-units-buggyfill.hacks'
 import FastClick from '@cjy0208/fastclick'
 
-import './style/reset.css'
-import './style/__postcss-viewport-units__fix.css'
+import './style/reset.scss'
+import './style/__postcss-viewport-units__fix.scss'
 import './style/__antd__fix.scss'
 import './eruda'
 

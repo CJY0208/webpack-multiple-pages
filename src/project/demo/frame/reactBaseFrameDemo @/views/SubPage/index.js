@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
 
-import { helpers } from '@common'
+import * as helpers from '@helpers'
 
-import styles from './style.m.scss'
-
-const className = helpers.classNames.react(styles)
+import './style.m.scss'
 
 @helpers.hot(module)
 export default class SubPage extends Component {

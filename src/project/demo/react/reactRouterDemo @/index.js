@@ -2,11 +2,10 @@ import '__prefix__'
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { HashRouter as Router, Route, Link, withRouter } from 'react-router-dom'
-import 'amfe-flexible'
 
-import * as common from '@common'
+import * as helpers from '@helpers'
 
-window.common = common
+window.helpers = helpers
 
 import './style.scss'
 import './test.css'
@@ -92,5 +91,5 @@ const Topic = ({ match }) => (
   </div>
 )
 
-ReactDOM.render(<BasicExample />, document.getElementById('app'))
-// ReactDOM.render(<div>test</div>, document.getElementById('app'))
+ReactDOM.render(<BasicExample />, document.getElementById('root'))
+// ReactDOM.render(<div>test</div>, document.getElementById('root'))

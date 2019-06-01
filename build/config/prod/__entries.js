@@ -1,29 +1,36 @@
 const { project, ...entries } = require('../../entries')
 
-let __entry__include, __entry__exclude
+let include = []
+let exclude = []
 
 try {
-  const __entry__config = require('../../../__entry.config.js')
-  __entry__include = __entry__config.include
-  __entry__exclude = __entry__config.exclude
+  const config = require('../../../__entry.config.js')
+  include = config.include
+  exclude = config.exclude
 } catch (err) {
-  const __entry__config = require('./__entry.config.js')
-  __entry__include = __entry__config.include
-  __entry__exclude = __entry__config.exclude
+  const config = require('./__entry.config.js')
+  include = config.include
+  exclude = config.exclude
 }
 
 module.exports = {
-  project: Object.entries(project).reduce(
-    (project, [name, filepath]) =>
-      __entry__exclude.some(filter => filter.test(filepath)) ||
-      (Array.isArray(__entry__include) &&
-        __entry__include.length > 0 &&
-        !__entry__include.some(filter => filter.test(filepath)))
-        ? project
-        : Object.assign(project, {
-            [name]: filepath
-          }),
-    {}
-  ),
+  project: Object.entries(project).reduce((project, [name, filepath]) => {
+    let pass = true
+
+    if (exclude.some(filter => filter.test(filepath))) {
+      pass = false
+    }
+
+    if (include.some(filter => filter.test(filepath))) {
+      pass = true
+    }
+
+    return pass
+      ? {
+          ...project,
+          [name]: filepath
+        }
+      : project
+  }, {}),
   ...entries
 }

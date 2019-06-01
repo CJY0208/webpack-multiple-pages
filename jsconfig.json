@@ -3,21 +3,19 @@
     "baseUrl": ".",
     "paths": {
       // vsc 识别 webpack alias
+      "__src__": ["src"],
       "__prefix__": ["src/__prefix__"],
       "__assets__": ["src/assets"],
-      "@common": ["src/vendor/common @"],
-      "@CacheRoute": ["src/vendor/demo/CacheRoute @"],
-      "@commonDemo": ["src/vendor/demo/commonDemo @"],
-      "@EasyStore": ["src/vendor/demo/EasyStore @"],
-      "@ReModulex": ["src/vendor/demo/ReModulex @"],
+      "@helpers": ["src/vendor/helpers @"],
+      "@UI": ["src/vendor/components/UI @"],
+      "@MAP": ["src/vendor/components/MAP @"],
 
+      "__src__/*": ["src/*"],
       "__prefix__/*": ["src/__prefix__/*"],
       "__assets__/*": ["src/assets/*"],
-      "@common/*": ["src/vendor/common @/*"],
-      "@CacheRoute/*": ["src/vendor/demo/CacheRoute @/*"],
-      "@commonDemo/*": ["src/vendor/demo/commonDemo @/*"],
-      "@EasyStore/*": ["src/vendor/demo/EasyStore @/*"],
-      "@ReModulex/*": ["src/vendor/demo/ReModulex @/*"]
+      "@helpers/*": ["src/vendor/helpers @/*"],
+      "@UI/*": ["src/vendor/components/UI @/*"],
+      "@MAP/*": ["src/vendor/components/MAP @/*"]
     }
   },
   "exclude": ["node_modules", "dist"]

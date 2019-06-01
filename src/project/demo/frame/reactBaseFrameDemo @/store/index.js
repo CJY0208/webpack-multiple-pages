@@ -1,12 +1,9 @@
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
 import { persistStore } from 'redux-persist'
 
-import { helpers } from '@common'
+import { isExist, run, globalThis as root } from '@helpers'
 
 import reduxModule from './modules/main'
-
-const root = global || window
-const { isExist, run } = helpers
 
 export const store = createStore(
   combineReducers({

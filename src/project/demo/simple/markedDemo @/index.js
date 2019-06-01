@@ -4,4 +4,4 @@ import terms from './terms.md'
 
 console.log(terms)
 
-document.querySelector('#app').innerHTML = terms
+document.querySelector('#root').innerHTML = terms

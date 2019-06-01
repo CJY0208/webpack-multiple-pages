@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Loading...</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+  <meta http-equiv="Expires" content="-1">
+  <meta http-equiv="Cache-Control" content="no-cache">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">  
+  <style>.loading{background:#fff;position:absolute;z-index:1000;left:0;right:0;top:0;bottom:0;width:100%;height:100%;transition:opacity .3s}.loading.show{opacity:1}.loading.hide{opacity:0}.loading .spinner{display:inline-block;position:absolute;top:50%;left:50%;-webkit-transform:translate3d(-50%,-50%,0);transform:translate3d(-50%,-50%,0)}.circle{box-sizing:border-box;width:40px;height:40px;border-radius:50%;border:2px solid #d3d3d3;border-left-color:#fd9933;-webkit-animation:loader_rotate 1s linear infinite;animation:loader_rotate 1s linear infinite}@-webkit-keyframes loader_rotate{from{transform:rotate(0);-webkit-transform:rotate(0)}to{transform:rotate(360deg);-webkit-transform:rotate(360deg)}}@keyframes loader_rotate{from{transform:rotate(0);-webkit-transform:rotate(0)}to{transform:rotate(360deg);-webkit-transform:rotate(360deg)}}</style>
+  <link href="project/__share.d64a5b.css" rel="stylesheet">
+  <link href="project/reactDemo.6c861e.css" rel="stylesheet">
+</head>
+<body>
+  <div class="loading show">
+    <div class="spinner">
+      <div class="circle"></div>
+    </div>
+  </div>
+  <div id="root"></div>
+  <script src="dll/react.6869fe7fa65021e0953a.js"></script>
+  <script src="project/__runtime.c8375e.js"></script>
+  <script src="project/__share.d64a5b.js"></script>
+  <script src="project/reactDemo.6c861e.js"></script>
+  <script>
+      window.__f = function() {
+        if (document.readyState === 'complete') {
+          const loading$ = document.querySelector('.loading')
+          loading$.className = 'loading hide'
+          setTimeout(function() {
+            loading$.parentNode.removeChild(loading$)
+          }, 1000)
+          document.removeEventListener('readystatechange', window.__f)
+          delete window.__f
+        }
+      }
+      document.addEventListener('readystatechange', window.__f)
+  </script>
+</body>
+</html>

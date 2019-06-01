@@ -1,0 +1,34 @@
+
+
+.grid-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  width: 500pt;
+
+  li {
+    width: calc(500pt / 3);
+    height: calc(500pt / 3);
+
+    outline: solid 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &.active {
+      background: rgba(yellow, .3);
+    }
+
+    &.hidden {
+      opacity: 0;
+    }
+  }
+}
+
+

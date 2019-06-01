@@ -1,0 +1,25 @@
+
+.content {
+  padding: 30px;
+
+  h2 {
+    font-size: 16px;
+    margin: 20px;
+    text-align: center;
+  }
+}
+
+.line {
+  position: relative;
+  width: 400px;
+  height: 400px;
+  background: #18212d;
+  // outline: solid 1px #666;
+  border-top: solid 1px #222;
+  border-bottom: solid 1px #222;
+
+  canvas {
+    width: 100%;
+    height: 100%;
+  }
+}

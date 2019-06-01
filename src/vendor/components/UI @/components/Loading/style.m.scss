@@ -1,0 +1,31 @@
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 30pt;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 12pt;
+
+  min-width: 170pt;
+  min-height: 160pt;
+
+  max-width: 500pt;
+
+  &.withContent {
+    padding: 40pt 30pt 20pt;
+  }
+}
+
+.text {
+  font-size: 24pt;
+  line-height: 34pt;
+  text-align: center;
+  color: #fff;
+  padding-top: 30pt;
+}
+
+.mask {
+  background-color: transparent !important;
+}

@@ -4,10 +4,9 @@ build/config/__dll/manifest
 build/config/__dll/files
 build/config/__dll__check/manifest
 build/config/__dll__check/files
-.uglify_cache
-.cache
-.cache-loader
 yarn-error.log
 /__entry.config.js
+build/scripts/language/i18n
+build/scripts/language/.txt
 package-lock.json
 npm-debug.log

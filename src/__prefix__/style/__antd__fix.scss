@@ -1,8 +1,10 @@
-
-#app, .am-modal-wrap {
+#root,
+.am-modal-wrap {
   .am-list {
-    .am-list-body, .am-list-line {
-      &::before, &::after {
+    .am-list-body,
+    .am-list-line {
+      &::before,
+      &::after {
         transform: scaleY(1);
         background-color: #efeff4;
       }
@@ -11,16 +13,18 @@
 }
 
 .am-modal-wrap {
-
   .am-modal-transparent {
     width: 80%;
   }
-  
-  &.am-modal.am-modal-transparent.am-modal-android {
 
+  &.am-modal.am-modal-transparent.am-modal-android {
     .am-modal-content {
-      box-shadow: 1px 1px 12px #333;
-      border-radius: 10px;
+      box-shadow: 1px 1px 12pt #333;
+      border-radius: 10pt;
     }
   }
+}
+
+.am-modal-mask-hidden + .am-modal-wrap-popup {
+  display: none;
 }

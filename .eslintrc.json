@@ -32,7 +32,7 @@
     "no-bitwise": "off", //禁用按位运算符（防止类似于将 && 错写为 & 的错误）
     "no-mixed-spaces-and-tabs": "warn", //不允许空格和 tab 混合缩进
     "max-depth": ["warn", { "max": 4 }], //强制可嵌套的块的最大深度
-    "max-params": ["warn", { "max": 4 }], //强制 function 定义中最多允许的参数数量
+    "max-params": ["warn", { "max": 9 }], //强制 function 定义中最多允许的参数数量
     "max-lines": ["warn", { "max": 1000 }], //强制最大行数
     "no-const-assign": "error", //禁止修改 const 声明的变量
     "prefer-template": "warn", //要求使用模板字面量而非字符串连接

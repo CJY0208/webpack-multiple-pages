@@ -9,17 +9,16 @@ import { HashRouter as Router } from 'react-router-dom'
 import { PersistGate } from 'redux-persist/integration/react'
 import { ModuleProvider } from 're-modulex'
 
-import * as common from '@common'
+import * as helpers from '@helpers'
 
 import AppRouter from './config/router'
 import locale from './config/locale'
 import { store, persistor } from './store'
 
-import './config/axios.default'
-import './config/CDN.source'
+import './config/source'
 import './assets/style.css'
 
-Object.assign(window, { common })
+Object.assign(window, { helpers })
 
 render(
   <ModuleProvider {...{ store }}>
@@ -29,5 +28,5 @@ render(
       </Router>
     </PersistGate>
   </ModuleProvider>,
-  document.getElementById('app')
+  document.getElementById('root')
 )

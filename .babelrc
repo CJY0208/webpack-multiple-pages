@@ -16,6 +16,11 @@
   "env": {
     "production": {
       "plugins": [
+        ["jsx-css-modules", {
+          "styleFileReg": [
+            "\\.m\\.(css|scss|sass)$"
+          ]
+        }],
         "transform-pipeline",
         "syntax-dynamic-import",
         "transform-decorators-legacy",
@@ -41,6 +46,11 @@
     },
     "development": {
       "plugins": [
+        ["jsx-css-modules", {
+          "styleFileReg": [
+            "\\.m\\.(css|scss|sass)$"
+          ]
+        }],
         "transform-pipeline",
         "react-hot-loader/babel",
         "syntax-dynamic-import",

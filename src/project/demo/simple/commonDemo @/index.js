@@ -1,9 +1,9 @@
-import * as common from '@common'
+import * as helpers from '@helpers'
 import lodash from 'lodash'
 
-window.common = common
+window.helpers = helpers
 
-console.log(common)
+console.log(helpers)
 
 window._ = lodash
 

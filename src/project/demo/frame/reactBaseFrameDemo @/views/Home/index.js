@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
 
-import { helpers } from '@common'
+import * as helpers from '@helpers'
 import { connectModules } from 're-modulex'
 
-import styles from './style.m.scss'
-
-const className = helpers.classNames.react(styles)
+import './style.m.scss'
 
 @helpers.hot(module)
 // 简化 connect 过程

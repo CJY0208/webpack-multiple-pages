@@ -28,8 +28,10 @@ module.exports = {
       '.less'
     ],
     alias: {
-      // 'vue': 'vue/dist/vue.esm.js',
+      vue: 'vue/dist/vue.esm.js',
+      'react-dom': '@hot-loader/react-dom',
       'lodash/fp': path.resolve(__dirname, '../../utils/lodash/fp'),
+      __src__: path.resolve(__dirname, '../../../src'),
       __prefix__: path.resolve(__dirname, '../../../src/__prefix__'),
       __assets__: path.resolve(__dirname, '../../../src/assets'),
       ...Object.entries(vendor).reduce(

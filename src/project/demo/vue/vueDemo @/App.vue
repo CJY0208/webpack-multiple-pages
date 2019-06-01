@@ -21,7 +21,7 @@ export default {
 
 * {
   color: var(--mainColor);
-  font-size: 24px;
+  font-size: 24pt;
   // height: 100vh;
   & div {
     color: red;

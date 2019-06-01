@@ -92,4 +92,4 @@ const App = () => (
   </HashRouter>
 )
 
-render(<App />, document.getElementById('app'))
+render(<App />, document.getElementById('root'))

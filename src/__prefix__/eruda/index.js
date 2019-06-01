@@ -1,7 +1,6 @@
-// import eruda from 'eruda'
-import '../style/__eruda__fix.css'
+import '../style/__eruda__fix.scss'
 import { overide, reset, release } from './helpers/overide'
-import * as CDN from './helpers/CDN'
+import * as source from './helpers/source'
 
 let __console__timeout
 
@@ -17,7 +16,7 @@ document.body.appendChild(eruda$)
 
 const showConsole = async () => {
   try {
-    const eruda = await CDN.js('//cdn.jsdelivr.net/npm/eruda', 'eruda')
+    const eruda = await source.js('//cdn.jsdelivr.net/npm/eruda', 'eruda')
 
     reset()
 

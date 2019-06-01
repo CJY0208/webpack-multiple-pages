@@ -1,0 +1,19 @@
+
+@mixin hidden {
+  display: none;
+  opacity: 0;
+  position: absolute;
+  z-index: -9999;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.map {
+  height: 100%;
+
+  & a,
+  & :global(.gm-style-cc) {
+    @include hidden;
+  }
+}
+
