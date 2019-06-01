@@ -9,7 +9,7 @@
     return m
   }
   var t = {},
-    o = { __runtime: 0 }
+    o = { w_runtime: 0 }
   function r(e) {
     if (t[e]) return t[e].exports
     var o = (t[e] = { i: e, l: !1, exports: {} })

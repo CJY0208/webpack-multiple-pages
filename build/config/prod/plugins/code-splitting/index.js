@@ -42,7 +42,7 @@ module.exports = [
    * 抽离 share
    */
   new CommonsChunkPlugin({
-    name: '__share',
+    name: 'w_share',
     filename: 'project/[name].[chunkhash:6].js',
     chunks: [...project_names, ...vendor_names, ...lib_names],
     minChunks: ({ resource = '', isDependentByLib = false }, count) =>
@@ -57,7 +57,7 @@ module.exports = [
    * 官方资料（中文版）：https://doc.webpack-china.org/guides/caching#-extracting-boilerplate-
    */
   new CommonsChunkPlugin({
-    name: '__runtime',
+    name: 'w_runtime',
     filename: 'project/[name].[chunkhash:6].js'
   })
 ]

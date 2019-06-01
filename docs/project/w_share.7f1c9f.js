@@ -1,4 +1,4 @@
-webpackJsonp(['__share'], {
+webpackJsonp(['w_share'], {
   '162o': function(e, t, n) {
     ;(function(e) {
       var r = Function.prototype.apply
