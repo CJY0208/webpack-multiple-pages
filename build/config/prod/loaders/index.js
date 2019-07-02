@@ -19,6 +19,26 @@ module.exports = {
       ...styleConfig.module.rules,
       ...require('./assets').module.rules,
       {
+        // 猜测 linux 路径分隔符不一致导致 entry-loader 不生效，故此处尝试兼容解决
+        test: [
+          /src\\project\\.*@[^((?!(\\)).)*$]*\\index\.js$/,
+          /src\\\\project\\\\.*@[^((?!(\\\\)).)*$]*\\\\index\.js$/,
+          /src\/\/project\/\/.*@[^((?!(\/\/)).)*$]*\/\/index\.js$/,
+          /src\/project\/.*@[^((?!(\/)).)*$]*\/index\.js$/
+        ],
+        // include: Object.values(project).map(path => `${path}.*index.js`),
+        // exclude: /node_modules/,
+        enforce: 'post',
+        loaders: [
+          {
+            loader: path.resolve(
+              __dirname,
+              '../../../utils/project-entry-loader.js'
+            )
+          }
+        ]
+      },
+      {
         test: /\.js(x?)$/,
         exclude: /node_modules/,
         use: [

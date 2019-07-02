@@ -1,6 +1,4 @@
 import 'babel-polyfill'
-import 'css-loader/lib/css-base'
-import 'style-loader/lib/addStyles'
 import viewportUnitsBuggyfill from 'viewport-units-buggyfill'
 import viewportUnitsBuggyfillHack from 'viewport-units-buggyfill/viewport-units-buggyfill.hacks'
 import FastClick from '@cjy0208/fastclick'
