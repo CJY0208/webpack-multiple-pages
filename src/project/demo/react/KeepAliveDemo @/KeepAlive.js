@@ -5,7 +5,6 @@ import React, {
   useEffect,
   createRef
 } from 'react'
-import { createPortal, render } from 'react-dom'
 
 import { run, get } from '@helpers'
 
@@ -44,7 +43,8 @@ export class AliveStore extends Component {
                 <div
                   key={key}
                   ref={node => {
-                    if (!this.cacheNodes[key]) {
+                    if (!this.cacheNodes[key] && node) {
+                      node.parentNode.removeChild(node)
                       this.cacheNodes[key] = get(node, 'children.0')
                     }
                   }}
@@ -57,7 +57,6 @@ export class AliveStore extends Component {
           }
         },
         () => {
-          console.log('setStateCallback')
           resolve(this.cacheNodes[key])
         }
       )
@@ -81,11 +80,9 @@ export default class KeepAlive extends Component {
   }
 
   init = async () => {
-    const { children } = this.props
+    const { children, name } = this.props
 
-    window.children = children
-
-    const node = await AliveStore.setCache('Test', {
+    const node = await AliveStore.setCache(name, {
       children: React.cloneElement(children, {
         // ref: (instance) => {
         //   // console.log(instance)
@@ -97,17 +94,22 @@ export default class KeepAlive extends Component {
       })
     })
 
-    this.placeholder.appendChild(node)
-    // run(children, 'componentDidRecover')
+    this.parentNode = this.placeholder.parentNode
+    this.parentNode.replaceChild(node, this.placeholder)
   }
 
   componentWillUnmount() {
     console.log('componentWillUnmount')
+
+    const { name } = this.props
+    const node = AliveStore.getCacheNode(name)
+
+    this.parentNode.replaceChild(this.placeholder, node)
   }
 
   render() {
     return (
-      <div
+      <span
         ref={node => {
           this.placeholder = node
         }}

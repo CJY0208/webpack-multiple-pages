@@ -62,20 +62,30 @@ class Test extends Component {
 
 function App() {
   const [showTest, setShowTest] = useState(true)
+  const [showTest2, setShowTest2] = useState(true)
   return (
     <Fragment>
       <div>
         {showTest ? (
-          <KeepAlive>
+          <KeepAlive name="Test">
             <Test />
           </KeepAlive>
         ) : null}
 
         <button onClick={() => setShowTest(!showTest)}>toggle</button>
       </div>
+      <div>
+        {showTest2 ? (
+          <KeepAlive name="Test2">
+            <Test2 />
+          </KeepAlive>
+        ) : null}
+
+        <button onClick={() => setShowTest2(!showTest2)}>toggle 2</button>
+      </div>
       <AliveStore />
     </Fragment>
   )
 }
 
-render(<RouterApp />, document.getElementById('root'))
+render(<App />, document.getElementById('root'))
