@@ -133,8 +133,8 @@ const RouterApp = () => (
         <Route
           exact
           path="/"
-          component={props => (
-            <KeepAlive>
+          render={props => (
+            <KeepAlive name="List">
               <List {...props} />
             </KeepAlive>
           )}

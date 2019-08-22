@@ -5,6 +5,7 @@ import React, {
   useEffect,
   createRef
 } from 'react'
+import createContext from 'create-react-context'
 
 import { run, get } from '@helpers'
 
@@ -44,7 +45,7 @@ export class AliveStore extends Component {
                   key={key}
                   ref={node => {
                     if (!this.cacheNodes[key] && node) {
-                      node.parentNode.removeChild(node)
+                      // node.parentNode.removeChild(node)
                       this.cacheNodes[key] = get(node, 'children.0')
                     }
                   }}
@@ -72,6 +73,31 @@ export class AliveStore extends Component {
   }
 }
 
+function getScrollableDom(domFrom = document) {
+  const checkStyleList = ['overflow', 'overflow-x', 'overflow-y']
+  const scrollableStyleValue = ['auto', 'scroll']
+
+  console.time('test')
+
+  const doms = Array.from(domFrom.querySelectorAll('*'))
+    .filter(dom => {
+      const styles = getComputedStyle(dom)
+
+      return checkStyleList.some(style =>
+        scrollableStyleValue.includes(styles[style])
+      )
+    })
+    .filter(dom => {
+      return (
+        dom.scrollWidth > dom.offsetWidth || dom.scrollHeight > dom.offsetHeight
+      )
+    })
+
+  console.timeEnd('test')
+
+  return doms
+}
+
 export default class KeepAlive extends Component {
   constructor(props) {
     super(props)
@@ -96,6 +122,11 @@ export default class KeepAlive extends Component {
 
     this.parentNode = this.placeholder.parentNode
     this.parentNode.replaceChild(node, this.placeholder)
+    ;(node.scrollableNodes || []).forEach(scrollNode => {
+      const { x, y } = node.scrollPositionSaver.get(scrollNode)
+      scrollNode.scrollLeft = x
+      scrollNode.scrollTop = y
+    })
   }
 
   componentWillUnmount() {
@@ -103,6 +134,15 @@ export default class KeepAlive extends Component {
 
     const { name } = this.props
     const node = AliveStore.getCacheNode(name)
+
+    node.scrollableNodes = getScrollableDom(node.parentNode)
+    node.scrollPositionSaver = new Map()
+    node.scrollableNodes.forEach(scrollNode => {
+      node.scrollPositionSaver.set(scrollNode, {
+        x: scrollNode.scrollLeft,
+        y: scrollNode.scrollTop
+      })
+    })
 
     this.parentNode.replaceChild(this.placeholder, node)
   }
