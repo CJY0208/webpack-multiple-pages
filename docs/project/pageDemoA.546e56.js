@@ -2,13 +2,16 @@ webpackJsonp(
   ['pageDemoA'],
   {
     '3IRH': function(e, n, t) {
-      e.exports = t('RuJ5')('3IRH')
+      e.exports = t('Y5u3')('3IRH')
     },
     DuR2: function(e, n, t) {
       e.exports = t('ldvi')('DuR2')
     },
     Eacs: function(e, n, t) {
-      e.exports = t('RuJ5')('Eacs')
+      e.exports = t('Y5u3')('Eacs')
+    },
+    'FZ+f': function(e, n, t) {
+      e.exports = t('Y5u3')('FZ+f')
     },
     GiK3: function(e, n, t) {
       e.exports = t('ldvi')('GiK3')
@@ -16,6 +19,9 @@ webpackJsonp(
     HjTH: function(e, n) {},
     KSGD: function(e, n, t) {
       e.exports = t('ldvi')('KSGD')
+    },
+    MTIv: function(e, n, t) {
+      e.exports = t('Y5u3')('MTIv')
     },
     O27J: function(e, n, t) {
       e.exports = t('ldvi')('O27J')
@@ -28,15 +34,15 @@ webpackJsonp(
       t('HjTH')
       ;(n.test = o.commonA), (n.shaking = 'shaking ')
     },
-    RuJ5: function(e, n) {
-      e.exports = polyfill_7040c53544f95c7ea1ff
+    Y5u3: function(e, n) {
+      e.exports = polyfill_c9c97520133899186818
     },
     cIrB: function(e, n, t) {
-      e.exports = t('RuJ5')('cIrB')
+      e.exports = t('Y5u3')('cIrB')
     },
     hW7Q: function(e, n) {},
     j1ja: function(e, n, t) {
-      e.exports = t('RuJ5')('j1ja')
+      e.exports = t('Y5u3')('j1ja')
     },
     lbQB: function(e, n, t) {
       'use strict'
@@ -50,11 +56,10 @@ webpackJsonp(
       e.exports = react_6869fe7fa65021e0953a
     },
     'w/50': function(e, n, t) {
-      e.exports = t('RuJ5')('w/50')
+      e.exports = t('Y5u3')('w/50')
     },
     zfe9: function(e, n, t) {
-      'use strict'
-      t('kQ6M')
+      t('kQ6M'), t('FZ+f'), t('MTIv'), t('kQ6M')
       s(t('GiK3')), s(t('O27J'))
       t('KXFW')
       s(t('L6bb')), s(t('mtWM'))
@@ -69,7 +74,7 @@ webpackJsonp(
       t('hW7Q'), Object.assign(window, { _: r.default, fp: o.default })
       console.log('pageA 3'), (0, c.fn1)(), (0, u.fnA)()
       var i,
-        a = function(e) {
+        f = function(e) {
           return new Promise(function(n) {
             return setTimeout(n, e)
           })
@@ -84,16 +89,16 @@ webpackJsonp(
                   return (
                     console.log('test async/await in pageA'),
                     (e.next = 3),
-                    a(1e3)
+                    f(1e3)
                   )
                 case 3:
-                  return console.log('after 1000 ms'), (e.next = 6), a(2e3)
+                  return console.log('after 1000 ms'), (e.next = 6), f(2e3)
                 case 6:
                   return (
                     console.log('after 2000 ms'),
                     console.warn('1000ms 后加载 my-test2'),
                     (e.next = 10),
-                    a(1e3)
+                    f(1e3)
                   )
                 case 10:
                   return (

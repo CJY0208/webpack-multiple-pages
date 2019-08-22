@@ -1,15 +1,27 @@
 webpackJsonp(
   ['reactDemo'],
   {
+    DuR2: function(e, t, a) {
+      e.exports = a('ldvi')('DuR2')
+    },
+    Eacs: function(e, t, a) {
+      e.exports = a('Y5u3')('Eacs')
+    },
+    'FZ+f': function(e, t, a) {
+      e.exports = a('Y5u3')('FZ+f')
+    },
     GiK3: function(e, t, a) {
       e.exports = a('ldvi')('GiK3')
     },
     KuLb: function(e, t) {},
+    MTIv: function(e, t, a) {
+      e.exports = a('Y5u3')('MTIv')
+    },
     O27J: function(e, t, a) {
       e.exports = a('ldvi')('O27J')
     },
     'VW/4': function(e, t, a) {
-      'use strict'
+      a('kQ6M'), a('FZ+f'), a('MTIv')
       var n,
         o = (function() {
           function e(e, t) {
@@ -28,11 +40,11 @@ webpackJsonp(
         l = a('GiK3'),
         r = (n = l) && n.__esModule ? n : { default: n },
         u = a('O27J')
-      function s(e, t) {
+      function i(e, t) {
         if (!(e instanceof t))
           throw new TypeError('Cannot call a class as a function')
       }
-      function i(e, t) {
+      function s(e, t) {
         if (!e)
           throw new ReferenceError(
             "this hasn't been initialised - super() hasn't been called"
@@ -62,8 +74,8 @@ webpackJsonp(
       var f = (function(e) {
         function t() {
           return (
-            s(this, t),
-            i(
+            i(this, t),
+            s(
               this,
               (t.__proto__ || Object.getPrototypeOf(t)).apply(this, arguments)
             )
@@ -90,7 +102,7 @@ webpackJsonp(
                       onChange: this.props.onChange
                     })
                   ),
-                  r.default.createElement(d, null)
+                  r.default.createElement(p, null)
                 )
               }
             }
@@ -98,21 +110,21 @@ webpackJsonp(
           t
         )
       })()
-      function d() {
+      function p() {
         return r.default.createElement('input', {
           className: 'btn',
           type: 'submit',
           value: 'Add Task'
         })
       }
-      var p = (function(e) {
+      var d = (function(e) {
           function t() {
             var e, a, n
-            s(this, t)
+            i(this, t)
             for (var o = arguments.length, l = Array(o), r = 0; r < o; r++)
               l[r] = arguments[r]
             return (
-              (a = n = i(
+              (a = n = s(
                 this,
                 (e = t.__proto__ || Object.getPrototypeOf(t)).call.apply(
                   e,
@@ -123,7 +135,7 @@ webpackJsonp(
                 var t = e.target.lastChild
                 null !== t && (t.className = 'hide')
               }),
-              i(n, a)
+              s(n, a)
             )
           }
           return (
@@ -203,8 +215,8 @@ webpackJsonp(
         })(),
         m = (function(e) {
           function t(e) {
-            s(this, t)
-            var a = i(
+            i(this, t)
+            var a = s(
               this,
               (t.__proto__ || Object.getPrototypeOf(t)).call(this, e)
             )
@@ -261,7 +273,7 @@ webpackJsonp(
                     'div',
                     { className: 'Page' },
                     r.default.createElement('h2', null, 'React Todo Demo'),
-                    r.default.createElement(p, {
+                    r.default.createElement(d, {
                       data: this.state.data,
                       onChange: this.toggleComplete,
                       onClick: this.deleTask
@@ -286,8 +298,20 @@ webpackJsonp(
         document.getElementById('root')
       )
     },
+    Y5u3: function(e, t) {
+      e.exports = polyfill_c9c97520133899186818
+    },
+    cIrB: function(e, t, a) {
+      e.exports = a('Y5u3')('cIrB')
+    },
+    j1ja: function(e, t, a) {
+      e.exports = a('Y5u3')('j1ja')
+    },
     ldvi: function(e, t) {
       e.exports = react_6869fe7fa65021e0953a
+    },
+    'w/50': function(e, t, a) {
+      e.exports = a('Y5u3')('w/50')
     }
   },
   ['VW/4']
