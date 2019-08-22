@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { render } from 'react-dom'
 import ScrollListener from 'tiny-scroll-listener'
 
-import { flatten, run, classnames } from '@helpers'
+import { flatten, run, classnames, debounce } from '@helpers'
 import styles from './style.m.scss'
 import dataSource from './dataSource'
 
@@ -17,6 +17,7 @@ function StrictList() {
     state: '',
     name: ''
   })
+  const debouceSetHeadState = useCallback(debounce(setHeadState))
 
   useEffect(() => {
     const heads = Object.values(headsMap)
@@ -28,11 +29,12 @@ function StrictList() {
       distanceEvents: flatten(
         heads.map((head, idx) => [
           {
+            name: `pre:${head.name}`,
             distance: head.getScrollTop() - headHeight,
             onGoingIn: () => {
               const prevHead = getPrevHead(idx)
               if (prevHead) {
-                setHeadState({
+                debouceSetHeadState({
                   state: 'fixed',
                   name: prevHead.name
                 })
@@ -41,7 +43,7 @@ function StrictList() {
             onGoingOut: () => {
               const prevHead = getPrevHead(idx)
               if (prevHead) {
-                setHeadState({
+                debouceSetHeadState({
                   state: 'bottomed',
                   name: prevHead.name
                 })
@@ -49,18 +51,19 @@ function StrictList() {
             }
           },
           {
+            name: head.name,
             distance: head.getScrollTop(),
             onGoingIn: () => {
               const prevHead = getPrevHead(idx)
               if (prevHead) {
-                setHeadState({
+                debouceSetHeadState({
                   state: 'bottomed',
                   name: prevHead.name
                 })
               }
             },
             onGoingOut: () => {
-              setHeadState({
+              debouceSetHeadState({
                 state: 'fixed',
                 name: head.name
               })

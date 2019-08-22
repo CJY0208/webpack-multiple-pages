@@ -69,7 +69,7 @@
     "react-router-dom": "^5.0.0",
     "redux": "^3.7.2",
     "redux-persist": "^5.9.1",
-    "tiny-scroll-listener": "^0.0.3",
+    "tiny-scroll-listener": "^0.0.4",
     "viewport-units-buggyfill": "^0.6.2",
     "vue": "^2.5.13",
     "vue-i18n": "^8.1.0",

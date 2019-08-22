@@ -9562,9 +9562,9 @@ tiny-invariant@^1.0.2:
   version "1.0.4"
   resolved "https://registry.npmjs.org/tiny-invariant/-/tiny-invariant-1.0.4.tgz#346b5415fd93cb696b0c4e8a96697ff590f92463"
 
-tiny-scroll-listener@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.npmjs.org/tiny-scroll-listener/-/tiny-scroll-listener-0.0.3.tgz#85ff26190c6abef880f3124ea6ecd3bbe35e15a9"
+tiny-scroll-listener@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.npmjs.org/tiny-scroll-listener/-/tiny-scroll-listener-0.0.4.tgz#e12fea33e26997242d32bf2aa7dd017b8b872a61"
 
 tiny-warning@^1.0.0:
   version "1.0.2"
