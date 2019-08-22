@@ -43,6 +43,10 @@ class Test extends Component {
     console.log('Test: willUnmount')
   }
 
+  componentWillCache() {
+    console.log('Test: componentWillCache')
+  }
+
   componentDidRecover() {
     console.log('Test: componentDidRecover')
   }
