@@ -98,11 +98,8 @@ function StrictList() {
             </div>
             <ul className="items">
               {getGroupItems(group).map(item => (
-                <li
-                  className="item"
-                  key={`${item.areaId}:${item.cityId}:${item.countryId}`}
-                >
-                  {item.cityName}
+                <li className="item" key={item}>
+                  {item}
                 </li>
               ))}
             </ul>
