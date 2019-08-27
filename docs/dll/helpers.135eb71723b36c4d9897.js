@@ -1,4 +1,4 @@
-var helpers_c66fb19f003fc0979f45 = (function(t) {
+var helpers_135eb71723b36c4d9897 = (function(t) {
   var e = {}
   function n(r) {
     if (e[r]) return e[r].exports
@@ -52,7 +52,7 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
       o = n('p8xL'),
       i = n('XgCd'),
       a = Object.prototype.hasOwnProperty,
-      u = {
+      c = {
         brackets: function(t) {
           return t + '[]'
         },
@@ -64,10 +64,10 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
           return t
         }
       },
-      c = Array.isArray,
+      u = Array.isArray,
       s = Array.prototype.push,
       l = function(t, e) {
-        s.apply(t, c(e) ? e : [e])
+        s.apply(t, u(e) ? e : [e])
       },
       f = Date.prototype.toISOString,
       d = {
@@ -87,74 +87,74 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
         skipNulls: !1,
         strictNullHandling: !1
       },
-      p = function t(e, n, r, i, a, u, s, f, p, y, h, m, b) {
-        var v = e
+      p = function t(e, n, r, i, a, c, s, f, p, h, y, v, m) {
+        var b = e
         if (
           ('function' == typeof s
-            ? (v = s(n, v))
-            : v instanceof Date
-              ? (v = y(v))
-              : 'comma' === r && c(v) && (v = v.join(',')),
-          null === v)
+            ? (b = s(n, b))
+            : b instanceof Date
+              ? (b = h(b))
+              : 'comma' === r && u(b) && (b = b.join(',')),
+          null === b)
         ) {
-          if (i) return u && !m ? u(n, d.encoder, b) : n
-          v = ''
+          if (i) return c && !v ? c(n, d.encoder, m) : n
+          b = ''
         }
         if (
-          'string' == typeof v ||
-          'number' == typeof v ||
-          'boolean' == typeof v ||
-          o.isBuffer(v)
+          'string' == typeof b ||
+          'number' == typeof b ||
+          'boolean' == typeof b ||
+          o.isBuffer(b)
         )
-          return u
-            ? [h(m ? n : u(n, d.encoder, b)) + '=' + h(u(v, d.encoder, b))]
-            : [h(n) + '=' + h(String(v))]
+          return c
+            ? [y(v ? n : c(n, d.encoder, m)) + '=' + y(c(b, d.encoder, m))]
+            : [y(n) + '=' + y(String(b))]
         var g,
           S = []
-        if (void 0 === v) return S
-        if (c(s)) g = s
+        if (void 0 === b) return S
+        if (u(s)) g = s
         else {
-          var $ = Object.keys(v)
+          var $ = Object.keys(b)
           g = f ? $.sort(f) : $
         }
         for (var w = 0; w < g.length; ++w) {
           var O = g[w]
-          ;(a && null === v[O]) ||
-            (c(v)
+          ;(a && null === b[O]) ||
+            (u(b)
               ? l(
                   S,
                   t(
-                    v[O],
+                    b[O],
                     'function' == typeof r ? r(n, O) : n,
                     r,
                     i,
                     a,
-                    u,
+                    c,
                     s,
                     f,
                     p,
-                    y,
                     h,
-                    m,
-                    b
+                    y,
+                    v,
+                    m
                   )
                 )
               : l(
                   S,
                   t(
-                    v[O],
+                    b[O],
                     n + (p ? '.' + O : '[' + O + ']'),
                     r,
                     i,
                     a,
-                    u,
+                    c,
                     s,
                     f,
                     p,
-                    y,
                     h,
-                    m,
-                    b
+                    y,
+                    v,
+                    m
                   )
                 ))
         }
@@ -189,7 +189,7 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
           var r = i.formatters[n],
             o = d.filter
           return (
-            ('function' == typeof t.filter || c(t.filter)) && (o = t.filter),
+            ('function' == typeof t.filter || u(t.filter)) && (o = t.filter),
             {
               addQueryPrefix:
                 'boolean' == typeof t.addQueryPrefix
@@ -226,26 +226,26 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
         })(e)
       'function' == typeof s.filter
         ? (o = (0, s.filter)('', o))
-        : c(s.filter) && (n = s.filter)
+        : u(s.filter) && (n = s.filter)
       var f,
-        y = []
+        h = []
       if ('object' !== (void 0 === o ? 'undefined' : r(o)) || null === o)
         return ''
       f =
-        e && e.arrayFormat in u
+        e && e.arrayFormat in c
           ? e.arrayFormat
           : e && 'indices' in e ? (e.indices ? 'indices' : 'repeat') : 'indices'
-      var h = u[f]
+      var y = c[f]
       n || (n = Object.keys(o)), s.sort && n.sort(s.sort)
-      for (var m = 0; m < n.length; ++m) {
-        var b = n[m]
-        ;(s.skipNulls && null === o[b]) ||
+      for (var v = 0; v < n.length; ++v) {
+        var m = n[v]
+        ;(s.skipNulls && null === o[m]) ||
           l(
-            y,
+            h,
             p(
-              o[b],
-              b,
-              h,
+              o[m],
+              m,
+              y,
               s.strictNullHandling,
               s.skipNulls,
               s.encode ? s.encoder : null,
@@ -259,14 +259,14 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
             )
           )
       }
-      var v = y.join(s.delimiter),
+      var b = h.join(s.delimiter),
         g = !0 === s.addQueryPrefix ? '?' : ''
       return (
         s.charsetSentinel &&
           ('iso-8859-1' === s.charset
             ? (g += 'utf8=%26%2310003%3B&')
             : (g += 'utf8=%E2%9C%93&')),
-        v.length > 0 ? g + v : ''
+        b.length > 0 ? g + b : ''
       )
     }
   },
@@ -296,16 +296,16 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
           var r = n.allowDots ? t.replace(/\.([^.[]+)/g, '[$1]') : t,
             i = /(\[[^[\]]*])/g,
             a = /(\[[^[\]]*])/.exec(r),
-            u = a ? r.slice(0, a.index) : r,
-            c = []
-          if (u) {
+            c = a ? r.slice(0, a.index) : r,
+            u = []
+          if (c) {
             if (
               !n.plainObjects &&
-              o.call(Object.prototype, u) &&
+              o.call(Object.prototype, c) &&
               !n.allowPrototypes
             )
               return
-            c.push(u)
+            u.push(c)
           }
           for (var s = 0; null !== (a = i.exec(r)) && s < n.depth; ) {
             if (
@@ -315,10 +315,10 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
                 !n.allowPrototypes)
             )
               return
-            c.push(a[1])
+            u.push(a[1])
           }
           return (
-            a && c.push('[' + r.slice(a.index) + ']'),
+            a && u.push('[' + r.slice(a.index) + ']'),
             (function(t, e, n) {
               for (var r = e, o = t.length - 1; o >= 0; --o) {
                 var i,
@@ -326,26 +326,26 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
                 if ('[]' === a && n.parseArrays) i = [].concat(r)
                 else {
                   i = n.plainObjects ? Object.create(null) : {}
-                  var u =
+                  var c =
                       '[' === a.charAt(0) && ']' === a.charAt(a.length - 1)
                         ? a.slice(1, -1)
                         : a,
-                    c = parseInt(u, 10)
-                  n.parseArrays || '' !== u
-                    ? !isNaN(c) &&
-                      a !== u &&
-                      String(c) === u &&
-                      c >= 0 &&
+                    u = parseInt(c, 10)
+                  n.parseArrays || '' !== c
+                    ? !isNaN(u) &&
+                      a !== c &&
+                      String(u) === c &&
+                      u >= 0 &&
                       n.parseArrays &&
-                      c <= n.arrayLimit
-                      ? ((i = [])[c] = r)
-                      : (i[u] = r)
+                      u <= n.arrayLimit
+                      ? ((i = [])[u] = r)
+                      : (i[c] = r)
                     : (i = { 0: r })
                 }
                 r = i
               }
               return r
-            })(c, e, n)
+            })(u, e, n)
           )
         }
       }
@@ -410,14 +410,14 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
       if ('' === t || null == t)
         return n.plainObjects ? Object.create(null) : {}
       for (
-        var u =
+        var c =
             'string' == typeof t
               ? (function(t, e) {
                   var n,
                     a = {},
-                    u = e.ignoreQueryPrefix ? t.replace(/^\?/, '') : t,
-                    c = e.parameterLimit === 1 / 0 ? void 0 : e.parameterLimit,
-                    s = u.split(e.delimiter, c),
+                    c = e.ignoreQueryPrefix ? t.replace(/^\?/, '') : t,
+                    u = e.parameterLimit === 1 / 0 ? void 0 : e.parameterLimit,
+                    s = c.split(e.delimiter, u),
                     l = -1,
                     f = e.charset
                   if (e.charsetSentinel)
@@ -433,14 +433,14 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
                     if (n !== l) {
                       var d,
                         p,
-                        y = s[n],
-                        h = y.indexOf(']='),
-                        m = -1 === h ? y.indexOf('=') : h + 1
-                      ;-1 === m
-                        ? ((d = e.decoder(y, i.decoder, f)),
+                        h = s[n],
+                        y = h.indexOf(']='),
+                        v = -1 === y ? h.indexOf('=') : y + 1
+                      ;-1 === v
+                        ? ((d = e.decoder(h, i.decoder, f)),
                           (p = e.strictNullHandling ? null : ''))
-                        : ((d = e.decoder(y.slice(0, m), i.decoder, f)),
-                          (p = e.decoder(y.slice(m + 1), i.decoder, f))),
+                        : ((d = e.decoder(h.slice(0, v), i.decoder, f)),
+                          (p = e.decoder(h.slice(v + 1), i.decoder, f))),
                         p &&
                           e.interpretNumericEntities &&
                           'iso-8859-1' === f &&
@@ -456,17 +456,17 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
                   return a
                 })(t, n)
               : t,
-          c = n.plainObjects ? Object.create(null) : {},
-          s = Object.keys(u),
+          u = n.plainObjects ? Object.create(null) : {},
+          s = Object.keys(c),
           l = 0;
         l < s.length;
         ++l
       ) {
         var f = s[l],
-          d = a(f, u[f], n)
-        c = r.merge(c, d, n)
+          d = a(f, c[f], n)
+        u = r.merge(u, d, n)
       }
-      return r.compact(c)
+      return r.compact(u)
     }
   },
   DuR2: function(t, e, n) {
@@ -502,8 +502,8 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
       var o,
         i,
         a,
-        u,
-        c =
+        c,
+        u =
           'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
             ? function(t) {
                 return typeof t
@@ -516,7 +516,7 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
                   ? 'symbol'
                   : typeof t
               }
-      ;(u = function(t, e) {
+      ;(c = function(t, e) {
         var n = 'default' in e ? e.default : e
         function o(t, e) {
           if (!(t instanceof e))
@@ -538,17 +538,17 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
         function a(t) {
           return 'function' == typeof t
         }
-        function u(t) {
+        function c(t) {
           return 'string' == typeof t
         }
-        function c(t) {
+        function u(t) {
           var e =
               1 < arguments.length && void 0 !== arguments[1]
                 ? arguments[1]
                 : [],
             n = 2 < arguments.length ? arguments[2] : void 0
           try {
-            var r = (u(e) ? e.split('.') : e).reduce(function(t, e) {
+            var r = (c(e) ? e.split('.') : e).reduce(function(t, e) {
               return t[e]
             }, t)
             return void 0 === r ? n : r
@@ -562,8 +562,8 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
                 1 < arguments.length && void 0 !== arguments[1]
                   ? arguments[1]
                   : [],
-              n = c(t, (e = u(e) ? e.split('.') : e)),
-              r = c(t, e.slice(0, -1)),
+              n = u(t, (e = c(e) ? e.split('.') : e)),
+              r = u(t, e.slice(0, -1)),
               o = arguments.length,
               i = new Array(2 < o ? o - 2 : 0),
               s = 2;
@@ -579,25 +579,25 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
           o(this, l)
           var r = 'function' == typeof t ? { runner: t } : t,
             i = r.runner,
-            u = void 0 === i ? l.default.runner : i,
+            c = void 0 === i ? l.default.runner : i,
             s = r.name,
-            f = void 0 === s ? c(u, 'name') : s,
+            f = void 0 === s ? u(c, 'name') : s,
             d = r.isSupported,
             p = void 0 === d ? l.default.isSupported : d,
-            y = r.getRunner,
-            h =
-              void 0 === y
+            h = r.getRunner,
+            y =
+              void 0 === h
                 ? e.gen(p, function(t) {
-                    return t && a(u) ? u : void 0
+                    return t && a(c) ? c : void 0
                   })
-                : y,
-            m = new n({ name: f, getExecutor: h })
+                : h,
+            v = new n({ name: f, getExecutor: y })
           return (
-            (m.isSupported = m.isExecutable),
-            (m.getRunner = m.getExecutor),
-            delete m.isExecutable,
-            delete m.getExecutor,
-            m
+            (v.isSupported = v.isExecutable),
+            (v.getRunner = v.getExecutor),
+            delete v.isExecutable,
+            delete v.getExecutor,
+            v
           )
         }
         function f() {
@@ -712,7 +712,7 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
               return e in t.apis
             }),
             i(this, 'get', function(e) {
-              return c(t.apis, e)
+              return u(t.apis, e)
             }),
             i(this, 'call', function(n) {
               for (
@@ -723,10 +723,10 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
                 i++
               )
                 o[i - 1] = arguments[i]
-              var u = '[Unregistered] Api "'
+              var c = '[Unregistered] Api "'
                   .concat(n, '" is unregistered in Bridge "')
                   .concat(t.name, '"'),
-                c = '[Not Supported] Api "'
+                u = '[Not Supported] Api "'
                   .concat(n, '" is not supported by Bridge "')
                   .concat(t.name, '"')
               return t.has(n)
@@ -735,10 +735,10 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
                       return s(t.apis, ''.concat(n, '.getRunner'))
                     },
                     function(e) {
-                      return a(e) ? e.apply(void 0, o) : t.log('warn', c)
+                      return a(e) ? e.apply(void 0, o) : t.log('warn', u)
                     }
                   )()
-                : t.log('warn', u)
+                : t.log('warn', c)
             }),
             (this.name = n)
         }
@@ -747,7 +747,7 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
             0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : ''
           return ''
             .concat(t, '_')
-            .concat(++h, '_')
+            .concat(++y, '_')
             .concat(Date.now(), '_')
             .concat(Math.floor(1e6 * Math.random()))
         }
@@ -757,7 +757,7 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
           if (void 0 !== r) return r
           throw new Error('unable to locate global object')
         }
-        function y(t) {
+        function h(t) {
           var e =
               1 < arguments.length && void 0 !== arguments[1]
                 ? arguments[1]
@@ -766,7 +766,7 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
             r = void 0 === n ? d('__globalFunction') : n,
             o = e.once,
             i = void 0 !== o && o
-          return u(t)
+          return c(t)
             ? t
             : ((p()[r] = function() {
                 if ((i && delete p()[r], a(t)))
@@ -782,19 +782,19 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
         }),
           i(f, 'Api', l),
           i(f, 'default', { silent: !1 })
-        var h = 0
-        ;(y.getGlobal = p),
+        var y = 0
+        ;(h.getGlobal = p),
           (t.Api = l),
           (t.Bridge = f),
           (t.default = f),
-          (t.globalize = y),
+          (t.globalize = h),
           (t.uniqueId = d),
           Object.defineProperty(t, '__esModule', { value: !0 })
       }),
-        'object' == c(e) && void 0 !== t
-          ? u(e, n('rFoO'))
+        'object' == u(e) && void 0 !== t
+          ? c(e, n('rFoO'))
           : ((i = [e, n('rFoO')]),
-            void 0 === (a = 'function' == typeof (o = u) ? o.apply(e, i) : o) ||
+            void 0 === (a = 'function' == typeof (o = c) ? o.apply(e, i) : o) ||
               (t.exports = a))
     }.call(e, n('DuR2')))
   },
@@ -830,7 +830,7 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
       o,
       i,
       a,
-      u =
+      c =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(t) {
               return typeof t
@@ -846,9 +846,9 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
     ;(a = function(t) {
       function e(t) {
         return (e =
-          'function' == typeof Symbol && 'symbol' == u(Symbol.iterator)
+          'function' == typeof Symbol && 'symbol' == c(Symbol.iterator)
             ? function(t) {
-                return void 0 === t ? 'undefined' : u(t)
+                return void 0 === t ? 'undefined' : c(t)
               }
             : function(t) {
                 return t &&
@@ -856,7 +856,7 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
                   t.constructor === Symbol &&
                   t !== Symbol.prototype
                   ? 'symbol'
-                  : void 0 === t ? 'undefined' : u(t)
+                  : void 0 === t ? 'undefined' : c(t)
               })(t)
       }
       function n(t) {
@@ -870,14 +870,14 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
             a++
           )
             i[a] = arguments[a]
-          var u = t.apply(this, i)
-          return u && n(u.then)
+          var c = t.apply(this, i)
+          return c && n(c.then)
             ? new Promise(function(t) {
-                return u.then(function(n) {
+                return c.then(function(n) {
                   return t(e.call.apply(e, [r, n].concat(i)))
                 })
               })
-            : e.call.apply(e, [this, u].concat(i))
+            : e.call.apply(e, [this, c].concat(i))
         }
       }
       ;(t.default = function t() {
@@ -898,8 +898,8 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
           }.apply(void 0, arguments),
           i = o.name,
           a = void 0 === i ? '' : i,
-          u = o.getExecutor,
-          c = r(u, function(t) {
+          c = o.getExecutor,
+          u = r(c, function(t) {
             for (
               var e = arguments.length, r = new Array(1 < e ? e - 1 : 0), o = 1;
               o < e;
@@ -909,23 +909,23 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
             return n(t) ? t.apply(this, r) : void 0
           })
         return (
-          (c.getExecutor = u),
-          (c.isExecutable = r(u, function(t) {
+          (u.getExecutor = c),
+          (u.isExecutable = r(c, function(t) {
             return n(t)
           })),
-          (c.getName = r(u, function(t) {
+          (u.getName = r(c, function(t) {
             return a || (n(t) ? t.name : '')
           })),
-          (c.getLength = r(u, function(t) {
+          (u.getLength = r(c, function(t) {
             return n(t) ? t.length : void 0
           })),
-          c
+          u
         )
       }),
         (t.gen = r),
         Object.defineProperty(t, '__esModule', { value: !0 })
     }),
-      'object' == u(e) && void 0 !== t
+      'object' == c(e) && void 0 !== t
         ? a(e)
         : ((o = [e]),
           void 0 === (i = 'function' == typeof (r = a) ? r.apply(e, o) : r) ||
@@ -953,87 +953,244 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
             }
     ;(i = function() {
       'use strict'
-      var t = function(t) {
+      var t =
+          Object.assign ||
+          function(t) {
+            for (var e = 1; e < arguments.length; e++) {
+              var n = arguments[e]
+              for (var r in n)
+                Object.prototype.hasOwnProperty.call(n, r) && (t[r] = n[r])
+            }
+            return t
+          },
+        e = (function() {
+          function t(t, e) {
+            for (var n = 0; n < e.length; n++) {
+              var r = e[n]
+              ;(r.enumerable = r.enumerable || !1),
+                (r.configurable = !0),
+                'value' in r && (r.writable = !0),
+                Object.defineProperty(t, r.key, r)
+            }
+          }
+          return function(e, n, r) {
+            return n && t(e.prototype, n), r && t(e, r), e
+          }
+        })(),
+        n = function(t) {
           return 'function' == typeof t
         },
-        e = 'OUTSIDE',
-        n = 'INSIDE'
-      return function r(o) {
-        var i = this,
-          a = o.distanceToReachEnd,
-          u = void 0 === a ? 100 : a,
-          c = o.onEndReached,
-          s = o.element,
-          l = o.distanceEvents,
-          f = void 0 === l ? [] : l
-        if (
-          ((function(t, e) {
-            if (!(t instanceof r))
+        r = 'OUTSIDE',
+        o = 'INSIDE',
+        i = function(t) {
+          return n(t.distance) ? t.distance() : t.distance
+        },
+        a = function(t) {
+          var e = !1
+          return function(n) {
+            e ||
+              (requestAnimationFrame(function() {
+                t(n), (e = !1)
+              }),
+              (e = !0))
+          }
+        }
+      return (function() {
+        function c(t) {
+          var e = this
+          !(function(t, e) {
+            if (!(t instanceof c))
               throw new TypeError('Cannot call a class as a function')
           })(this),
-          void 0 !== s)
-        ) {
-          var d = s === document.body,
-            p = f.map(function(t) {
-              var r = t.distance
-              return s.scrollTop > r ? e : n
-            })
-          if (t(c)) {
-            var y = !1,
-              h = function(t) {
-                t ? 1 === f.length && i.destroy() : (y = !1)
-              },
-              m = {
-                distance: function() {
-                  return s.scrollHeight - s.offsetHeight - u
-                },
-                onGoingOut: function() {
-                  y || ((y = !0), c(h))
+            (this.config = {}),
+            (this.destroy = function() {
+              return null
+            }),
+            (this.dynamicEvents = []),
+            (this.staticEvents = []),
+            (this.walkEvent = function(t, e) {
+              var n = t.onGoingIn,
+                a = void 0 === n ? function() {} : n,
+                c = t.onGoingOut,
+                u = void 0 === c ? function() {} : c,
+                s = t.status,
+                l = i(t)
+              switch (s) {
+                case o:
+                  l < e && (u(), (t.status = r))
+                  break
+                case r:
+                  e <= l && (a(), (t.status = o))
+              }
+              return t.status !== s
+            }),
+            (this.walkStaticEvent = function(t) {
+              var n = t.direction,
+                r = t.scrollTop,
+                o = e.currentStaticEvent,
+                i = o.prevEvent || o.getPrevEvent(),
+                a = o.nextEvent || o.getNextEvent(),
+                c = 1 === n ? o : i
+              c &&
+                e.walkEvent(c, r) &&
+                ((e.currentStaticEvent = (1 === n ? a : i) || o),
+                e.walkStaticEvent({ direction: n, scrollTop: r }))
+            }),
+            (this.walkDynamicEvents = function(t) {
+              var n = t.direction,
+                r = t.scrollTop
+              e.dynamicEvents
+                .sort(function(t, e) {
+                  return (i(t) - i(e)) * n
+                })
+                .forEach(function(t) {
+                  e.walkEvent(t, r)
+                })
+            }),
+            (this.config = t),
+            this.init()
+        }
+        return (
+          e(c, [
+            {
+              key: 'init',
+              value: function() {
+                var t = this,
+                  e = this.config,
+                  r = e.element,
+                  o = e.scrollHandler,
+                  i = void 0 === o ? a : o,
+                  c = e.getScrollTop
+                if (void 0 !== r) {
+                  var u = n(c)
+                    ? c
+                    : function() {
+                        return r.scrollTop
+                      }
+                  ;(this.getScrollTop = u),
+                    this.genDynamicEvents(),
+                    this.genStaticEvents()
+                  var s = u(),
+                    l = i(function(e) {
+                      e.stopPropagation()
+                      var n = u(),
+                        r = { scrollTop: n, direction: s < n ? 1 : -1 }
+                      t.walkStaticEvent(r), t.walkDynamicEvents(r), (s = n)
+                    })
+                  return (
+                    r.addEventListener('scroll', l),
+                    (this.destroy = function() {
+                      return r.removeEventListener('scroll', l)
+                    }),
+                    this
+                  )
+                }
+                console.error('Need Scroll Container!')
+              }
+            },
+            {
+              key: 'getEndReachedEvent',
+              value: function() {
+                var t = this,
+                  e = this.config,
+                  r = e.distanceToReachEnd,
+                  o = void 0 === r ? 100 : r,
+                  i = e.onEndReached,
+                  a = e.element
+                if (n(i)) {
+                  var c = !1,
+                    u = function(e) {
+                      e
+                        ? 0 === t.staticEvents.length &&
+                          1 === t.dynamicEvents.length &&
+                          t.dynamicEvents[0] === s &&
+                          t.destroy()
+                        : (c = !1)
+                    },
+                    s = {
+                      dynamic: !0,
+                      distance: function() {
+                        return a.scrollHeight - a.offsetHeight - o
+                      },
+                      onGoingOut: function() {
+                        c || ((c = !0), i(u))
+                      }
+                    }
+                  return s
                 }
               }
-            f.push(m), p.push(n)
-          }
-          if (0 !== f.length) {
-            var b = !1,
-              v = function(r) {
-                b ||
-                  (requestAnimationFrame(function() {
-                    ;(function(r) {
-                      r.stopPropagation()
-                      var o = d
-                        ? document.documentElement.scrollTop
-                        : s.scrollTop
-                      f.forEach(function(r, i) {
-                        var a = r.distance,
-                          u = void 0 === a ? -1 : a,
-                          c = r.onGoingIn,
-                          s = void 0 === c ? function() {} : c,
-                          l = r.onGoingOut,
-                          f = void 0 === l ? function() {} : l
-                        switch ((t(u) && (u = u()), p[i])) {
-                          case n:
-                            u < o && (f(), (p[i] = e))
-                            break
-                          case e:
-                            o <= u && (s(), (p[i] = n))
+            },
+            {
+              key: 'genDynamicEvents',
+              value: function() {
+                var e = this.config.distanceEvents,
+                  n = void 0 === e ? [] : e,
+                  i = this.getEndReachedEvent(),
+                  a = this.getScrollTop(),
+                  c = []
+                    .concat(
+                      (function(t) {
+                        if (Array.isArray(t)) {
+                          for (
+                            var e = 0, n = Array(t.length);
+                            e < t.length;
+                            e++
+                          )
+                            n[e] = t[e]
+                          return n
                         }
-                      })
-                    }.call(s, r),
-                      (b = !1))
-                  }),
-                  (b = !0))
+                        return Array.from(t)
+                      })(n),
+                      [i]
+                    )
+                    .filter(function(t) {
+                      return t && t.dynamic
+                    })
+                    .map(function(e) {
+                      return t({}, e, { status: a > e.distance ? r : o })
+                    })
+                this.dynamicEvents = c
               }
-            return (
-              (d ? document : s).addEventListener('scroll', v),
-              (this.destroy = function() {
-                return (d ? document : s).removeEventListener('scroll', v)
-              }),
-              this
-            )
-          }
-          console.error('Need Distance Events!')
-        } else console.error('Need Scroll Container!')
-      }
+            },
+            {
+              key: 'genStaticEvents',
+              value: function() {
+                var e = this.config.distanceEvents,
+                  n = void 0 === e ? [] : e,
+                  a = this.getScrollTop(),
+                  c = n
+                    .map(function(e) {
+                      return t({}, e, { distance: i(e) })
+                    })
+                    .filter(function(t) {
+                      return 0 <= t.distance && !t.dynamic
+                    })
+                    .map(function(e, n) {
+                      var i = t({}, e, {
+                        prevEvent: void 0,
+                        nextEvent: void 0,
+                        getPrevEvent: function() {
+                          var t = c[n - 1] || null
+                          return (i.prevEvent = t)
+                        },
+                        getNextEvent: function() {
+                          var t = c[n + 1] || null
+                          return (i.nextEvent = t)
+                        },
+                        status: a > e.distance ? r : o
+                      })
+                      return i
+                    })
+                ;(this.staticEvents = c),
+                  (this.currentStaticEvent = c.find(function(t) {
+                    return t.distance >= a
+                  }))
+              }
+            }
+          ]),
+          c
+        )
+      })()
     }),
       'object' == a(e) && void 0 !== t
         ? (t.exports = i())
@@ -1074,8 +1231,8 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
         o = 'day',
         i = 'week',
         a = 'month',
-        u = 'year',
-        c = /^(\d{4})-?(\d{1,2})-?(\d{0,2})(.*?(\d{1,2}):(\d{1,2}):(\d{1,2}))?.?(\d{1,3})?$/,
+        c = 'year',
+        u = /^(\d{4})-?(\d{1,2})-?(\d{0,2})(.*?(\d{1,2}):(\d{1,2}):(\d{1,2}))?.?(\d{1,3})?$/,
         s = /\[.*?\]|Y{2,4}|M{1,4}|D{1,2}|d{1,4}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|Z{1,2}|SSS/g,
         l = {
           name: 'en',
@@ -1110,10 +1267,10 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
           absFloor: function(t) {
             return t < 0 ? Math.ceil(t) || 0 : Math.floor(t)
           },
-          prettyUnit: function(c) {
+          prettyUnit: function(u) {
             return (
-              { M: a, y: u, w: i, d: o, h: r, m: n, s: e, ms: t }[c] ||
-              String(c || '')
+              { M: a, y: c, w: i, d: o, h: r, m: n, s: e, ms: t }[u] ||
+              String(u || '')
                 .toLowerCase()
                 .replace(/s$/, '')
             )
@@ -1123,31 +1280,31 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
           }
         },
         p = 'en',
-        y = {}
-      y[p] = l
-      var h = function(t) {
+        h = {}
+      h[p] = l
+      var y = function(t) {
           return t instanceof S
         },
-        m = function(t, e, n) {
+        v = function(t, e, n) {
           var r
           if (!t) return null
-          if ('string' == typeof t) y[t] && (r = t), e && ((y[t] = e), (r = t))
+          if ('string' == typeof t) h[t] && (r = t), e && ((h[t] = e), (r = t))
           else {
             var o = t.name
-            ;(y[o] = t), (r = o)
+            ;(h[o] = t), (r = o)
           }
           return n || (p = r), r
         },
-        b = function(t, e) {
-          if (h(t)) return t.clone()
+        m = function(t, e) {
+          if (y(t)) return t.clone()
           var n = e || {}
           return (n.date = t), new S(n)
         },
-        v = function(t, e) {
-          return b(t, { locale: e.$L })
+        b = function(t, e) {
+          return m(t, { locale: e.$L })
         },
         g = d
-      ;(g.parseLocale = m), (g.isDayjs = h), (g.wrapper = v)
+      ;(g.parseLocale = v), (g.isDayjs = y), (g.wrapper = b)
       var S = (function() {
         function l(t) {
           this.parse(t)
@@ -1165,7 +1322,7 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
                     ? e
                     : 'string' == typeof e &&
                       /.*[^Z]$/i.test(e) &&
-                      (n = e.match(c))
+                      (n = e.match(u))
                       ? new Date(
                           n[1],
                           n[2] - 1,
@@ -1187,7 +1344,7 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
               (this.$m = this.$d.getMinutes()),
               (this.$s = this.$d.getSeconds()),
               (this.$ms = this.$d.getMilliseconds()),
-              (this.$L = this.$L || m(t.locale, null, !0) || p)
+              (this.$L = this.$L || v(t.locale, null, !0) || p)
           }),
           (f.$utils = function() {
             return g
@@ -1196,7 +1353,7 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
             return !('Invalid Date' === this.$d.toString())
           }),
           (f.$compare = function(t) {
-            return this.valueOf() - b(t).valueOf()
+            return this.valueOf() - m(t).valueOf()
           }),
           (f.isSame = function(t) {
             return 0 === this.$compare(t)
@@ -1237,15 +1394,15 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
           (f.valueOf = function() {
             return this.$d.getTime()
           }),
-          (f.startOf = function(t, c) {
+          (f.startOf = function(t, u) {
             var s = this,
-              l = !!g.isUndefined(c) || c,
+              l = !!g.isUndefined(u) || u,
               f = function(t, e) {
-                var n = v(new Date(s.$y, e, t), s)
+                var n = b(new Date(s.$y, e, t), s)
                 return l ? n : n.endOf(o)
               },
               d = function(t, e) {
-                return v(
+                return b(
                   s
                     .toDate()
                     [t].apply(
@@ -1256,7 +1413,7 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
                 )
               }
             switch (g.prettyUnit(t)) {
-              case u:
+              case c:
                 return l ? f(1, 0) : f(31, 11)
               case a:
                 return l ? f(1, this.$M) : f(0, this.$M + 1)
@@ -1281,48 +1438,48 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
           (f.endOf = function(t) {
             return this.startOf(t, !1)
           }),
-          (f.$set = function(i, c) {
+          (f.$set = function(i, u) {
             switch (g.prettyUnit(i)) {
               case o:
-                this.$d.setDate(this.$D + (c - this.$W))
+                this.$d.setDate(this.$D + (u - this.$W))
                 break
               case 'date':
-                this.$d.setDate(c)
+                this.$d.setDate(u)
                 break
               case a:
-                this.$d.setMonth(c)
+                this.$d.setMonth(u)
                 break
-              case u:
-                this.$d.setFullYear(c)
+              case c:
+                this.$d.setFullYear(u)
                 break
               case r:
-                this.$d.setHours(c)
+                this.$d.setHours(u)
                 break
               case n:
-                this.$d.setMinutes(c)
+                this.$d.setMinutes(u)
                 break
               case e:
-                this.$d.setSeconds(c)
+                this.$d.setSeconds(u)
                 break
               case t:
-                this.$d.setMilliseconds(c)
+                this.$d.setMilliseconds(u)
             }
             return this.init(), this
           }),
           (f.set = function(t, e) {
             return this.clone().$set(t, e)
           }),
-          (f.add = function(t, c) {
+          (f.add = function(t, u) {
             var s = this
             t = Number(t)
             var l,
-              f = g.prettyUnit(c),
+              f = g.prettyUnit(u),
               d = function(e, n) {
                 var r = s.set('date', 1).set(e, n + t)
                 return r.set('date', Math.min(s.$D, r.daysInMonth()))
               }
             if (f === a) return d(a, this.$M)
-            if (f === u) return d(u, this.$y)
+            if (f === c) return d(c, this.$y)
             switch (f) {
               case n:
                 l = 6e4
@@ -1343,7 +1500,7 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
                 l = 1
             }
             var p = this.valueOf() + t * l
-            return v(p, this)
+            return b(p, this)
           }),
           (f.subtract = function(t, e) {
             return this.add(-1 * t, e)
@@ -1355,7 +1512,7 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
               o = this.$locale(),
               i = o.weekdays,
               a = o.months,
-              u = function(t, e, n, r) {
+              c = function(t, e, n, r) {
                 return (t && t[e]) || n[e].substr(0, r)
               }
             return n.replace(s, function(t) {
@@ -1370,7 +1527,7 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
                 case 'MM':
                   return g.padStart(e.$M + 1, 2, '0')
                 case 'MMM':
-                  return u(o.monthsShort, e.$M, a, 3)
+                  return c(o.monthsShort, e.$M, a, 3)
                 case 'MMMM':
                   return a[e.$M]
                 case 'D':
@@ -1380,9 +1537,9 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
                 case 'd':
                   return String(e.$W)
                 case 'dd':
-                  return u(o.weekdaysMin, e.$W, i, 2)
+                  return c(o.weekdaysMin, e.$W, i, 2)
                 case 'ddd':
-                  return u(o.weekdaysShort, e.$W, i, 3)
+                  return c(o.weekdaysShort, e.$W, i, 3)
                 case 'dddd':
                   return i[e.$W]
                 case 'H':
@@ -1419,13 +1576,13 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
               }
             })
           }),
-          (f.diff = function(t, c, s) {
-            var l = g.prettyUnit(c),
-              f = b(t),
+          (f.diff = function(t, u, s) {
+            var l = g.prettyUnit(u),
+              f = m(t),
               d = this - f,
               p = g.monthDiff(this, f)
             switch (l) {
-              case u:
+              case c:
                 p /= 12
                 break
               case a:
@@ -1457,14 +1614,14 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
             return this.endOf(a).$D
           }),
           (f.$locale = function() {
-            return y[this.$L]
+            return h[this.$L]
           }),
           (f.locale = function(t, e) {
             var n = this.clone()
-            return (n.$L = m(t, e, !0)), n
+            return (n.$L = v(t, e, !0)), n
           }),
           (f.clone = function() {
-            return v(this.toDate(), this)
+            return b(this.toDate(), this)
           }),
           (f.toDate = function() {
             return new Date(this.$d)
@@ -1504,13 +1661,13 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
         )
       })()
       return (
-        (b.extend = function(t, e) {
-          return t(e, S, b), b
+        (m.extend = function(t, e) {
+          return t(e, S, m), m
         }),
-        (b.locale = m),
-        (b.isDayjs = h),
-        (b.en = y[p]),
-        b
+        (m.locale = v),
+        (m.isDayjs = y),
+        (m.en = h[p]),
+        m
       )
     }),
       'object' == a(e) && void 0 !== t
@@ -1541,7 +1698,7 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
           t.push('%' + ((e < 16 ? '0' : '') + e.toString(16)).toUpperCase())
         return t
       })(),
-      u = function(t, e) {
+      c = function(t, e) {
         for (
           var n = e && e.plainObjects ? Object.create(null) : {}, r = 0;
           r < t.length;
@@ -1551,7 +1708,7 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
         return n
       }
     t.exports = {
-      arrayToObject: u,
+      arrayToObject: c,
       assign: function(t, e) {
         return Object.keys(e).reduce(function(t, n) {
           return (t[n] = e[n]), t
@@ -1567,16 +1724,16 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
           ++o
         )
           for (
-            var a = e[o], u = a.obj[a.prop], c = Object.keys(u), s = 0;
-            s < c.length;
+            var a = e[o], c = a.obj[a.prop], u = Object.keys(c), s = 0;
+            s < u.length;
             ++s
           ) {
-            var l = c[s],
-              f = u[l]
+            var l = u[s],
+              f = c[l]
             'object' === (void 0 === f ? 'undefined' : r(f)) &&
               null !== f &&
               -1 === n.indexOf(f) &&
-              (e.push({ obj: u, prop: l }), n.push(f))
+              (e.push({ obj: c, prop: l }), n.push(f))
           }
         return (
           (function(t) {
@@ -1610,32 +1767,32 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
             return '%26%23' + parseInt(t.slice(2), 16) + '%3B'
           })
         for (var o = '', i = 0; i < r.length; ++i) {
-          var u = r.charCodeAt(i)
-          45 === u ||
-          46 === u ||
-          95 === u ||
-          126 === u ||
-          (u >= 48 && u <= 57) ||
-          (u >= 65 && u <= 90) ||
-          (u >= 97 && u <= 122)
+          var c = r.charCodeAt(i)
+          45 === c ||
+          46 === c ||
+          95 === c ||
+          126 === c ||
+          (c >= 48 && c <= 57) ||
+          (c >= 65 && c <= 90) ||
+          (c >= 97 && c <= 122)
             ? (o += r.charAt(i))
-            : u < 128
-              ? (o += a[u])
-              : u < 2048
-                ? (o += a[192 | (u >> 6)] + a[128 | (63 & u)])
-                : u < 55296 || u >= 57344
+            : c < 128
+              ? (o += a[c])
+              : c < 2048
+                ? (o += a[192 | (c >> 6)] + a[128 | (63 & c)])
+                : c < 55296 || c >= 57344
                   ? (o +=
-                      a[224 | (u >> 12)] +
-                      a[128 | ((u >> 6) & 63)] +
-                      a[128 | (63 & u)])
+                      a[224 | (c >> 12)] +
+                      a[128 | ((c >> 6) & 63)] +
+                      a[128 | (63 & c)])
                   : ((i += 1),
-                    (u =
-                      65536 + (((1023 & u) << 10) | (1023 & r.charCodeAt(i)))),
+                    (c =
+                      65536 + (((1023 & c) << 10) | (1023 & r.charCodeAt(i)))),
                     (o +=
-                      a[240 | (u >> 18)] +
-                      a[128 | ((u >> 12) & 63)] +
-                      a[128 | ((u >> 6) & 63)] +
-                      a[128 | (63 & u)]))
+                      a[240 | (c >> 18)] +
+                      a[128 | ((c >> 12) & 63)] +
+                      a[128 | ((c >> 6) & 63)] +
+                      a[128 | (63 & c)]))
         }
         return o
       },
@@ -1668,18 +1825,18 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
         }
         if (!e || 'object' !== (void 0 === e ? 'undefined' : r(e)))
           return [e].concat(n)
-        var c = e
+        var u = e
         return (
-          i(e) && !i(n) && (c = u(e, a)),
+          i(e) && !i(n) && (u = c(e, a)),
           i(e) && i(n)
             ? (n.forEach(function(n, i) {
                 if (o.call(e, i)) {
-                  var u = e[i]
-                  u &&
-                  'object' === (void 0 === u ? 'undefined' : r(u)) &&
+                  var c = e[i]
+                  c &&
+                  'object' === (void 0 === c ? 'undefined' : r(c)) &&
                   n &&
                   'object' === (void 0 === n ? 'undefined' : r(n))
-                    ? (e[i] = t(u, n, a))
+                    ? (e[i] = t(c, n, a))
                     : e.push(n)
                 } else e[i] = n
               }),
@@ -1687,7 +1844,7 @@ var helpers_c66fb19f003fc0979f45 = (function(t) {
             : Object.keys(n).reduce(function(e, r) {
                 var i = n[r]
                 return o.call(e, r) ? (e[r] = t(e[r], i, a)) : (e[r] = i), e
-              }, c)
+              }, u)
         )
       }
     }

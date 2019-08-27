@@ -10,12 +10,11 @@ $lineHeight: 80pt;
   display: flex;
   align-items: center;
   height: $lineHeight;
-  background: #f2f2f2;
+  background: #e6e6e6;
   padding-left: $paddingLeft;
 }
 
-.group {
-  position: relative;
+.group {  
   &.fixed,
   &.bottomed {
     padding-top: $lineHeight;
@@ -28,13 +27,15 @@ $lineHeight: 80pt;
   }
 
   &.fixed {
+    position: static;
     .group-head {
-      position: fixed;
+      position: absolute;
       top: 0;
     }
   }
 
   &.bottomed {
+    position: relative;
     .group-head {
       position: absolute;
       top: initial;

@@ -1,10 +1,10 @@
 webpackJsonp(
   ['StrictListDemo'],
   {
-    '0DLX': function(a, n, e) {
+    '0DLX': function(n, a, i) {
       'use strict'
-      Object.defineProperty(n, '__esModule', { value: !0 }),
-        (n.default = {
+      Object.defineProperty(a, '__esModule', { value: !0 }),
+        (a.default = {
           A: ['Province Asahan', 'Province Agam'],
           B: [
             'Province Bojonegoro',
@@ -217,8 +217,8 @@ webpackJsonp(
           Z: []
         })
     },
-    '0NrT': function(a, n) {
-      a.exports = {
+    '0NrT': function(n, a) {
+      n.exports = {
         list: 'list_3Sxj',
         'group-head': 'group-head_29UY',
         group: 'group_22ld',
@@ -228,214 +228,174 @@ webpackJsonp(
         item: 'item_2xnE'
       }
     },
-    DuR2: function(a, n, e) {
-      a.exports = e('ldvi')('DuR2')
+    DuR2: function(n, a, i) {
+      n.exports = i('ldvi')('DuR2')
     },
-    Eacs: function(a, n, e) {
-      a.exports = e('Y5u3')('Eacs')
+    Eacs: function(n, a, i) {
+      n.exports = i('RuJ5')('Eacs')
     },
-    'FZ+f': function(a, n, e) {
-      a.exports = e('Y5u3')('FZ+f')
+    'FZ+f': function(n, a, i) {
+      n.exports = i('RuJ5')('FZ+f')
     },
-    FwUZ: function(a, n, e) {
-      a.exports = e('a+K2')('FwUZ')
+    FwUZ: function(n, a, i) {
+      n.exports = i('zCtQ')('FwUZ')
     },
-    GiK3: function(a, n, e) {
-      a.exports = e('ldvi')('GiK3')
+    GiK3: function(n, a, i) {
+      n.exports = i('ldvi')('GiK3')
     },
-    JtFK: function(a, n, e) {
-      e('kQ6M'), e('FZ+f'), e('MTIv')
-      var i = function(a, n) {
-          if (Array.isArray(a)) return a
-          if (Symbol.iterator in Object(a))
-            return (function(a, n) {
-              var e = [],
-                i = !0,
-                r = !1,
-                t = void 0
-              try {
-                for (
-                  var o, c = a[Symbol.iterator]();
-                  !(i = (o = c.next()).done) &&
-                  (e.push(o.value), !n || e.length !== n);
-                  i = !0
-                );
-              } catch (a) {
-                ;(r = !0), (t = a)
-              } finally {
-                try {
-                  !i && c.return && c.return()
-                } finally {
-                  if (r) throw t
-                }
-              }
-              return e
-            })(a, n)
-          throw new TypeError(
-            'Invalid attempt to destructure non-iterable instance'
-          )
-        },
-        r = e('GiK3'),
-        t = l(r),
-        o = e('O27J'),
-        c = l(e('FwUZ')),
-        u = e('+sPD'),
-        s = l(e('0NrT')),
-        P = l(e('0DLX'))
-      function l(a) {
-        return a && a.__esModule ? a : { default: a }
+    JtFK: function(n, a, i) {
+      i('kQ6M'), i('FZ+f'), i('MTIv')
+      var e = i('GiK3'),
+        r = P(e),
+        t = i('O27J'),
+        o = P(i('FwUZ')),
+        c = i('+sPD'),
+        u = P(i('0NrT')),
+        s = P(i('0DLX'))
+      function P(n) {
+        return n && n.__esModule ? n : { default: n }
       }
-      var v = (0, e('ipgc').getMatcher)(Object.assign({}, s.default), 'local'),
-        g = Object.keys(P.default),
-        m = function(a) {
-          return P.default[a] || []
+      var v = (0, i('ipgc').getMatcher)(Object.assign({}, u.default), 'local'),
+        l = Object.keys(s.default),
+        g = function(n) {
+          return s.default[n] || []
         }
-      function f() {
-        var a = (0, r.useRef)({}).current,
-          n = (0, r.useRef)(),
-          e = (0, r.useRef)(),
-          o = (0, r.useState)({ state: '', name: '' }),
-          s = i(o, 2),
-          P = s[0],
-          l = s[1],
-          f = (0, r.useCallback)((0, u.debounce)(l))
+      function d() {
+        var n = (0, e.useRef)({}).current,
+          a = (0, e.useRef)(),
+          i = (0, e.useRef)()
         return (
-          (0, r.useEffect)(function() {
-            var i = Object.values(a),
-              r = function(a) {
-                return i[a - 1]
+          (0, e.useEffect)(function() {
+            var e = Object.values(n),
+              r = function(n) {
+                return e[n - 1]
               },
-              t = i[0].$node.offsetHeight
-            e.current = new c.default({
-              element: n.current,
-              distanceEvents: (0, u.flatten)(
-                i.map(function(a, n) {
+              t = e[0].$node.offsetHeight,
+              s = function(n, a) {
+                ;(0, c.run)(n, '$node.parentNode.classList.add', u.default[a])
+              },
+              P = function(n, a) {
+                ;(0, c.run)(
+                  n,
+                  '$node.parentNode.classList.remove',
+                  u.default[a]
+                )
+              }
+            i.current = new o.default({
+              element: a.current,
+              distanceEvents: (0, c.flatten)(
+                e.map(function(n, a) {
                   return [
                     {
-                      name: 'pre:' + a.name,
-                      distance: a.getScrollTop() - t,
+                      name: 'pre:' + n.name,
+                      distance: n.getScrollTop() - t,
                       onGoingIn: function() {
-                        var a = r(n)
-                        a && f({ state: 'fixed', name: a.name })
+                        var n = r(a)
+                        n && (P(n, 'bottomed'), s(n, 'fixed'))
                       },
                       onGoingOut: function() {
-                        var a = r(n)
-                        a && f({ state: 'bottomed', name: a.name })
+                        var n = r(a)
+                        n && (P(n, 'fixed'), s(n, 'bottomed'))
                       }
                     },
                     {
-                      name: a.name,
-                      distance: a.getScrollTop(),
+                      name: n.name,
+                      distance: n.getScrollTop(),
                       onGoingIn: function() {
-                        var a = r(n)
-                        a && f({ state: 'bottomed', name: a.name })
+                        var i = r(a)
+                        i && (P(n, 'fixed'), s(i, 'bottomed'))
                       },
                       onGoingOut: function() {
-                        f({ state: 'fixed', name: a.name })
+                        var i = r(a)
+                        i && P(i, 'bottomed'), s(n, 'fixed')
                       }
                     }
                   ]
                 })
-              )
+              ),
+              distanceToReachEnd: 10,
+              onEndReached: function(n) {
+                console.log('reach end!'), setTimeout(n, 500)
+              }
             })
           }, []),
-          t.default.createElement(
+          r.default.createElement(
             'div',
-            { className: v('list'), ref: n },
-            t.default.createElement(
+            { className: v('list'), ref: a },
+            r.default.createElement(
               'ul',
               { className: v('groups') },
-              g
-                .filter(function(a) {
-                  return m(a).length > 0
+              l
+                .filter(function(n) {
+                  return g(n).length > 0
                 })
-                .map(function(n) {
-                  return t.default.createElement(
+                .map(function(a) {
+                  return r.default.createElement(
                     'li',
-                    {
-                      className: v(
-                        (0, u.classnames)(
-                          'group',
-                          ((e = {}),
-                          (i = P.state),
-                          (r = P.name === n),
-                          i in e
-                            ? Object.defineProperty(e, i, {
-                                value: r,
-                                enumerable: !0,
-                                configurable: !0,
-                                writable: !0
-                              })
-                            : (e[i] = r),
-                          e)
-                        )
-                      ),
-                      key: n
-                    },
-                    t.default.createElement(
+                    { className: v('group'), key: a },
+                    r.default.createElement(
                       'div',
                       {
                         className: v('group-head'),
-                        ref: function(e) {
-                          a[n] = {
-                            $node: e,
-                            name: n,
+                        ref: function(i) {
+                          n[a] = {
+                            $node: i,
+                            name: a,
                             getScrollTop: function() {
-                              return e.parentNode.offsetTop
+                              return i.parentNode.offsetTop
                             }
                           }
                         }
                       },
-                      n
+                      a
                     ),
-                    t.default.createElement(
+                    r.default.createElement(
                       'ul',
                       { className: v('items') },
-                      m(n).map(function(a) {
-                        return t.default.createElement(
+                      g(a).map(function(n) {
+                        return r.default.createElement(
                           'li',
-                          { className: v('item'), key: a },
-                          a
+                          { className: v('item'), key: n },
+                          n
                         )
                       })
                     )
                   )
-                  var e, i, r
                 })
             )
           )
         )
       }
-      ;(0, o.render)(
-        t.default.createElement(function() {
-          return t.default.createElement(f, null)
+      ;(0, t.render)(
+        r.default.createElement(function() {
+          return r.default.createElement(d, null)
         }, null),
         document.getElementById('root')
       )
     },
-    MTIv: function(a, n, e) {
-      a.exports = e('Y5u3')('MTIv')
+    MTIv: function(n, a, i) {
+      n.exports = i('RuJ5')('MTIv')
     },
-    O27J: function(a, n, e) {
-      a.exports = e('ldvi')('O27J')
+    O27J: function(n, a, i) {
+      n.exports = i('ldvi')('O27J')
     },
-    Y5u3: function(a, n) {
-      a.exports = polyfill_c9c97520133899186818
+    RuJ5: function(n, a) {
+      n.exports = polyfill_7040c53544f95c7ea1ff
     },
-    'a+K2': function(a, n) {
-      a.exports = helpers_c66fb19f003fc0979f45
+    cIrB: function(n, a, i) {
+      n.exports = i('RuJ5')('cIrB')
     },
-    cIrB: function(a, n, e) {
-      a.exports = e('Y5u3')('cIrB')
+    j1ja: function(n, a, i) {
+      n.exports = i('RuJ5')('j1ja')
     },
-    j1ja: function(a, n, e) {
-      a.exports = e('Y5u3')('j1ja')
+    ldvi: function(n, a) {
+      n.exports = react_6869fe7fa65021e0953a
     },
-    ldvi: function(a, n) {
-      a.exports = react_6869fe7fa65021e0953a
+    'w/50': function(n, a, i) {
+      n.exports = i('RuJ5')('w/50')
     },
-    'w/50': function(a, n, e) {
-      a.exports = e('Y5u3')('w/50')
+    zCtQ: function(n, a) {
+      n.exports = helpers_135eb71723b36c4d9897
     }
   },
   ['JtFK']
