@@ -1,6 +1,6 @@
 const path = require('path')
 
-const proxyTarget = 'http://testweb.vithantai.com/'
+const proxyTarget = 'http://www.proxy.com/'
 const proxyList = ['/api']
 
 module.exports = {
