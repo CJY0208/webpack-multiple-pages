@@ -2,7 +2,7 @@ import React, { useEffect, Component, Fragment } from 'react'
 import { render } from 'react-dom'
 import { HashRouter, Link, Route, Switch } from 'react-router-dom'
 
-import KeepAlive, { AliveStore } from '../KeepAlive'
+import KeepAlive, { KeepAliveProvider } from '../KeepAlive'
 import './style.scss'
 
 class Test extends Component {
@@ -128,21 +128,21 @@ const Item = ({ history }) => (
 
 const RouterApp = () => (
   <HashRouter>
-    <HashRouter>
+    <KeepAliveProvider>
       <Switch>
         <Route
           exact
           path="/"
           render={props => (
             <KeepAlive name="List">
+              <Test />
               <List {...props} />
             </KeepAlive>
           )}
         />
         <Route exact path="/item" component={Item} />
       </Switch>
-      <AliveStore />
-    </HashRouter>
+    </KeepAliveProvider>
   </HashRouter>
 )
 
