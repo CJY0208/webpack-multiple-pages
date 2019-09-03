@@ -46,7 +46,7 @@ export class KeepAliveProvider extends Component {
         const [contextValue, setContextValue] = useState(value)
         useEffect(() => {
           const unmount = onUpdate(setContextValue)
-          return unmount
+          return () => run(unmount)
         }, [])
 
         return (
