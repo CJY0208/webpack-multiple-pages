@@ -11,10 +11,14 @@ import { render } from 'react-dom'
 import RouterApp from './Router'
 import KeepAlive, {
   KeepAliveProvider,
-  injectKeepAliveLifecycles
+  injectKeepAliveLifecycles,
+  fixContext
 } from './KeepAlive'
 
-const { Provider, Consumer } = createContext()
+const context = createContext()
+const { Provider, Consumer } = context
+
+fixContext(context)
 
 function Test2({ injectKeepAliveCycles }) {
   const [count, setCount] = useState(0)
@@ -50,7 +54,7 @@ class Deep extends Component {
   }
 }
 
-@injectKeepAliveLifecycles
+// @injectKeepAliveLifecycles
 class Test extends Component {
   state = {
     count: 0,
@@ -63,24 +67,25 @@ class Test extends Component {
     console.log(props)
   }
 
-  // componentDidMount() {
-  //   console.log('Test: didMount')
-  // }
+  componentDidMount() {
+    console.log('Test: didMount')
+  }
 
   // componentWillUnmount() {
   //   console.log('Test: willUnmount')
   // }
 
-  componentDidActivate() {
-    console.log('Test: componentDidActivate')
-  }
+  // componentDidActivate() {
+  //   console.log('Test: componentDidActivate')
+  // }
 
-  componentWillUnactivate() {
-    console.log('Test: componentWillUnactivate')
-  }
+  // componentWillUnactivate() {
+  //   console.log('Test: componentWillUnactivate')
+  // }
 
   render() {
     const { count, showDeep } = this.state
+    const { count: contextCount } = this.props
 
     const setCount = count => this.setState({ count })
     const toggleDeep = () =>
@@ -89,25 +94,33 @@ class Test extends Component {
       }))
     return (
       <div>
-        count: {count}
-        <button onClick={() => setCount(count + 1)}>add</button>
-        <button onClick={toggleDeep}>toggle Deep</button>
-        {showDeep && (
+        <div>
+          count: {count}
+          <button onClick={() => setCount(count + 1)}>add</button>
+        </div>
+        <div>contextCount: {contextCount}</div>
+        {/* <button onClick={toggleDeep}>toggle Deep</button> */}
+        {/* {showDeep && (
           <KeepAlive name="Deep">
             <Deep />
           </KeepAlive>
-        )}
+        )} */}
       </div>
     )
   }
 }
 
 function App() {
+  const [count, setCount] = useState(0)
   const [showTest, setShowTest] = useState(true)
   const [showTest2, setShowTest2] = useState(true)
   return (
-    <Provider value={{ test1: 1 }}>
-      <KeepAliveProvider>
+    <KeepAliveProvider>
+      <Provider value={{ test1: 1, count }}>
+        <div>
+          count: {count}
+          <button onClick={() => setCount(count + 1)}>Main add</button>
+        </div>
         <div>
           {showTest ? (
             <KeepAlive name="Test">
@@ -124,16 +137,16 @@ function App() {
           <button onClick={() => setShowTest(!showTest)}>toggle</button>
         </div>
         <div>
-          {showTest2 ? (
+          {/* {showTest2 ? (
             <KeepAlive name="Test2">
               <Test2 />
             </KeepAlive>
-          ) : null}
+          ) : null} */}
 
           <button onClick={() => setShowTest2(!showTest2)}>toggle 2</button>
         </div>
-      </KeepAliveProvider>
-    </Provider>
+      </Provider>
+    </KeepAliveProvider>
   )
 }
 

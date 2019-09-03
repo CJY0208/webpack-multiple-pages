@@ -10,12 +10,15 @@ import saveScrollPos from '../helpers/saveScrollPos'
 class KeepAlive extends Component {
   constructor(props) {
     super(props)
+  }
+
+  componentDidMount() {
     this.init()
   }
 
   init = async () => {
-    const { keep, children, name } = this.props
-    const cache = await keep(name, children)
+    const { keep, children, name, context$$ } = this.props
+    const cache = await keep(name, children, context$$)
 
     cache.inited = true
     cache.cached = false
