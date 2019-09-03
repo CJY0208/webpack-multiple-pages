@@ -32,6 +32,11 @@ export class KeepAliveProvider extends Component {
 
   keep = (key, component, context$$) =>
     new Promise(resolve => {
+      if (this.store[key]) {
+        this.setState({}, () => resolve(this.store[key]))
+        return
+      }
+
       const listeners = new Map()
       const [context] = context$$
       const { Provider } = context.context
@@ -39,10 +44,10 @@ export class KeepAliveProvider extends Component {
 
       const AliveComponent = () => {
         const [contextValue, setContextValue] = useState(value)
-        // useEffect(() => {
-        //   const unmount = onUpdate(setContextValue)
-        //   return unmount
-        // }, [])
+        useEffect(() => {
+          const unmount = onUpdate(setContextValue)
+          return unmount
+        }, [])
 
         return (
           <Provider value={contextValue}>
@@ -115,16 +120,15 @@ export const connect = WrappedComponent => {
         listenerCache[props.name] || new Map()
       )
 
-      // useEffect(
-      //   () => {
-      //     updateListener.forEach(fn => fn(value))
-      //   },
-      //   [value]
-      // )
+      useEffect(
+        () => {
+          updateListener.forEach(fn => fn(value))
+        },
+        [value]
+      )
 
       useEffect(() => {
         return () => {
-          // debugger
           listenerCache[props.name] = updateListener
         }
       }, [])
