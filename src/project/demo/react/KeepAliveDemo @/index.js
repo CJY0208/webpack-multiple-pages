@@ -4,6 +4,7 @@ import React, {
   Fragment,
   useState,
   useEffect,
+  useRef,
   createContext
 } from 'react'
 import { render } from 'react-dom'
@@ -13,7 +14,9 @@ import KeepAlive, {
   KeepAliveProvider,
   withLifecycles,
   fixContext,
-  useAliveStore
+  useAliveStore,
+  useActivate,
+  useUnactivate
 } from './KeepAlive'
 
 const context = createContext()
@@ -23,8 +26,12 @@ fixContext(context)
 
 function Test2({ injectKeepAliveCycles }) {
   const [count, setCount] = useState(0)
+  const ref = useRef()
+
+  console.log('ref', ref)
 
   useEffect(() => {
+    console.log('ref', ref)
     console.log('Test2: didMount effect', injectKeepAliveCycles)
 
     return () => {
@@ -36,7 +43,7 @@ function Test2({ injectKeepAliveCycles }) {
     <div>
       count: {count}
       <button onClick={() => setCount(count + 1)}>add</button>
-      <Deep />
+      <DeepDeep ref={ref} />
     </div>
   )
 }
@@ -53,10 +60,12 @@ class Deep extends Component {
 
   componentDidActivate() {
     console.log('Deep: componentDidActivate')
+    console.log(this)
   }
 
   componentWillUnactivate() {
     console.log('Deep: componentWillUnactivate')
+    console.log(this)
   }
 
   render() {
@@ -64,7 +73,11 @@ class Deep extends Component {
       <div>
         I am Deep
         <KeepAlive id="DeepDeep">
-          <DeepDeep />
+          <DeepDeep
+            ref={ref => {
+              console.log('ref', ref)
+            }}
+          />
         </KeepAlive>
       </div>
     )
@@ -163,7 +176,7 @@ function Main() {
         count: {count}
         <button onClick={() => setCount(count + 1)}>Main add</button>
       </div>
-      <div>
+      {/* <div>
         {showTest ? (
           <KeepAlive id="Test">
             <Consumer>{context => <Test {...context} />}</Consumer>
@@ -182,26 +195,28 @@ function Main() {
         <div>
           <button onClick={clear}>clear</button>
         </div>
+      </div> */}
+      <div>
+        {/* {showTest2 ? (
+          <KeepAlive id="Test2">
+            <Test2 />
+          </KeepAlive>
+        ) : null} */}
+
+        {showTest2 ? (
+          <div>
+            <KeepAlive id="Test3">
+              <Test />
+            </KeepAlive>
+          </div>
+        ) : (
+          <KeepAlive id="Test4">
+            <Test />
+          </KeepAlive>
+        )}
+
+        <button onClick={() => setShowTest2(!showTest2)}>toggle 2</button>
       </div>
-      {/* <div>
-          {showTest2 ? (
-            <KeepAlive id="Test2">
-              <Test2 />
-            </KeepAlive>
-          ) : null}
-
-          {showTest2 ? (
-            <div>
-              <Test />
-            </div>
-          ) : (
-            <KeepAlive id="Test4">
-              <Test />
-            </KeepAlive>
-          )}
-
-          <button onClick={() => setShowTest2(!showTest2)}>toggle 2</button>
-        </div> */}
     </Provider>
   )
 }

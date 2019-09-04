@@ -6,15 +6,15 @@ import { run, get, isUndefined } from '@helpers'
 const fixedContext = []
 const updateListenerCache = new Map()
 
-export function fixContext(context) {
-  fixedContext.push(context)
+export function fixContext(ctx) {
+  fixedContext.push(ctx)
 }
 
 export const createContext = (...args) => {
-  const context = createReactContext(...args)
+  const ctx = createReactContext(...args)
 
-  fixContext(context)
-  return context
+  fixContext(ctx)
+  return ctx
 }
 
 export class ProviderBridge extends PureComponent {
@@ -22,16 +22,16 @@ export class ProviderBridge extends PureComponent {
   constructor(props, ...args) {
     super(props, ...args)
 
-    const { value: contextValues } = props
-    const [{ context, value, onUpdate }] = contextValues
+    const { value: ctxValues } = props
+    const [{ ctx, value, onUpdate }] = ctxValues
 
     this.state = {
-      contextValue: value
+      ctxValue: value
     }
 
     this.unmount = onUpdate(value => {
       this.setState({
-        contextValue: value
+        ctxValue: value
       })
     })
   }
@@ -42,13 +42,13 @@ export class ProviderBridge extends PureComponent {
   }
 
   render() {
-    const { value: contextValues, children } = this.props
-    const { contextValue } = this.state
-    const [{ context }, ...restValues] = contextValues
-    const { Provider } = context
+    const { value: ctxValues, children } = this.props
+    const { ctxValue } = this.state
+    const [{ ctx }, ...restValues] = ctxValues
+    const { Provider } = ctx
 
-    const nextChildren = contextValue ? (
-      <Provider value={contextValue}>{children}</Provider>
+    const nextChildren = ctxValue ? (
+      <Provider value={ctxValue}>{children}</Provider>
     ) : (
       children
     )
@@ -63,18 +63,18 @@ export class ProviderBridge extends PureComponent {
 
 class ConsumerWrapper extends PureComponent {
   updateListener = null
-  contextInfo = null
+  ctxInfo = null
   constructor(props, ...args) {
     super(props, ...args)
 
-    const { value, context, id } = props
+    const { value, ctx, id } = props
     if (isUndefined(value)) {
       return
     }
 
-    this.updateListener = get(updateListenerCache.get(context), id, new Map())
-    this.contextInfo = {
-      context,
+    this.updateListener = get(updateListenerCache.get(ctx), id, new Map())
+    this.ctxInfo = {
+      ctx,
       value,
       onUpdate: fn => {
         this.updateListener.set(fn, fn)
@@ -85,13 +85,13 @@ class ConsumerWrapper extends PureComponent {
   }
 
   componentWillUnmount() {
-    const { value, context, id } = this.props
+    const { value, ctx, id } = this.props
     if (isUndefined(value)) {
       return
     }
 
-    updateListenerCache.set(context, {
-      ...get(updateListenerCache.get(context), undefined, {}),
+    updateListenerCache.set(ctx, {
+      ...get(updateListenerCache.get(ctx), undefined, {}),
       [id]: this.updateListener
     })
   }
@@ -106,18 +106,16 @@ class ConsumerWrapper extends PureComponent {
   render() {
     const { value, renderWrapper, renderContent, id } = this.props
 
-    return renderWrapper(context$$ =>
-      renderContent(
-        isUndefined(value) ? context$$ : [...context$$, this.contextInfo]
-      )
+    return renderWrapper(ctx$$ =>
+      renderContent(isUndefined(value) ? ctx$$ : [...ctx$$, this.ctxInfo])
     )
   }
 }
 
 export function ConsumerBridge({ children: renderChildren, id }) {
   const renderWrapper = fixedContext.reduce(
-    (render, context) => {
-      const { Consumer } = context
+    (render, ctx) => {
+      const { Consumer } = ctx
 
       const renderWrapper = renderContent => (
         <Consumer>
@@ -125,7 +123,7 @@ export function ConsumerBridge({ children: renderChildren, id }) {
             <ConsumerWrapper
               {...{
                 value,
-                context,
+                ctx,
                 renderWrapper: render,
                 renderContent,
                 id

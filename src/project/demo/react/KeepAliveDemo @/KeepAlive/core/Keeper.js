@@ -4,6 +4,7 @@ import { run } from '@helpers'
 
 import { AliveNodeProvider, AliveNodeConsumer } from './context'
 import { ProviderBridge } from './ContextBridge'
+import { LIFECYCLE_ACTIVATE, LIFECYCLE_UNACTIVATE } from './lifecycles'
 
 export default class Keeper extends Component {
   listeners = new Map()
@@ -21,30 +22,30 @@ export default class Keeper extends Component {
       listeners,
       inited: false,
       nodes: [...node.children],
-      didActivate: () => this.componentDidActivate(),
-      willUnactivate: () => this.componentWillUnactivate()
+      [LIFECYCLE_ACTIVATE]: () => this[LIFECYCLE_ACTIVATE](),
+      [LIFECYCLE_UNACTIVATE]: () => this[LIFECYCLE_UNACTIVATE]()
     }
   }
 
-  componentDidActivate() {
+  [LIFECYCLE_ACTIVATE]() {
     const listeners = [...this.listeners]
 
     listeners
       .reverse()
       .filter(([, { isCached }]) => !isCached())
-      .forEach(([, { didActivate }]) => run(didActivate))
+      .forEach(([, listener]) => run(listener, [LIFECYCLE_ACTIVATE]))
   }
 
-  componentWillUnactivate() {
+  [LIFECYCLE_UNACTIVATE]() {
     const listeners = [...this.listeners]
 
     listeners
       .filter(([, { isCached }]) => !isCached())
-      .forEach(([, { willUnactivate }]) => run(willUnactivate))
+      .forEach(([, listener]) => run(listener, [LIFECYCLE_UNACTIVATE]))
   }
 
   render() {
-    const { context$$, store, id, children, ...props } = this.props
+    const { ctx$$, store, id, children, ...props } = this.props
     const listeners = this.listeners
 
     return (
@@ -53,25 +54,28 @@ export default class Keeper extends Component {
           this.wrapper = node
         }}
       >
-        <ProviderBridge value={context$$}>
+        <ProviderBridge value={ctx$$}>
           <AliveNodeConsumer>
-            {lifecycleContext => (
+            {parentAliveCtx => (
               <AliveNodeProvider
                 value={{
                   id,
-                  attach: (ref, id) => {
+                  attach(ref, id) {
                     if (!ref) {
                       return () => null
                     }
 
-                    const drop = run(lifecycleContext, 'attach', ref, id)
+                    // 嵌套 KeepAlive 中监听父层 KeepAlive 的生命周期
+                    const drop = run(parentAliveCtx, 'attach', ref, id)
 
                     listeners.set(ref, {
-                      didActivate: ref.componentDidActivate,
-                      willUnactivate: ref.componentWillUnactivate,
+                      [LIFECYCLE_ACTIVATE]: () => run(ref, LIFECYCLE_ACTIVATE),
+                      [LIFECYCLE_UNACTIVATE]: () =>
+                        run(ref, LIFECYCLE_UNACTIVATE),
                       isCached: () => store[id].cached
                     })
 
+                    // 返回 listenerRemover 用以在对应组件卸载时解除监听
                     return () => {
                       run(drop)
                       listeners.delete(ref)

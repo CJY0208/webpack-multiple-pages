@@ -11,6 +11,9 @@ import { get, run, isObject, isFunction } from '@helpers'
 
 import { AliveNodeConsumer, aliveNodeContext } from './context'
 
+export const LIFECYCLE_ACTIVATE = 'componentDidActivate'
+export const LIFECYCLE_UNACTIVATE = 'componentWillUnactivate'
+
 export const withLifecycles = WrappedComponent => {
   class HOC extends Component {
     drop = null
@@ -28,8 +31,8 @@ export const withLifecycles = WrappedComponent => {
             <WrappedComponent
               ref={ref => {
                 if (
-                  ['componentDidActivate', 'componentWillUnactivate'].every(
-                    lifecycleName => !isFunction(get(ref, 'lifecycleName'))
+                  [LIFECYCLE_ACTIVATE, LIFECYCLE_UNACTIVATE].every(
+                    lifecycleName => !isFunction(get(ref, lifecycleName))
                   )
                 ) {
                   return
@@ -41,7 +44,7 @@ export const withLifecycles = WrappedComponent => {
                   return
                 }
 
-                if (isObject(forwardedRef)) {
+                if (isObject(forwardedRef) && 'current' in forwardedRef) {
                   forwardedRef.current = ref
                   return
                 }
@@ -73,15 +76,15 @@ const useLifecycle = (funcName, func) => {
     return
   }
 
-  const contextValue = useContext(aliveNodeContext)
+  const ctxValue = useContext(aliveNodeContext)
 
   // 未处于 KeepAlive 中
-  if (!contextValue) {
+  if (!ctxValue) {
     return
   }
 
   const { current: ref } = useRef({})
-  const { attach, id } = contextValue
+  const { attach, id } = ctxValue
 
   ref[funcName] = func
   ref.drop = attach(ref, id)
@@ -91,5 +94,5 @@ const useLifecycle = (funcName, func) => {
   }, [])
 }
 
-export const useActivate = useLifecycle.bind(null, 'componentDidActivate')
-export const useUnactivate = useLifecycle.bind(null, 'componentWillUnactivate')
+export const useActivate = useLifecycle.bind(null, LIFECYCLE_ACTIVATE)
+export const useUnactivate = useLifecycle.bind(null, LIFECYCLE_UNACTIVATE)

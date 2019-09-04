@@ -1,22 +1,39 @@
 import React, { forwardRef, useContext } from 'react'
 import hoistStatics from 'hoist-non-react-statics'
 
-import { isFunction } from '@helpers'
+import { isFunction, isString } from '@helpers'
 
 import { ConsumerBridge } from './ContextBridge'
-import { AliveStoreConsumer, aliveStoreContext } from './context'
+import {
+  AliveStoreConsumer,
+  aliveStoreContext,
+  AliveNodeConsumer
+} from './context'
 
 export const expandKeepAlive = KeepAlive => {
-  const HOCExpandKeepAlive = props => (
-    <ConsumerBridge id={props.id}>
-      {contextValue => (
-        <AliveStoreConsumer>
-          {helpers => (
-            <KeepAlive {...helpers} {...props} context$$={contextValue} />
-          )}
-        </AliveStoreConsumer>
+  const HOCExpandKeepAlive = ({ id: currentId, ...props }) => (
+    <AliveStoreConsumer>
+      {helpers => (
+        <AliveNodeConsumer>
+          {({ id: parentId } = {}) => {
+            // 兼容不同 parent 下相同 child 的情景，例如
+            // Test1 下的 Deep 与 Test2 下的 Deep，若不做处理，两者争抢 Deep 位置时会出现问题
+            // 上述情景将 id 分配为 Test1/Deep 与 Test2/Deep
+            const id = isString(parentId)
+              ? [parentId, currentId].join('/')
+              : currentId
+
+            return (
+              <ConsumerBridge id={id}>
+                {ctxValue => (
+                  <KeepAlive id={id} {...helpers} {...props} ctx$$={ctxValue} />
+                )}
+              </ConsumerBridge>
+            )
+          }}
+        </AliveNodeConsumer>
       )}
-    </ConsumerBridge>
+    </AliveStoreConsumer>
   )
 
   return HOCExpandKeepAlive
@@ -51,13 +68,13 @@ export const useAliveStore = () => {
     return {}
   }
 
-  const contextValue = useContext(aliveStoreContext)
+  const ctxValue = useContext(aliveStoreContext)
 
-  if (!contextValue) {
+  if (!ctxValue) {
     return {}
   }
 
-  const { drop, clear, getCachingIds } = contextValue
+  const { drop, clear, getCachingIds } = ctxValue
   return { drop, clear, getCachingIds }
 }
 

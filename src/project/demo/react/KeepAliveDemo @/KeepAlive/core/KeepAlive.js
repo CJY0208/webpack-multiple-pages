@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { run } from '@helpers'
 
 import { expandKeepAlive } from './withAliveStore'
+import { LIFECYCLE_ACTIVATE, LIFECYCLE_UNACTIVATE } from './lifecycles'
 import saveScrollPos from '../helpers/saveScrollPos'
 
 @expandKeepAlive
@@ -13,10 +14,10 @@ export default class KeepAlive extends Component {
   }
 
   init = async () => {
-    const { keep, id, children, context$$ } = this.props
+    const { keep, id, children, ctx$$ } = this.props
 
     // 将 children 渲染至 AliveStoreProvider 中
-    const cache = await keep(id, children, context$$)
+    const cache = await keep(id, children, ctx$$)
 
     // 将 AliveStoreProvider 中的渲染内容通过 dom 操作置回当前 KeepAlive
     this.parentNode = this.placeholder.parentNode
@@ -31,7 +32,7 @@ export default class KeepAlive extends Component {
     // 触发 didActivate 生命周期
     cache.cached = false
     if (cache.inited) {
-      run(cache.didActivate)
+      run(cache, LIFECYCLE_ACTIVATE)
     } else {
       cache.inited = true
     }
@@ -51,7 +52,7 @@ export default class KeepAlive extends Component {
     })
 
     // 触发 willUnactivate 生命周期
-    run(cache.willUnactivate)
+    run(cache, LIFECYCLE_UNACTIVATE)
     cache.cached = true
   }
 

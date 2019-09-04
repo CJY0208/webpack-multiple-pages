@@ -7,14 +7,14 @@ export default class KeepAliveProvider extends Component {
   store = {}
   state = {}
 
-  keep = (id, component, context$$) =>
+  keep = (id, component, ctx$$) =>
     new Promise(resolve => {
       this.setState(
         {
           [id]: {
             id,
             component,
-            context$$
+            ctx$$
           }
         },
         () => {
@@ -64,8 +64,8 @@ export default class KeepAliveProvider extends Component {
         {this.props.children}
         {Object.values(this.state)
           .filter(info => info)
-          .map(({ id, context$$, component }) => (
-            <Keeper key={id} context$$={context$$} store={this.store} id={id}>
+          .map(({ id, ctx$$, component }) => (
+            <Keeper key={id} ctx$$={ctx$$} store={this.store} id={id}>
               {component}
             </Keeper>
           ))}
