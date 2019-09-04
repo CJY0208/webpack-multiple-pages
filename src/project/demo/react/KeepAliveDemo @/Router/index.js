@@ -2,20 +2,34 @@ import React, { useEffect, Component, Fragment } from 'react'
 import { render } from 'react-dom'
 import { HashRouter, Link, Route, Switch } from 'react-router-dom'
 
-import KeepAlive, { KeepAliveProvider } from '../KeepAlive'
+import KeepAlive, {
+  KeepAliveProvider,
+  withLifecycles,
+  useActivate,
+  useUnactivate
+} from '../KeepAlive'
 import './style.scss'
 
+@withLifecycles
 class Test extends Component {
   state = {
     count: 0
   }
 
   componentDidMount() {
-    console.log('Test: didMount')
+    console.log('Test: componentDidMount')
   }
 
   componentWillUnmount() {
-    console.log('Test: willUnmount')
+    console.log('Test: componentWillUnmount')
+  }
+
+  componentDidActivate() {
+    console.log('Test: componentDidActivate')
+  }
+
+  componentWillUnactivate() {
+    console.log('Test: componentWillUnactivate')
   }
 
   render() {
@@ -32,9 +46,21 @@ class Test extends Component {
 }
 
 function List(props) {
+  useActivate(() => {
+    console.log('List useActivate effect 1')
+  })
+
+  useActivate(() => {
+    console.log('List useActivate effect 2')
+  })
+
+  useUnactivate(() => {
+    console.log('List useUnactivate effect')
+  })
+
   return (
     <div className="list">
-      <Test />
+      {/* <Test /> */}
       <ul>
         <li>1</li>
         <li>2</li>
@@ -134,7 +160,7 @@ const RouterApp = () => (
           exact
           path="/"
           render={props => (
-            <KeepAlive name="List">
+            <KeepAlive id="List">
               <Test />
               <List {...props} />
             </KeepAlive>

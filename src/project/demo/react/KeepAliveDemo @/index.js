@@ -11,8 +11,9 @@ import { render } from 'react-dom'
 import RouterApp from './Router'
 import KeepAlive, {
   KeepAliveProvider,
-  injectKeepAliveLifecycles,
-  fixContext
+  withLifecycles,
+  fixContext,
+  useAliveStore
 } from './KeepAlive'
 
 const context = createContext()
@@ -35,12 +36,21 @@ function Test2({ injectKeepAliveCycles }) {
     <div>
       count: {count}
       <button onClick={() => setCount(count + 1)}>add</button>
+      <Deep />
     </div>
   )
 }
 
-@injectKeepAliveLifecycles
+@withLifecycles
 class Deep extends Component {
+  componentDidMount() {
+    console.log('Deep: componentDidMount')
+  }
+
+  componentWillUnmount() {
+    console.log('Deep: componentWillUnmount')
+  }
+
   componentDidActivate() {
     console.log('Deep: componentDidActivate')
   }
@@ -50,38 +60,62 @@ class Deep extends Component {
   }
 
   render() {
-    return null
+    return (
+      <div>
+        I am Deep
+        <KeepAlive id="DeepDeep">
+          <DeepDeep />
+        </KeepAlive>
+      </div>
+    )
   }
 }
 
-// @injectKeepAliveLifecycles
+@withLifecycles
+class DeepDeep extends Component {
+  componentDidMount() {
+    console.log('DeepDeep: componentDidMount')
+  }
+
+  componentWillUnmount() {
+    console.log('DeepDeep: componentWillUnmount')
+  }
+
+  componentDidActivate() {
+    console.log('DeepDeep: componentDidActivate')
+  }
+
+  componentWillUnactivate() {
+    console.log('DeepDeep: componentWillUnactivate')
+  }
+
+  render() {
+    return <div>I am DeepDeep</div>
+  }
+}
+
+@withLifecycles
 class Test extends Component {
   state = {
     count: 0,
     showDeep: true
   }
 
-  constructor(props) {
-    super(props)
-
-    console.log(props)
-  }
-
   componentDidMount() {
-    console.log('Test: didMount')
+    console.log('Test: componentDidMount')
   }
 
-  // componentWillUnmount() {
-  //   console.log('Test: willUnmount')
-  // }
+  componentWillUnmount() {
+    console.log('Test: componentWillUnmount')
+  }
 
-  // componentDidActivate() {
-  //   console.log('Test: componentDidActivate')
-  // }
+  componentDidActivate() {
+    console.log('Test: componentDidActivate')
+  }
 
-  // componentWillUnactivate() {
-  //   console.log('Test: componentWillUnactivate')
-  // }
+  componentWillUnactivate() {
+    console.log('Test: componentWillUnactivate')
+  }
 
   render() {
     const { count, showDeep } = this.state
@@ -99,53 +133,83 @@ class Test extends Component {
           <button onClick={() => setCount(count + 1)}>add</button>
         </div>
         <div>contextCount: {contextCount}</div>
-        {/* <button onClick={toggleDeep}>toggle Deep</button> */}
-        {/* {showDeep && (
-          <KeepAlive name="Deep">
-            <Deep />
-          </KeepAlive>
-        )} */}
+        <button onClick={toggleDeep}>toggle Deep</button>
+        {showDeep && <Deep />}
       </div>
     )
   }
 }
 
-function App() {
+function Test3() {
+  useEffect(() => {
+    console.log('Test3: didMount')
+
+    return () => {
+      console.log('Test3: willUnmount')
+    }
+  }, [])
+  return <div>Test3</div>
+}
+
+function Main() {
   const [count, setCount] = useState(0)
   const [showTest, setShowTest] = useState(true)
   const [showTest2, setShowTest2] = useState(true)
+  const { drop, clear, getCachingIds } = useAliveStore()
+
   return (
-    <KeepAliveProvider>
-      <Provider value={{ test1: 1, count }}>
+    <Provider value={{ count }}>
+      <div>
+        count: {count}
+        <button onClick={() => setCount(count + 1)}>Main add</button>
+      </div>
+      <div>
+        {showTest ? (
+          <KeepAlive id="Test">
+            <Consumer>{context => <Test {...context} />}</Consumer>
+          </KeepAlive>
+        ) : null}
+
+        <button onClick={() => setShowTest(!showTest)}>toggle</button>
+        <div>caching ids: {getCachingIds()}</div>
+        <button
+          onClick={() => {
+            drop('Test')
+          }}
+        >
+          drop Test
+        </button>
         <div>
-          count: {count}
-          <button onClick={() => setCount(count + 1)}>Main add</button>
+          <button onClick={clear}>clear</button>
         </div>
-        <div>
-          {showTest ? (
-            <KeepAlive name="Test">
-              <Consumer>
-                {context => (
-                  <Provider value={{ test2: 2, ...context }}>
-                    <Consumer>{context => <Test {...context} />}</Consumer>
-                  </Provider>
-                )}
-              </Consumer>
+      </div>
+      {/* <div>
+          {showTest2 ? (
+            <KeepAlive id="Test2">
+              <Test2 />
             </KeepAlive>
           ) : null}
 
-          <button onClick={() => setShowTest(!showTest)}>toggle</button>
-        </div>
-        <div>
-          {/* {showTest2 ? (
-            <KeepAlive name="Test2">
-              <Test2 />
+          {showTest2 ? (
+            <div>
+              <Test />
+            </div>
+          ) : (
+            <KeepAlive id="Test4">
+              <Test />
             </KeepAlive>
-          ) : null} */}
+          )}
 
           <button onClick={() => setShowTest2(!showTest2)}>toggle 2</button>
-        </div>
-      </Provider>
+        </div> */}
+    </Provider>
+  )
+}
+
+function App() {
+  return (
+    <KeepAliveProvider>
+      <Main />
     </KeepAliveProvider>
   )
 }

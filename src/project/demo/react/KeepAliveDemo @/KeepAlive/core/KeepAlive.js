@@ -2,48 +2,57 @@ import React, { Component } from 'react'
 
 import { run } from '@helpers'
 
-import { connect } from './storeContext'
-import { Provider } from './createAliveContext'
+import { expandKeepAlive } from './withAliveStore'
 import saveScrollPos from '../helpers/saveScrollPos'
 
-@connect
-class KeepAlive extends Component {
+@expandKeepAlive
+export default class KeepAlive extends Component {
   constructor(props) {
     super(props)
-  }
-
-  componentDidMount() {
     this.init()
   }
 
   init = async () => {
-    const { keep, children, name, context$$ } = this.props
-    const cache = await keep(name, children, context$$)
+    const { keep, id, children, context$$ } = this.props
 
-    cache.inited = true
-    cache.cached = false
+    // 将 children 渲染至 AliveStoreProvider 中
+    const cache = await keep(id, children, context$$)
 
+    // 将 AliveStoreProvider 中的渲染内容通过 dom 操作置回当前 KeepAlive
     this.parentNode = this.placeholder.parentNode
     cache.nodes.forEach(node => {
       this.parentNode.insertBefore(node, this.placeholder)
     })
     this.parentNode.removeChild(this.placeholder)
 
+    // 恢复该节点下各可滚动元素的滚动位置
     run(cache.revertScrollPos)
-    run(cache.didActivate)
+
+    // 触发 didActivate 生命周期
+    cache.cached = false
+    if (cache.inited) {
+      run(cache.didActivate)
+    } else {
+      cache.inited = true
+    }
   }
 
   componentWillUnmount() {
-    const { name, getCache } = this.props
-    const cache = getCache(name)
+    const { id, getCache } = this.props
+    const cache = getCache(id)
 
-    cache.cached = true
+    // 保存该节点下各可滚动元素的滚动位置
     cache.revertScrollPos = saveScrollPos(cache.nodes)
+
+    // 将 KeepAlive 中的节点恢复为原先的占位节点，保证卸载操作正常进行
     this.parentNode.insertBefore(this.placeholder, cache.nodes[0])
     cache.nodes.forEach(node => {
       this.parentNode.removeChild(node)
     })
+
+    // 触发 willUnactivate 生命周期
     run(cache.willUnactivate)
+    cache.cached = true
   }
 
   render() {
@@ -56,5 +65,3 @@ class KeepAlive extends Component {
     )
   }
 }
-
-export default KeepAlive

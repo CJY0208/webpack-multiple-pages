@@ -1,21 +1,17 @@
-// import React from 'react'
-
-import { KeepAliveProvider } from './core/storeContext'
-import { injectKeepAliveLifecycles } from './core/createAliveContext'
+import KeepAliveProvider from './core/Provider'
+import { withLifecycles, useActivate, useUnactivate } from './core/lifecycles'
 import KeepAlive from './core/KeepAlive'
-import fixContext from './helpers/fixContext'
-
-// const { createContext } = React
-
-// console.log('222 createContext')
-// React.createContext = (...args) => {
-//   const context = createContext.call(React, args)
-//   fixContext(context)
-
-//   console.log('createContext')
-
-//   return context
-// }
+import { fixContext, createContext } from './core/ContextBridge'
+import withAliveStore, { useAliveStore } from './core/withAliveStore'
 
 export default KeepAlive
-export { KeepAliveProvider, injectKeepAliveLifecycles, fixContext }
+export {
+  KeepAliveProvider,
+  withLifecycles,
+  fixContext,
+  useActivate,
+  useUnactivate,
+  createContext,
+  withAliveStore,
+  useAliveStore
+}

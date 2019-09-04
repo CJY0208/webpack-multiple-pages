@@ -4,7 +4,7 @@ function getScrollableNodes(from = document) {
   const checkStyleList = ['overflow', 'overflow-x', 'overflow-y']
   const scrollableStyleValue = ['auto', 'scroll']
 
-  return [...Array.from(from.querySelectorAll('*')), from].filter(dom => {
+  return [...from.querySelectorAll('*'), from].filter(dom => {
     const styles = getComputedStyle(dom)
 
     return (
