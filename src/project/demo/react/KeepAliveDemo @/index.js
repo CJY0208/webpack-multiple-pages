@@ -186,12 +186,12 @@ function Main() {
         <button onClick={() => setCount(count + 1)}>Main add</button>
       </div>
       <div>
-        <KeepAlive name="Test">
-          <a href="" />
-        </KeepAlive>
-        <KeepAlive name="Test">
-          <a href="" />
-        </KeepAlive>
+        {showTest && (
+          <KeepAlive name="Test">
+            <Test />
+            <Consumer>{contextValue => <Test {...contextValue} />}</Consumer>
+          </KeepAlive>
+        )}
 
         <button onClick={() => setShowTest(!showTest)}>toggle</button>
         <div>

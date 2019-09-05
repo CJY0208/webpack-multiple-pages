@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 
 import { run, isRegExp } from '@helpers'
 
@@ -74,13 +74,15 @@ export default class KeepAliveProvider extends Component {
         }}
       >
         {this.props.children}
-        {Object.values(this.state)
-          .filter(info => info)
-          .map(({ children, ...props }) => (
-            <Keeper key={props.id} store={this.store} {...props}>
-              {children}
-            </Keeper>
-          ))}
+        <div>
+          {Object.values(this.state)
+            .filter(info => info)
+            .map(({ children, ...props }) => (
+              <Keeper key={props.id} store={this.store} {...props}>
+                {children}
+              </Keeper>
+            ))}
+        </div>
       </AliveStoreProvider>
     )
   }

@@ -4,12 +4,8 @@ import hoistStatics from 'hoist-non-react-statics'
 import { isFunction, isString } from '@helpers'
 
 import { ConsumerBridge } from './ContextBridge'
-import {
-  AliveStoreConsumer,
-  AliveNodeConsumer,
-  aliveStoreContext,
-  aliveNodeContext
-} from './context'
+import AliveIdProvider from './AliveIdProvider'
+import { AliveStoreConsumer, aliveStoreContext } from './context'
 
 // 兼容不同 parent 下相同 child 的情景，例如
 // Test1 下的 Deep 与 Test2 下的 Deep，若不做处理，两者争抢 Deep 位置时会出现问题
@@ -28,30 +24,23 @@ export const expandKeepAlive = KeepAlive => {
 
   function HookExpand(props) {
     const helpers = useContext(aliveStoreContext)
-    const { id: parentId } = useContext(aliveNodeContext) || {}
 
-    return renderContent({
-      id: genId(parentId, props.name),
-      helpers,
-      props
-    })
+    return (
+      <AliveIdProvider>
+        {id => renderContent({ id, helpers, props })}
+      </AliveIdProvider>
+    )
   }
 
   function WithExpand(props) {
     return (
-      <AliveStoreConsumer>
-        {helpers => (
-          <AliveNodeConsumer>
-            {({ id: parentId } = {}) =>
-              renderContent({
-                id: genId(parentId, props.name),
-                helpers,
-                props
-              })
-            }
-          </AliveNodeConsumer>
+      <AliveIdProvider>
+        {id => (
+          <AliveStoreConsumer>
+            {helpers => renderContent({ id, helpers, props })}
+          </AliveStoreConsumer>
         )}
-      </AliveStoreConsumer>
+      </AliveIdProvider>
     )
   }
 
