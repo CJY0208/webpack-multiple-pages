@@ -31,8 +31,7 @@ export default class Keeper extends Component {
     const listeners = [...this.listeners]
 
     listeners
-      .reverse()
-      .filter(([, { isCached }]) => !isCached())
+      // .filter(([, { isCached }]) => !isCached())
       .forEach(([, listener]) => run(listener, [LIFECYCLE_ACTIVATE]))
   }
 
@@ -40,7 +39,8 @@ export default class Keeper extends Component {
     const listeners = [...this.listeners]
 
     listeners
-      .filter(([, { isCached }]) => !isCached())
+      // .filter(([, { isCached }]) => !isCached())
+      .reverse()
       .forEach(([, listener]) => run(listener, [LIFECYCLE_UNACTIVATE]))
   }
 
@@ -48,46 +48,42 @@ export default class Keeper extends Component {
     const { ctx$$, store, id, children, ...props } = this.props
     const listeners = this.listeners
 
+    const content = (
+      <AliveNodeProvider
+        value={{
+          id,
+          attach(ref) {
+            if (!ref) {
+              return () => null
+            }
+
+            listeners.set(ref, {
+              [LIFECYCLE_ACTIVATE]: () => run(ref, LIFECYCLE_ACTIVATE),
+              [LIFECYCLE_UNACTIVATE]: () => run(ref, LIFECYCLE_UNACTIVATE)
+            })
+
+            // 返回 listenerRemover 用以在对应组件卸载时解除监听
+            return () => {
+              listeners.delete(ref)
+            }
+          }
+        }}
+      >
+        {children}
+      </AliveNodeProvider>
+    )
+
     return (
       <div
         ref={node => {
           this.wrapper = node
         }}
       >
-        <ProviderBridge value={ctx$$}>
-          <AliveNodeConsumer>
-            {parentAliveCtx => (
-              <AliveNodeProvider
-                value={{
-                  id,
-                  attach(ref, id) {
-                    if (!ref) {
-                      return () => null
-                    }
-
-                    // 嵌套 KeepAlive 中监听父层 KeepAlive 的生命周期
-                    const drop = run(parentAliveCtx, 'attach', ref, id)
-
-                    listeners.set(ref, {
-                      [LIFECYCLE_ACTIVATE]: () => run(ref, LIFECYCLE_ACTIVATE),
-                      [LIFECYCLE_UNACTIVATE]: () =>
-                        run(ref, LIFECYCLE_UNACTIVATE),
-                      isCached: () => store[id].cached
-                    })
-
-                    // 返回 listenerRemover 用以在对应组件卸载时解除监听
-                    return () => {
-                      run(drop)
-                      listeners.delete(ref)
-                    }
-                  }
-                }}
-              >
-                {children}
-              </AliveNodeProvider>
-            )}
-          </AliveNodeConsumer>
-        </ProviderBridge>
+        {ctx$$.length > 0 ? (
+          <ProviderBridge value={ctx$$}>{content}</ProviderBridge>
+        ) : (
+          content
+        )}
       </div>
     )
   }

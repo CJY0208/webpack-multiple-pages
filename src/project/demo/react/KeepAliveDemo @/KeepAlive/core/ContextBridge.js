@@ -1,7 +1,7 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent, useContext, useRef, useEffect } from 'react'
 import createReactContext from 'create-react-context'
 
-import { run, get, isUndefined } from '@helpers'
+import { run, get, isUndefined, isFunction } from '@helpers'
 
 const fixedContext = []
 const updateListenerCache = new Map()
@@ -23,6 +23,7 @@ export class ProviderBridge extends PureComponent {
     super(props, ...args)
 
     const { value: ctxValues } = props
+
     const [{ ctx, value, onUpdate }] = ctxValues
 
     this.state = {
@@ -37,7 +38,6 @@ export class ProviderBridge extends PureComponent {
   }
 
   componentWillUnmount() {
-    console.log('ProviderBridge componentWillUnmount')
     run(this.unmount)
   }
 
@@ -112,7 +112,50 @@ class ConsumerWrapper extends PureComponent {
   }
 }
 
-export function ConsumerBridge({ children: renderChildren, id }) {
+function HooksConsumerBridge({ children: renderChildren, id }) {
+  const context$$ = fixedContext
+    .map(ctx => {
+      const value = useContext(ctx)
+      const { current: updateListener } = useRef(
+        get(updateListenerCache.get(ctx), id, new Map())
+      )
+
+      useEffect(
+        () => {
+          run(updateListener, 'forEach', fn => fn(value))
+        },
+        [value]
+      )
+
+      useEffect(() => {
+        return () => {
+          if (isUndefined(value)) {
+            return
+          }
+
+          updateListenerCache.set(ctx, {
+            ...get(updateListenerCache.get(ctx), undefined, {}),
+            [id]: updateListener
+          })
+        }
+      }, [])
+
+      return {
+        ctx,
+        value,
+        onUpdate: fn => {
+          updateListener.set(fn, fn)
+
+          return () => updateListener.delete(fn)
+        }
+      }
+    })
+    .filter(({ value }) => !isUndefined(value))
+
+  return renderChildren(context$$)
+}
+
+function RecursiveConsumerBridge({ children: renderChildren, id }) {
   const renderWrapper = fixedContext.reduce(
     (render, ctx) => {
       const { Consumer } = ctx
@@ -140,3 +183,7 @@ export function ConsumerBridge({ children: renderChildren, id }) {
 
   return renderWrapper(renderChildren)
 }
+
+export const ConsumerBridge = [useContext, useRef, useEffect].every(isFunction)
+  ? HooksConsumerBridge
+  : RecursiveConsumerBridge

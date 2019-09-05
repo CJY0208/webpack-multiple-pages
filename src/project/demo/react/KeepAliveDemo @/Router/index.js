@@ -160,7 +160,7 @@ const RouterApp = () => (
           exact
           path="/"
           render={props => (
-            <KeepAlive id="List">
+            <KeepAlive name="List">
               <Test />
               <List {...props} />
             </KeepAlive>

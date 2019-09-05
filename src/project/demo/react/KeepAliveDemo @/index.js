@@ -1,12 +1,5 @@
 import 'babel-polyfill'
-import React, {
-  Component,
-  Fragment,
-  useState,
-  useEffect,
-  useRef,
-  createContext
-} from 'react'
+import React, { Component, Fragment, useState, useEffect, useRef } from 'react'
 import { render } from 'react-dom'
 
 import RouterApp from './Router'
@@ -16,13 +9,14 @@ import KeepAlive, {
   fixContext,
   useAliveStore,
   useActivate,
-  useUnactivate
+  useUnactivate,
+  createContext
 } from './KeepAlive'
 
 const context = createContext()
 const { Provider, Consumer } = context
 
-fixContext(context)
+// fixContext(context)
 
 function Test2({ injectKeepAliveCycles }) {
   const [count, setCount] = useState(0)
@@ -48,7 +42,7 @@ function Test2({ injectKeepAliveCycles }) {
   )
 }
 
-@withLifecycles
+// @withLifecycles
 class Deep extends Component {
   componentDidMount() {
     console.log('Deep: componentDidMount')
@@ -72,10 +66,10 @@ class Deep extends Component {
     return (
       <div>
         I am Deep
-        <KeepAlive id="DeepDeep">
+        <KeepAlive name="DeepDeep">
           <DeepDeep
             ref={ref => {
-              console.log('ref', ref)
+              // console.log('ref', ref)
             }}
           />
         </KeepAlive>
@@ -86,6 +80,10 @@ class Deep extends Component {
 
 @withLifecycles
 class DeepDeep extends Component {
+  state = {
+    count: 0
+  }
+
   componentDidMount() {
     console.log('DeepDeep: componentDidMount')
   }
@@ -103,7 +101,18 @@ class DeepDeep extends Component {
   }
 
   render() {
-    return <div>I am DeepDeep</div>
+    const { count } = this.state
+
+    const setCount = count => this.setState({ count })
+    return (
+      <div>
+        I am DeepDeep
+        {/* <div>
+          count: {count}
+          <button onClick={() => setCount(count + 1)}>add</button>
+        </div> */}
+      </div>
+    )
   }
 }
 
@@ -168,7 +177,7 @@ function Main() {
   const [count, setCount] = useState(0)
   const [showTest, setShowTest] = useState(true)
   const [showTest2, setShowTest2] = useState(true)
-  const { drop, clear, getCachingIds } = useAliveStore()
+  const { drop, clear, getCachingNodes } = useAliveStore()
 
   return (
     <Provider value={{ count }}>
@@ -176,15 +185,18 @@ function Main() {
         count: {count}
         <button onClick={() => setCount(count + 1)}>Main add</button>
       </div>
-      {/* <div>
-        {showTest ? (
-          <KeepAlive id="Test">
-            <Consumer>{context => <Test {...context} />}</Consumer>
-          </KeepAlive>
-        ) : null}
+      <div>
+        <KeepAlive name="Test">
+          <a href="" />
+        </KeepAlive>
+        <KeepAlive name="Test">
+          <a href="" />
+        </KeepAlive>
 
         <button onClick={() => setShowTest(!showTest)}>toggle</button>
-        <div>caching ids: {getCachingIds()}</div>
+        <div>
+          caching nodes name: {getCachingNodes().map(node => node.name)}
+        </div>
         <button
           onClick={() => {
             drop('Test')
@@ -195,27 +207,27 @@ function Main() {
         <div>
           <button onClick={clear}>clear</button>
         </div>
-      </div> */}
+      </div>
       <div>
         {/* {showTest2 ? (
-          <KeepAlive id="Test2">
+          <KeepAlive name="Test2">
             <Test2 />
           </KeepAlive>
         ) : null} */}
 
-        {showTest2 ? (
+        {/* {showTest2 ? (
           <div>
-            <KeepAlive id="Test3">
+            <KeepAlive name="Test3">
               <Test />
             </KeepAlive>
           </div>
         ) : (
-          <KeepAlive id="Test4">
-            <Test />
-          </KeepAlive>
-        )}
+          <KeepAlive name="Test4">
+              <Test />
+            </KeepAlive>
+        )} */}
 
-        <button onClick={() => setShowTest2(!showTest2)}>toggle 2</button>
+        {/* <button onClick={() => setShowTest2(!showTest2)}>toggle 2</button> */}
       </div>
     </Provider>
   )

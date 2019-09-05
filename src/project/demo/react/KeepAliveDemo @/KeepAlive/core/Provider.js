@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 
+import { run, isRegExp } from '@helpers'
+
 import { AliveStoreProvider } from './context'
 import Keeper from './Keeper'
 
@@ -7,13 +9,14 @@ export default class KeepAliveProvider extends Component {
   store = {}
   state = {}
 
-  keep = (id, component, ctx$$) =>
+  keep = (id, { name, children, ctx$$ }) =>
     new Promise(resolve => {
       this.setState(
         {
           [id]: {
             id,
-            component,
+            name,
+            children,
             ctx$$
           }
         },
@@ -23,11 +26,14 @@ export default class KeepAliveProvider extends Component {
       )
     })
 
-  drop = id =>
+  dropById = id =>
     new Promise(resolve => {
       const cache = this.store[id]
 
       if (cache && cache.cached) {
+        // 用在多层 KeepAlive 同时触发 drop 时，避免触发深层 KeepAlive 节点的缓存生命周期
+        cache.willDrop = true
+
         this.setState({ [id]: null }, () => {
           delete this.store[id]
           resolve(true)
@@ -37,18 +43,24 @@ export default class KeepAliveProvider extends Component {
       }
     })
 
-  clear = () =>
+  drop = name =>
+    this.dropNodes(
+      this.getCachingNodes().filter(
+        node => (isRegExp(name) ? name.test(node.name) : node.name === name)
+      )
+    )
+
+  dropNodes = nodes =>
     new Promise(resolve => {
-      Promise.all(this.getCachingIds().map(id => this.drop(id))).then(res =>
+      Promise.all(nodes.map(node => this.dropById(node.id))).then(res =>
         resolve(res.every(success => success))
       )
     })
 
+  clear = () => this.dropNodes(this.getCachingNodes())
+
   getCache = id => this.store[id]
-  getCachingIds = () =>
-    Object.values(this.state)
-      .filter(info => !!info)
-      .map(({ id }) => id)
+  getCachingNodes = () => Object.values(this.state).filter(info => !!info)
 
   render() {
     return (
@@ -58,15 +70,15 @@ export default class KeepAliveProvider extends Component {
           drop: this.drop,
           clear: this.clear,
           getCache: this.getCache,
-          getCachingIds: this.getCachingIds
+          getCachingNodes: this.getCachingNodes
         }}
       >
         {this.props.children}
         {Object.values(this.state)
           .filter(info => info)
-          .map(({ id, ctx$$, component }) => (
-            <Keeper key={id} ctx$$={ctx$$} store={this.store} id={id}>
-              {component}
+          .map(({ children, ...props }) => (
+            <Keeper key={props.id} store={this.store} {...props}>
+              {children}
             </Keeper>
           ))}
       </AliveStoreProvider>

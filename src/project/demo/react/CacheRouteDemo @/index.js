@@ -75,7 +75,7 @@ const Item = ({ history }) => (
   <div>
     <button
       onClick={() => {
-        history.goBack()
+        history.push('/')
       }}
     >
       Go Back
@@ -86,7 +86,7 @@ const Item = ({ history }) => (
 const App = () => (
   <HashRouter>
     <CacheSwitch>
-      <CacheRoute exact path="/" component={List} />
+      <CacheRoute exact path="/" component={List} when="always" />
       <CacheRoute exact path="/item" component={Item} />
     </CacheSwitch>
   </HashRouter>

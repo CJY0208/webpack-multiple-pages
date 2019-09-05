@@ -9,6 +9,8 @@ export const isFunction = val => typeof val === 'function'
 
 export const isArray = val => val instanceof Array
 
+export const isRegExp = val => val instanceof RegExp
+
 const __error__type = [
   'Error',
   'EvalError',

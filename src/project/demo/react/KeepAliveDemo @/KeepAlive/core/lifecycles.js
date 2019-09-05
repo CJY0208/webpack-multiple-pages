@@ -7,7 +7,7 @@ import React, {
 } from 'react'
 import hoistStatics from 'hoist-non-react-statics'
 
-import { get, run, isObject, isFunction } from '@helpers'
+import { get, run, isObject, isFunction, isUndefined } from '@helpers'
 
 import { AliveNodeConsumer, aliveNodeContext } from './context'
 
@@ -27,7 +27,7 @@ export const withLifecycles = WrappedComponent => {
 
       return (
         <AliveNodeConsumer>
-          {({ attach, id } = {}) => (
+          {({ attach } = {}) => (
             <WrappedComponent
               ref={ref => {
                 if (
@@ -37,10 +37,10 @@ export const withLifecycles = WrappedComponent => {
                 ) {
                   return
                 }
-                this.drop = run(attach, undefined, ref, id)
+                this.drop = run(attach, undefined, ref)
 
                 // 以下保持 ref 功能
-                if (!forwardedRef) {
+                if (isUndefined(forwardedRef)) {
                   return
                 }
 
@@ -84,10 +84,10 @@ const useLifecycle = (funcName, func) => {
   }
 
   const { current: ref } = useRef({})
-  const { attach, id } = ctxValue
+  const { attach } = ctxValue
 
   ref[funcName] = func
-  ref.drop = attach(ref, id)
+  ref.drop = attach(ref)
 
   useEffect(() => {
     return () => run(ref.drop)
