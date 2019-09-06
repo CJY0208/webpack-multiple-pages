@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Route } from 'react-router-dom'
 
-import CacheComponent from '../core/CacheComponent'
+import CacheComponent, { isMatch } from '../core/CacheComponent'
 import Updatable from '../core/Updatable'
-import { run } from '../helpers/try'
+import { run, get } from '../helpers/try'
+import { isExist } from '../helpers/is'
 
 const isEmptyChildren = children => React.Children.count(children) === 0
 
@@ -15,13 +16,7 @@ export default class CacheRoute extends Component {
     component: PropTypes.elementType || PropTypes.any,
     render: PropTypes.func,
     children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
-    className: PropTypes.string,
-    when: PropTypes.oneOf(['forward', 'back', 'always']),
-    behavior: PropTypes.func
-  }
-
-  static defaultProps = {
-    when: 'forward'
+    computedMatchForCacheRoute: PropTypes.object
   }
 
   render() {
@@ -33,7 +28,10 @@ export default class CacheRoute extends Component {
       when,
       behavior,
       cacheKey,
-      ...__rest__props
+      unmount,
+      saveScrollPosition,
+      computedMatchForCacheRoute,
+      ...__restProps
     } = this.props
 
     /**
@@ -46,22 +44,31 @@ export default class CacheRoute extends Component {
       render = () => children
     }
 
+    if (computedMatchForCacheRoute) {
+      __restProps.computedMatch = computedMatchForCacheRoute
+    }
+
     return (
       /**
        * Only children prop of Route can help to control rendering behavior
        * 只有 Router 的 children 属性有助于主动控制渲染行为
        */
-      <Route
-        {...__rest__props}
-        children={props => (
+      <Route {...__restProps}>
+        {props => (
           <CacheComponent
             {...props}
-            {...{ when, className, behavior, cacheKey }}
+            {...{
+              when,
+              className,
+              behavior,
+              cacheKey,
+              unmount,
+              saveScrollPosition
+            }}
           >
             {cacheLifecycles => (
-              <Updatable
-                match={props.match}
-                render={() => {
+              <Updatable when={isMatch(props.match)}>
+                {() => {
                   Object.assign(props, { cacheLifecycles })
 
                   if (component) {
@@ -70,11 +77,11 @@ export default class CacheRoute extends Component {
 
                   return run(render || children, undefined, props)
                 }}
-              />
+              </Updatable>
             )}
           </CacheComponent>
         )}
-      />
+      </Route>
     )
   }
 }

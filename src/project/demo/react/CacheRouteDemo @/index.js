@@ -1,7 +1,7 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { HashRouter, Link } from 'react-router-dom'
-import CacheRoute, { CacheSwitch } from '@CacheRoute'
+import { HashRouter, Link, Route } from 'react-router-dom'
+import CacheRoute, { CacheSwitch } from 'react-router-cache-route'
 
 window.React = React
 console.log('React Version', React.version)
@@ -83,11 +83,21 @@ const Item = ({ history }) => (
   </div>
 )
 
+const Test = ({ keepAlive, ...props }) => <CacheRoute {...props} />
+
 const App = () => (
   <HashRouter>
-    <CacheSwitch>
-      <CacheRoute exact path="/" component={List} when="always" />
-      <CacheRoute exact path="/item" component={Item} />
+    <CacheSwitch which={element => element.props.keepAlive}>
+      <Test
+        exact
+        path="/"
+        component={List}
+        when="always"
+        keepAlive
+        // unmount
+        // saveScrollPosition
+      />
+      <Route exact path="/item" component={Item} />
     </CacheSwitch>
   </HashRouter>
 )
