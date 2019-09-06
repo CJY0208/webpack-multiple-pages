@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { run } from '@helpers'
+import { get, run, isArray } from '@helpers'
 
 import { expandKeepAlive } from './withAliveStore'
 import {
@@ -9,6 +9,14 @@ import {
   withLifecycles
 } from './lifecycles'
 import saveScrollPos from '../helpers/saveScrollPos'
+import { getTypeId } from './getKeyByFiberNode'
+
+const getChildType = child => getTypeId(get(child, 'type.$$typeof', child.type))
+const getChildrenTypes = children =>
+  (isArray(children)
+    ? children.map(getChildType)
+    : [getChildType(children)]
+  ).join('|')
 
 @expandKeepAlive
 @withLifecycles
@@ -48,6 +56,7 @@ export default class KeepAlive extends Component {
       // 将 AliveStoreProvider 中的渲染内容通过 dom 操作置回当前 KeepAlive
       this.parentNode = this.placeholder.parentNode
       cache.nodes.forEach(node => {
+        // this.placeholder.appendChild(node)
         this.parentNode.insertBefore(node, this.placeholder)
       })
       this.parentNode.removeChild(this.placeholder)
@@ -65,6 +74,26 @@ export default class KeepAlive extends Component {
       cache.inited = true
     }
   }
+
+  async componentDidUpdate(prevProps) {
+    const { keep, id, children, ctx$$, name } = this.props
+    console.log(children)
+    if (getChildrenTypes() !== getChildrenTypes(children)) {
+      console.log(children)
+      // 将 children 渲染至 AliveStoreProvider 中
+      // const cache = await keep(id, {
+      //   name,
+      //   children,
+      //   ctx$$
+      // })
+    }
+  }
+
+  // getIn = () => {
+
+  // }
+
+  // getOut = () => {}
 
   componentWillUnmount() {
     const { id, getCache } = this.props
@@ -91,6 +120,9 @@ export default class KeepAlive extends Component {
   render() {
     return (
       <div
+        onClick={e => {
+          console.log(e)
+        }}
         ref={node => {
           this.placeholder = node
         }}

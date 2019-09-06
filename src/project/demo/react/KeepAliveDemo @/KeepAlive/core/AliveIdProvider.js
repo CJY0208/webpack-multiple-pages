@@ -10,7 +10,7 @@ export default class AliveIdProvider extends Component {
   id = null
   genId = () => {
     this.id = getKeyByFiberNode(this._reactInternalFiber)
-
+    // console.log(this.id)
     return this.id
   }
 

@@ -28,18 +28,13 @@ export default class Keeper extends Component {
   }
 
   [LIFECYCLE_ACTIVATE]() {
-    const listeners = [...this.listeners]
-
-    listeners
-      // .filter(([, { isCached }]) => !isCached())
-      .forEach(([, listener]) => run(listener, [LIFECYCLE_ACTIVATE]))
+    this.listeners.forEach(listener => run(listener, [LIFECYCLE_ACTIVATE]))
   }
 
   [LIFECYCLE_UNACTIVATE]() {
     const listeners = [...this.listeners]
 
     listeners
-      // .filter(([, { isCached }]) => !isCached())
       .reverse()
       .forEach(([, listener]) => run(listener, [LIFECYCLE_UNACTIVATE]))
   }

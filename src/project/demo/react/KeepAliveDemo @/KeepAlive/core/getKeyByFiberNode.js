@@ -6,7 +6,7 @@ const typeIdMap = new Map()
 window.typeIdMap = typeIdMap
 
 // 对每种 NodeType 做编号处理
-const getNodeTypeId = type => {
+export const getTypeId = type => {
   let typeId = typeIdMap.get(type)
 
   if (!typeId) {
@@ -21,13 +21,14 @@ const genRenderPath = node =>
   node.return ? [node, ...genRenderPath(node.return)] : [node]
 
 // 使用节点下标或其 key 作为 Y 坐标
-const getNodeId = fiberNode => fiberNode.key || fiberNode.index
+const getNodeId = fiberNode =>
+  get(fiberNode, 'pendingProps.data-KA') || fiberNode.key || fiberNode.index
 
 // 根据 X,Y 坐标生成 Key
 const getKeyByCoord = nodes =>
   nodes
     .map(node => {
-      const x = getNodeTypeId(get(node, 'type.$$typeof', node.type))
+      const x = getTypeId(get(node, 'type.$$typeof', node.type))
       const y = getNodeId(node)
 
       return `${x},${y}`

@@ -26,10 +26,10 @@ function Test2({ injectKeepAliveCycles }) {
 
   useEffect(() => {
     // console.log('ref', ref)
-    // console.log('Test2: didMount effect', injectKeepAliveCycles)
+    console.log('Test2: didMount effect', injectKeepAliveCycles)
 
     return () => {
-      // console.log('Test2: willUnmount effect')
+      console.log('Test2: willUnmount effect')
     }
   }, [])
 
@@ -45,21 +45,21 @@ function Test2({ injectKeepAliveCycles }) {
 // @withLifecycles
 class Deep extends Component {
   componentDidMount() {
-    // console.log('Deep: componentDidMount')
+    console.log('Deep: componentDidMount')
   }
 
   componentWillUnmount() {
-    // console.log('Deep: componentWillUnmount')
+    console.log('Deep: componentWillUnmount')
   }
 
   componentDidActivate() {
-    // console.log('Deep: componentDidActivate')
-    // console.log(this)
+    console.log('Deep: componentDidActivate')
+    console.log(this)
   }
 
   componentWillUnactivate() {
-    // console.log('Deep: componentWillUnactivate')
-    // console.log(this)
+    console.log('Deep: componentWillUnactivate')
+    console.log(this)
   }
 
   render() {
@@ -85,19 +85,19 @@ class DeepDeep extends Component {
   }
 
   componentDidMount() {
-    // console.log('DeepDeep: componentDidMount')
+    console.log('DeepDeep: componentDidMount')
   }
 
   componentWillUnmount() {
-    // console.log('DeepDeep: componentWillUnmount')
+    console.log('DeepDeep: componentWillUnmount')
   }
 
   componentDidActivate() {
-    // console.log('DeepDeep: componentDidActivate')
+    console.log('DeepDeep: componentDidActivate')
   }
 
   componentWillUnactivate() {
-    // console.log('DeepDeep: componentWillUnactivate')
+    console.log('DeepDeep: componentWillUnactivate')
   }
 
   render() {
@@ -124,19 +124,19 @@ class Test extends Component {
   }
 
   componentDidMount() {
-    // console.log('Test: componentDidMount')
+    console.log('Test: componentDidMount')
   }
 
   componentWillUnmount() {
-    // console.log('Test: componentWillUnmount')
+    console.log('Test: componentWillUnmount')
   }
 
   componentDidActivate() {
-    // console.log('Test: componentDidActivate')
+    console.log('Test: componentDidActivate')
   }
 
   componentWillUnactivate() {
-    // console.log('Test: componentWillUnactivate')
+    console.log('Test: componentWillUnactivate')
   }
 
   render() {
@@ -155,8 +155,8 @@ class Test extends Component {
           <button onClick={() => setCount(count + 1)}>add</button>
         </div>
         <div>contextCount: {contextCount}</div>
-        <button onClick={toggleDeep}>toggle Deep</button>
-        {showDeep && <Deep />}
+        {/* <button onClick={toggleDeep}>toggle Deep</button>
+        {showDeep && <Deep />} */}
       </div>
     )
   }
@@ -164,10 +164,10 @@ class Test extends Component {
 
 function Test3() {
   useEffect(() => {
-    // console.log('Test3: didMount')
+    console.log('Test3: didMount')
 
     return () => {
-      // console.log('Test3: willUnmount')
+      console.log('Test3: willUnmount')
     }
   }, [])
   return <div>Test3</div>
@@ -179,22 +179,50 @@ function Main() {
   const [showTest2, setShowTest2] = useState(true)
   const { drop, clear, getCachingNodes } = useAliveStore()
 
+  useEffect(() => {
+    // setInterval(() => {
+    //   setShowTest(Math.random() > 0.5)
+    // }, 1000)
+  }, [])
+
   return (
     <Provider value={{ count }}>
       <div>
         count: {count}
         <button onClick={() => setCount(count + 1)}>Main add</button>
       </div>
-      <div>
+      <div
+        onClick={() => {
+          console.log('Parent Click')
+        }}
+      >
+        {!showTest && <div>random1</div>}
         {showTest && (
-          <KeepAlive name="Test" key="Test">
-            <Test />
-            <Consumer>{contextValue => <Test {...contextValue} />}</Consumer>
-          </KeepAlive>
+          <Consumer>
+            {contextValue => (
+              <KeepAlive name="Test" key="Test">
+                {/* <div>random2</div> */}
+                <Test {...contextValue} />
+                {/* <Test /> */}
+                {/* <Test data-KA={'KA1'} /> */}
+                {/* <Test data-KA={'KA2'} /> */}
+                {/* <Consumer>{contextValue => <Test {...contextValue} />}</Consumer> */}
+              </KeepAlive>
+            )}
+          </Consumer>
         )}
 
-        <button onClick={() => setShowTest(!showTest)}>toggle</button>
-        <div>
+        {!showTest && <div>random3</div>}
+
+        <button
+          onClick={() => {
+            console.log(123)
+            setShowTest(!showTest)
+          }}
+        >
+          toggle
+        </button>
+        {/* <div>
           caching nodes name: {getCachingNodes().map(node => node.name)}
         </div>
         <button
@@ -206,7 +234,7 @@ function Main() {
         </button>
         <div>
           <button onClick={clear}>clear</button>
-        </div>
+        </div> */}
       </div>
       <div>
         {/* {showTest2 ? (
