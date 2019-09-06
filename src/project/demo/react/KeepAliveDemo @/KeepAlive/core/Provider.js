@@ -74,15 +74,13 @@ export default class KeepAliveProvider extends Component {
         }}
       >
         {this.props.children}
-        <div>
-          {Object.values(this.state)
-            .filter(info => info)
-            .map(({ children, ...props }) => (
-              <Keeper key={props.id} store={this.store} {...props}>
-                {children}
-              </Keeper>
-            ))}
-        </div>
+        {Object.values(this.state)
+          .filter(info => info)
+          .map(({ children, ...props }) => (
+            <Keeper key={props.id} store={this.store} {...props}>
+              {children}
+            </Keeper>
+          ))}
       </AliveStoreProvider>
     )
   }

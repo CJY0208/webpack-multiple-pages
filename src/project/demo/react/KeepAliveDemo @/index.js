@@ -22,14 +22,14 @@ function Test2({ injectKeepAliveCycles }) {
   const [count, setCount] = useState(0)
   const ref = useRef()
 
-  console.log('ref', ref)
+  // console.log('ref', ref)
 
   useEffect(() => {
-    console.log('ref', ref)
-    console.log('Test2: didMount effect', injectKeepAliveCycles)
+    // console.log('ref', ref)
+    // console.log('Test2: didMount effect', injectKeepAliveCycles)
 
     return () => {
-      console.log('Test2: willUnmount effect')
+      // console.log('Test2: willUnmount effect')
     }
   }, [])
 
@@ -45,21 +45,21 @@ function Test2({ injectKeepAliveCycles }) {
 // @withLifecycles
 class Deep extends Component {
   componentDidMount() {
-    console.log('Deep: componentDidMount')
+    // console.log('Deep: componentDidMount')
   }
 
   componentWillUnmount() {
-    console.log('Deep: componentWillUnmount')
+    // console.log('Deep: componentWillUnmount')
   }
 
   componentDidActivate() {
-    console.log('Deep: componentDidActivate')
-    console.log(this)
+    // console.log('Deep: componentDidActivate')
+    // console.log(this)
   }
 
   componentWillUnactivate() {
-    console.log('Deep: componentWillUnactivate')
-    console.log(this)
+    // console.log('Deep: componentWillUnactivate')
+    // console.log(this)
   }
 
   render() {
@@ -85,19 +85,19 @@ class DeepDeep extends Component {
   }
 
   componentDidMount() {
-    console.log('DeepDeep: componentDidMount')
+    // console.log('DeepDeep: componentDidMount')
   }
 
   componentWillUnmount() {
-    console.log('DeepDeep: componentWillUnmount')
+    // console.log('DeepDeep: componentWillUnmount')
   }
 
   componentDidActivate() {
-    console.log('DeepDeep: componentDidActivate')
+    // console.log('DeepDeep: componentDidActivate')
   }
 
   componentWillUnactivate() {
-    console.log('DeepDeep: componentWillUnactivate')
+    // console.log('DeepDeep: componentWillUnactivate')
   }
 
   render() {
@@ -124,19 +124,19 @@ class Test extends Component {
   }
 
   componentDidMount() {
-    console.log('Test: componentDidMount')
+    // console.log('Test: componentDidMount')
   }
 
   componentWillUnmount() {
-    console.log('Test: componentWillUnmount')
+    // console.log('Test: componentWillUnmount')
   }
 
   componentDidActivate() {
-    console.log('Test: componentDidActivate')
+    // console.log('Test: componentDidActivate')
   }
 
   componentWillUnactivate() {
-    console.log('Test: componentWillUnactivate')
+    // console.log('Test: componentWillUnactivate')
   }
 
   render() {
@@ -164,10 +164,10 @@ class Test extends Component {
 
 function Test3() {
   useEffect(() => {
-    console.log('Test3: didMount')
+    // console.log('Test3: didMount')
 
     return () => {
-      console.log('Test3: willUnmount')
+      // console.log('Test3: willUnmount')
     }
   }, [])
   return <div>Test3</div>
@@ -187,7 +187,7 @@ function Main() {
       </div>
       <div>
         {showTest && (
-          <KeepAlive name="Test">
+          <KeepAlive name="Test" key="Test">
             <Test />
             <Consumer>{contextValue => <Test {...contextValue} />}</Consumer>
           </KeepAlive>

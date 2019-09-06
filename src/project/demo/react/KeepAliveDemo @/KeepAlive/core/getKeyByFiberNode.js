@@ -1,4 +1,4 @@
-import { get } from '@helpers'
+import { get, isObject } from '@helpers'
 
 let uuid = 1
 const typeIdMap = new Map()
@@ -16,23 +16,19 @@ const getNodeTypeId = type => {
 
   return typeId
 }
-
 // 获取节点的渲染路径，作为节点的 X 坐标
-const genRenderPath = (fiberNode, res = []) =>
-  fiberNode.return
-    ? genRenderPath(fiberNode.return, [fiberNode.return, ...res])
-    : res
+const genRenderPath = node =>
+  node.return ? [node, ...genRenderPath(node.return)] : [node]
 
-// 计算元素的剩余同级节点个数，作为节点的 Y 坐标
-const getSiblingCount = (fiberNode, res = 0) =>
-  fiberNode.sibling ? getSiblingCount(fiberNode.sibling, res + 1) : res
+// 使用节点下标或其 key 作为 Y 坐标
+const getNodeId = fiberNode => fiberNode.key || fiberNode.index
 
 // 根据 X,Y 坐标生成 Key
 const getKeyByCoord = nodes =>
   nodes
     .map(node => {
       const x = getNodeTypeId(get(node, 'type.$$typeof', node.type))
-      const y = getSiblingCount(node)
+      const y = getNodeId(node)
 
       return `${x},${y}`
     })
