@@ -203,7 +203,7 @@ const Main = React.memo(function Main() {
   const { drop, clear, getCachingNodes } = useAliveController()
 
   useEffect(() => {
-    console.log(getCachingNodes())
+    // console.log(getCachingNodes())
     // setInterval(() => {
     //   setShowTest(Math.random() > 0.5)
     // }, 1000)
@@ -212,12 +212,11 @@ const Main = React.memo(function Main() {
 
   return (
     <Provider value={{ count }}>
-      <div data-ka="div-1">
+      <div>
         count: {count}
         <button onClick={() => setCount(count + 1)}>Main add</button>
       </div>
       <div
-        data-ka="div-2"
         onClick={() => {
           console.log('Parent Click')
         }}
@@ -232,7 +231,7 @@ const Main = React.memo(function Main() {
             {!showTest && <div>random2</div>}
             {/* <Test {...contextValue} /> */}
             <div>count in keep alive: {count}</div>
-            <Test />
+            <Consumer>{contextValue => <Test {...contextValue} />}</Consumer>
             {/* <Test data-KA={'KA1'} /> */}
             {/* <Consumer>{contextValue => <Test data-KA={'KA2'} {...contextValue} />}</Consumer> */}
             <Consumer>{contextValue => <Test {...contextValue} />}</Consumer>

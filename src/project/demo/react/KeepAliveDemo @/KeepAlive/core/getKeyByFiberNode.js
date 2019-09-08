@@ -22,7 +22,7 @@ const genRenderPath = node =>
 
 // 使用节点下标或其 key 作为 Y 坐标
 const getNodeId = fiberNode =>
-  `${get(fiberNode, 'pendingProps.data-ka', fiberNode.index)}:${fiberNode.key ||
+  `${get(fiberNode, 'pendingProps._ka', fiberNode.index)}:${fiberNode.key ||
     ''}`
 
 // 根据 X,Y 坐标生成 Key

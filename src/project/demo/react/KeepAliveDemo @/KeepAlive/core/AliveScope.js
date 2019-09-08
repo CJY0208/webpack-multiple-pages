@@ -95,11 +95,13 @@ export default class AliveScope extends Component {
     return (
       <AliveScopeProvider value={this.helpers}>
         {children}
-        {[...this.nodes.values()].map(({ children, ...props }) => (
-          <Keeper key={props.id} {...props} store={this.store}>
-            {children}
-          </Keeper>
-        ))}
+        <div>
+          {[...this.nodes.values()].map(({ children, ...props }) => (
+            <Keeper key={props.id} {...props} store={this.store}>
+              {children}
+            </Keeper>
+          ))}
+        </div>
       </AliveScopeProvider>
     )
   }

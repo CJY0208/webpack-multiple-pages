@@ -205,7 +205,7 @@ class KeepAlive extends Component {
 
     return (
       <div
-        data-ka="keep-alive-placeholder"
+        key="keep-alive-placeholder"
         ref={node => {
           this.placeholder = node
         }}
@@ -217,8 +217,8 @@ class KeepAlive extends Component {
 // 兼容 SSR 服务端渲染
 function SSRKeepAlive({ children }) {
   return (
-    <div data-ka="keep-alive-placeholder">
-      <div data-ka="keeper-container">{children}</div>
+    <div key="keep-alive-placeholder">
+      <div key="keeper-container">{children}</div>
     </div>
   )
 }
