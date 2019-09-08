@@ -290,62 +290,6 @@ const Main = React.memo(function Main() {
   )
 })
 
-// const TestChildren = React.memo(function TestChildren({ children }) {
-//   // const [children, updateChildren] = useState(propChildren)
-
-//   // useEffect(() => {
-//   //   console.log('children update')
-//   //   updateChildren(propChildren)
-//   // }, [propChildren])
-
-//   useEffect(() => {
-//     console.log('update')
-//   })
-
-//   return children
-// })
-
-class TestChildren extends React.PureComponent {
-  componentDidUpdate() {
-    console.log('update')
-  }
-
-  render() {
-    return (
-      <Consumer>
-        {setCount => (
-          <button onClick={() => setCount(count => count + 1)}>add</button>
-        )}
-      </Consumer>
-    )
-  }
-}
-
-function TestMainProvider({ children }) {
-  const [count, setCount] = useState(0)
-
-  return (
-    <Provider value={setCount}>
-      {children}
-      {count}
-    </Provider>
-  )
-}
-
-function TestMain() {
-  // const [count, setCount] = useState(0)
-
-  // const getCount = () => count
-
-  // const { current: renderContent } = useRef(() => getCount())
-
-  return (
-    <TestMainProvider>
-      <TestChildren />
-    </TestMainProvider>
-  )
-}
-
 function App() {
   const [count, setCount] = useState(0)
   console.log('render App')
