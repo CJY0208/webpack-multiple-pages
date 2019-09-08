@@ -8,6 +8,8 @@ export const hot = module => Component =>
     ? require('react-hot-loader').hot(module)(Component)
     : Component
 
+export const nextTick = func => Promise.resolve().then(func)
+
 export const pipe = (...handlers) => arg =>
   handlers.reduce((res, handler) => run(handler, undefined, res), arg)
 

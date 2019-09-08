@@ -1,17 +1,17 @@
-import KeepAliveProvider from './core/Provider'
-import { withLifecycles, useActivate, useUnactivate } from './core/lifecycles'
+import AliveScope from './core/AliveScope'
+import { withActivation, useActivate, useUnactivate } from './core/lifecycles'
 import KeepAlive from './core/KeepAlive'
 import { fixContext, createContext } from './core/ContextBridge'
-import withAliveStore, { useAliveStore } from './core/withAliveStore'
+import withAliveScope, { useAliveController } from './core/withAliveScope'
 
 export default KeepAlive
 export {
-  KeepAliveProvider,
-  withLifecycles,
+  AliveScope,
+  withActivation,
   fixContext,
   useActivate,
   useUnactivate,
   createContext,
-  withAliveStore,
-  useAliveStore
+  withAliveScope,
+  useAliveController
 }

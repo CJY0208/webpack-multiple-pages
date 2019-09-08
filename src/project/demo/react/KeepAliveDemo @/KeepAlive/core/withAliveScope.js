@@ -5,25 +5,20 @@ import { isFunction, isString } from '@helpers'
 
 import { ConsumerBridge } from './ContextBridge'
 import AliveIdProvider from './AliveIdProvider'
-import { AliveStoreConsumer, aliveStoreContext } from './context'
+import { AliveScopeConsumer, aliveScopeContext } from './context'
 
-// 兼容不同 parent 下相同 child 的情景，例如
-// Test1 下的 Deep 与 Test2 下的 Deep，若不做处理，两者争抢 Deep 位置时会出现问题
-// 上述情景将 id 分配为 Test1/Deep 与 Test2/Deep
-const genId = (parentId, currentId) =>
-  isString(parentId) ? [parentId, currentId].join('/') : currentId
 
 export const expandKeepAlive = KeepAlive => {
   const renderContent = ({ id, helpers, props }) => (
     <ConsumerBridge id={id}>
       {ctxValue => (
-        <KeepAlive {...props} id={id} {...helpers} ctx$$={ctxValue} />
+        <KeepAlive {...props} id={id} __aliveScopeHelpers={helpers} ctx$$={ctxValue} />
       )}
     </ConsumerBridge>
   )
 
   function HookExpand(props) {
-    const helpers = useContext(aliveStoreContext)
+    const helpers = useContext(aliveScopeContext)
 
     return (
       <AliveIdProvider>
@@ -36,9 +31,9 @@ export const expandKeepAlive = KeepAlive => {
     return (
       <AliveIdProvider>
         {id => (
-          <AliveStoreConsumer>
+          <AliveScopeConsumer>
             {helpers => renderContent({ id, helpers, props })}
-          </AliveStoreConsumer>
+          </AliveScopeConsumer>
         )}
       </AliveIdProvider>
     )
@@ -47,7 +42,7 @@ export const expandKeepAlive = KeepAlive => {
   return isFunction(useContext) ? HookExpand : WithExpand
 }
 
-const withAliveStore = WrappedComponent => {
+const withAliveScope = WrappedComponent => {
   const renderContent = ({
     drop,
     clear,
@@ -63,7 +58,7 @@ const withAliveStore = WrappedComponent => {
   )
 
   function HookStore({ forwardedRef, ...props }) {
-    const { drop, clear, getCachingNodes } = useContext(aliveStoreContext) || {}
+    const { drop, clear, getCachingNodes } = useContext(aliveScopeContext) || {}
 
     return renderContent({
       drop,
@@ -76,7 +71,7 @@ const withAliveStore = WrappedComponent => {
 
   function WithStore({ forwardedRef, ...props }) {
     return (
-      <AliveStoreConsumer>
+      <AliveScopeConsumer>
         {({ drop, clear, getCachingNodes } = {}) =>
           renderContent({
             drop,
@@ -86,29 +81,29 @@ const withAliveStore = WrappedComponent => {
             forwardedRef
           })
         }
-      </AliveStoreConsumer>
+      </AliveScopeConsumer>
     )
   }
 
-  const HOCWithAliveStore = isFunction(useContext) ? HookStore : WithStore
+  const HOCWithAliveScope = isFunction(useContext) ? HookStore : WithStore
 
   if (isFunction(forwardRef)) {
     const ForwardedRefHOC = forwardRef((props, ref) => (
-      <HOCWithAliveStore {...props} forwardedRef={ref} />
+      <HOCWithAliveScope {...props} forwardedRef={ref} />
     ))
 
     return hoistStatics(ForwardedRefHOC, WrappedComponent)
   } else {
-    return hoistStatics(HOCWithAliveStore, WrappedComponent)
+    return hoistStatics(HOCWithAliveScope, WrappedComponent)
   }
 }
 
-export const useAliveStore = () => {
+export const useAliveController = () => {
   if (!isFunction(useContext)) {
     return {}
   }
 
-  const ctxValue = useContext(aliveStoreContext)
+  const ctxValue = useContext(aliveScopeContext)
 
   if (!ctxValue) {
     return {}
@@ -118,4 +113,4 @@ export const useAliveStore = () => {
   return { drop, clear, getCachingNodes }
 }
 
-export default withAliveStore
+export default withAliveScope

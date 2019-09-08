@@ -16,6 +16,7 @@
   "env": {
     "production": {
       "plugins": [
+        "./build/utils/babel-plugin-ka-marker",
         ["jsx-css-modules", {
           "styleFileReg": [
             "\\.m\\.(css|scss|sass)$"
@@ -25,7 +26,7 @@
         "syntax-dynamic-import",
         "transform-decorators-legacy",
         "transform-async-functions",
-        "transform-export-extensions",
+        "transform-export-extensions",        
 
         /**
         * babel-plugin-import 实现 antd-mobile 按需加载配置，文档：https://github.com/ant-design/babel-plugin-import
@@ -46,6 +47,7 @@
     },
     "development": {
       "plugins": [
+        "./build/utils/babel-plugin-ka-marker",
         ["jsx-css-modules", {
           "styleFileReg": [
             "\\.m\\.(css|scss|sass)$"

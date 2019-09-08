@@ -3,14 +3,14 @@ import { render } from 'react-dom'
 import { HashRouter, Link, Route, Switch } from 'react-router-dom'
 
 import KeepAlive, {
-  KeepAliveProvider,
-  withLifecycles,
+  AliveScope,
+  withActivation,
   useActivate,
   useUnactivate
 } from '../KeepAlive'
 import './style.scss'
 
-@withLifecycles
+@withActivation
 class Test extends Component {
   state = {
     count: 0
@@ -154,7 +154,7 @@ const Item = ({ history }) => (
 
 const RouterApp = () => (
   <HashRouter>
-    <KeepAliveProvider>
+    <AliveScope>
       <Switch>
         <Route
           exact
@@ -168,7 +168,7 @@ const RouterApp = () => (
         />
         <Route exact path="/item" component={Item} />
       </Switch>
-    </KeepAliveProvider>
+    </AliveScope>
   </HashRouter>
 )
 

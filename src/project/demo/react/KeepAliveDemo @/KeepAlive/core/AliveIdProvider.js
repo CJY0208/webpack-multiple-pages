@@ -4,13 +4,13 @@ import { run } from '@helpers'
 
 import getKeyByFiberNode from './getKeyByFiberNode'
 
-const nextTick = func => Promise.resolve().then(func)
+// const useActivation = func => Promise.resolve().then(func)
 
+// 根据 FiberNode 所处位置来确定 KeepAlive ID
 export default class AliveIdProvider extends Component {
   id = null
   genId = () => {
     this.id = getKeyByFiberNode(this._reactInternalFiber)
-    // console.log(this.id)
     return this.id
   }
 

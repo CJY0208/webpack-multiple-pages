@@ -7,14 +7,14 @@ import React, {
 } from 'react'
 import hoistStatics from 'hoist-non-react-statics'
 
-import { get, run, isObject, isFunction, isUndefined } from '@helpers'
+import { get, run, nextTick, isObject, isFunction, isUndefined } from '@helpers'
 
 import { AliveNodeConsumer, aliveNodeContext } from './context'
 
 export const LIFECYCLE_ACTIVATE = 'componentDidActivate'
 export const LIFECYCLE_UNACTIVATE = 'componentWillUnactivate'
 
-export const withLifecycles = WrappedComponent => {
+export const withActivation = WrappedComponent => {
   class HOC extends Component {
     drop = null
 
@@ -59,6 +59,19 @@ export const withLifecycles = WrappedComponent => {
     }
   }
 
+  // 由于 KeepAlive 内组件渲染与实际内容落后一个节拍
+  // 将导致真实节点的 componentDidMount 无法及时获取到 KeepAlive 中内容的 ref 值
+  // 此处对使用了 withActivation HOC 的组件 componentDidMount 做 nextTick 延时处理
+  // 修复上述问题
+
+  if (isFunction(WrappedComponent.prototype.componentDidMount)) {
+    WrappedComponent.prototype._componentDidMount =
+      WrappedComponent.prototype.componentDidMount
+    WrappedComponent.prototype.componentDidMount = function componentDidMount() {
+      nextTick(() => WrappedComponent.prototype._componentDidMount.call(this))
+    }
+  }
+
   if (isFunction(forwardRef)) {
     const ForwardedRefHOC = forwardRef((props, ref) => (
       <HOC {...props} forwardedRef={ref} />
@@ -70,7 +83,7 @@ export const withLifecycles = WrappedComponent => {
   }
 }
 
-const useLifecycle = (funcName, func) => {
+const useActivation = (funcName, func) => {
   // 兼容性判断
   if ([useRef, useContext, useEffect].some(fn => !isFunction(fn))) {
     return
@@ -94,5 +107,5 @@ const useLifecycle = (funcName, func) => {
   }, [])
 }
 
-export const useActivate = useLifecycle.bind(null, LIFECYCLE_ACTIVATE)
-export const useUnactivate = useLifecycle.bind(null, LIFECYCLE_UNACTIVATE)
+export const useActivate = useActivation.bind(null, LIFECYCLE_ACTIVATE)
+export const useUnactivate = useActivation.bind(null, LIFECYCLE_UNACTIVATE)

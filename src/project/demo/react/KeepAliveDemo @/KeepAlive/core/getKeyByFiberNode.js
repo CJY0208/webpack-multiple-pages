@@ -10,7 +10,7 @@ export const getTypeId = type => {
   let typeId = typeIdMap.get(type)
 
   if (!typeId) {
-    typeId = ++uuid
+    typeId = (++uuid).toString(32)
     typeIdMap.set(type, typeId)
   }
 
@@ -22,7 +22,8 @@ const genRenderPath = node =>
 
 // 使用节点下标或其 key 作为 Y 坐标
 const getNodeId = fiberNode =>
-  get(fiberNode, 'pendingProps.data-KA') || fiberNode.key || fiberNode.index
+  `${get(fiberNode, 'pendingProps.data-ka', fiberNode.index)}:${fiberNode.key ||
+    ''}`
 
 // 根据 X,Y 坐标生成 Key
 const getKeyByCoord = nodes =>
@@ -35,6 +36,10 @@ const getKeyByCoord = nodes =>
     })
     .join('|')
 
-const getKeyByFiberNode = fiberNode => getKeyByCoord(genRenderPath(fiberNode))
+const getKeyByFiberNode = fiberNode => {
+  const key = getKeyByCoord(genRenderPath(fiberNode))
+
+  return getTypeId(key)
+}
 
 export default getKeyByFiberNode
