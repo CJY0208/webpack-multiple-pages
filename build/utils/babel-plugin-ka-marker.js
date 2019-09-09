@@ -64,7 +64,22 @@ module.exports = function({ types: t, template }) {
             return
           }
 
+          // 排除 key 为以下的项，保证 SSR 时两端结果一致
+          const keyAttr = path.node.attributes.find(
+            attr => attr.type === 'JSXAttribute' && attr.name.name === 'key'
+          )
+          if (
+            keyAttr &&
+            keyAttr.value &&
+            ['keep-alive-placeholder', 'keeper-container'].includes(
+              keyAttr.value.value
+            )
+          ) {
+            return
+          }
+
           // 不允许自定义 _ka 属性
+          // TODO: 使用 key 属性替换，需考虑不覆盖 array 结构中的 key 属性，array 结构中保持 _ka 属性
           const attributes = path.node.attributes.filter(attr => {
             try {
               return attr.type !== 'JSXAttribute' || attr.name.name !== '_ka'

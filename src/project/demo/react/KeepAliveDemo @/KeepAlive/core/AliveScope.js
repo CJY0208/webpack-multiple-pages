@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 
-import { get, run, nextTick, isRegExp } from '@helpers'
+import { get, run, nextTick, flatten, isRegExp } from '@helpers'
 
 import { AliveScopeProvider } from './context'
 import Keeper from './Keeper'
@@ -36,18 +36,29 @@ export default class AliveScope extends Component {
       })
     })
 
+  getCachingNodesByName = name =>
+    this.getCachingNodes().filter(
+      node => (isRegExp(name) ? name.test(node.name) : node.name === name)
+    )
+
   drop = name =>
+    this.dropNodes(this.getCachingNodesByName(name).map(node => node.id))
+
+  dropScope = name =>
     this.dropNodes(
-      this.getCachingNodes().filter(
-        node => (isRegExp(name) ? name.test(node.name) : node.name === name)
+      flatten(
+        this.getCachingNodesByName(name).map(({ id }) => [
+          id,
+          ...get(this.getCache(id), 'aliveNodesId', [])
+        ])
       )
     )
 
-  dropNodes = nodes =>
+  dropNodes = nodesId =>
     new Promise(resolve => {
-      const willDropIds = nodes
-        .filter(node => {
-          const cache = this.store.get(node.id)
+      const willDropIds = nodesId
+        .filter(id => {
+          const cache = this.store.get(id)
           const canDrop = get(cache, 'cached')
 
           if (canDrop) {
@@ -57,8 +68,7 @@ export default class AliveScope extends Component {
 
           return canDrop
         })
-        .map(node => {
-          const { id } = node
+        .map(id => {
           this.nodes.delete(id)
 
           return id
@@ -84,6 +94,7 @@ export default class AliveScope extends Component {
     keep: this.keep,
     update: this.update,
     drop: this.drop,
+    dropScope: this.dropScope,
     clear: this.clear,
     getCache: this.getCache,
     getCachingNodes: this.getCachingNodes

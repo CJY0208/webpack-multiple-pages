@@ -200,7 +200,7 @@ const Main = React.memo(function Main() {
   const [count, setCount] = useState(0)
   const [showTest, setShowTest] = useState(true)
   const [showTest2, setShowTest2] = useState(true)
-  const { drop, clear, getCachingNodes } = useAliveController()
+  const { drop, dropScope, clear, getCachingNodes } = useAliveController()
 
   useEffect(() => {
     // console.log(getCachingNodes())
@@ -226,7 +226,7 @@ const Main = React.memo(function Main() {
         {/* <Consumer>
           {contextValue => ( */}
         {showTest2 && (
-          <KeepAlive>
+          <KeepAlive name="Test">
             {/* <div>random2</div> */}
             {!showTest && <div>random2</div>}
             {/* <Test {...contextValue} /> */}
@@ -274,6 +274,13 @@ const Main = React.memo(function Main() {
         <button onClick={() => setShowTest2(!showTest2)}>toggle 2</button>
         <br />
         <div>caching node count: {getCachingNodes().length}</div>
+        <button
+          onClick={() => {
+            dropScope('Test')
+          }}
+        >
+          drop Test scope
+        </button>
         <button
           onClick={() => {
             drop('Test')

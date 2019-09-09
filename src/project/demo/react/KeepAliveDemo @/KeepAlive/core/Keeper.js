@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { get, run } from '@helpers'
+import { get, run, nextTick } from '@helpers'
 
 import { AliveNodeProvider, AliveNodeConsumer } from './context'
 import { ProviderBridge } from './ContextBridge'
@@ -20,6 +20,7 @@ export default class Keeper extends Component {
 
     store.set(id, {
       listeners,
+      aliveNodesId: [],
       inited: false,
       cached: false,
       wrapper: node,
@@ -77,6 +78,14 @@ export default class Keeper extends Component {
 
     if (!ref) {
       return () => null
+    }
+
+    if (ref.isKeepAlive) {
+      nextTick(() => {
+        const { id, store } = this.props
+        const cache = store.get(id)
+        cache.aliveNodesId = new Set([...cache.aliveNodesId, ref.id])
+      })
     }
 
     listeners.set(ref, {

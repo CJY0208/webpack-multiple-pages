@@ -7,12 +7,16 @@ import { ConsumerBridge } from './ContextBridge'
 import AliveIdProvider from './AliveIdProvider'
 import { AliveScopeConsumer, aliveScopeContext } from './context'
 
-
 export const expandKeepAlive = KeepAlive => {
   const renderContent = ({ id, helpers, props }) => (
     <ConsumerBridge id={id}>
       {ctxValue => (
-        <KeepAlive {...props} id={id} __aliveScopeHelpers={helpers} ctx$$={ctxValue} />
+        <KeepAlive
+          {...props}
+          id={id}
+          __aliveScopeHelpers={helpers}
+          ctx$$={ctxValue}
+        />
       )}
     </ConsumerBridge>
   )
@@ -43,27 +47,16 @@ export const expandKeepAlive = KeepAlive => {
 }
 
 const withAliveScope = WrappedComponent => {
-  const renderContent = ({
-    drop,
-    clear,
-    getCachingNodes,
-    props,
-    forwardedRef
-  }) => (
-    <WrappedComponent
-      {...props}
-      {...{ drop, clear, getCachingNodes }}
-      ref={forwardedRef}
-    />
+  const renderContent = ({ helpers, props, forwardedRef }) => (
+    <WrappedComponent {...props} {...helpers} ref={forwardedRef} />
   )
 
   function HookStore({ forwardedRef, ...props }) {
-    const { drop, clear, getCachingNodes } = useContext(aliveScopeContext) || {}
+    const { drop, dropScope, clear, getCachingNodes } =
+      useContext(aliveScopeContext) || {}
 
     return renderContent({
-      drop,
-      clear,
-      getCachingNodes,
+      helpers: { drop, dropScope, clear, getCachingNodes },
       props,
       forwardedRef
     })
@@ -72,11 +65,9 @@ const withAliveScope = WrappedComponent => {
   function WithStore({ forwardedRef, ...props }) {
     return (
       <AliveScopeConsumer>
-        {({ drop, clear, getCachingNodes } = {}) =>
+        {({ drop, dropScope, clear, getCachingNodes } = {}) =>
           renderContent({
-            drop,
-            clear,
-            getCachingNodes,
+            helpers: { drop, dropScope, clear, getCachingNodes },
             props,
             forwardedRef
           })
@@ -109,8 +100,8 @@ export const useAliveController = () => {
     return {}
   }
 
-  const { drop, clear, getCachingNodes } = ctxValue
-  return { drop, clear, getCachingNodes }
+  const { drop, dropScope, clear, getCachingNodes } = ctxValue
+  return { drop, dropScope, clear, getCachingNodes }
 }
 
 export default withAliveScope

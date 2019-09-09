@@ -51,8 +51,11 @@ class KeepAlive extends Component {
     return needForceStopUpdate
   }
 
+  id = null // 用作 Keeper 识别 KeepAlive
+  isKeepAlive = true // 用作 Keeper 识别 KeepAlive
   constructor(props) {
     super(props)
+    this.id = props.id
     this.init()
 
     // 继承响应父级 KeepAlive 的生命周期
