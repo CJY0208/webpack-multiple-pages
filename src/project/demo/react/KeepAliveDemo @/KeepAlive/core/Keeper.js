@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { get, run, nextTick } from '@helpers'
+import { get, run, nextTick } from '../helpers'
 
 import { AliveNodeProvider, AliveNodeConsumer } from './context'
 import { ProviderBridge } from './ContextBridge'

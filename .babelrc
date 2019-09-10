@@ -16,7 +16,7 @@
   "env": {
     "production": {
       "plugins": [
-        "./build/utils/babel-plugin-ka-marker",
+        "react-activation/babel",
         ["jsx-css-modules", {
           "styleFileReg": [
             "\\.m\\.(css|scss|sass)$"
@@ -47,7 +47,7 @@
     },
     "development": {
       "plugins": [
-        "./build/utils/babel-plugin-ka-marker",
+        "react-activation/babel",
         ["jsx-css-modules", {
           "styleFileReg": [
             "\\.m\\.(css|scss|sass)$"

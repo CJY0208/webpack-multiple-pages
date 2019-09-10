@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 
-import { get, run, nextTick, flatten, isRegExp } from '@helpers'
+import { get, flatten, isRegExp } from '../helpers'
 
 import { AliveScopeProvider } from './context'
 import Keeper from './Keeper'
@@ -18,7 +18,7 @@ export default class AliveScope extends Component {
         ctx$$
       })
 
-      this.forceUpdate(resolve)
+      // this.forceUpdate(resolve)
     })
   keep = (id, params) =>
     new Promise(resolve => {
@@ -44,15 +44,23 @@ export default class AliveScope extends Component {
   drop = name =>
     this.dropNodes(this.getCachingNodesByName(name).map(node => node.id))
 
-  dropScope = name =>
-    this.dropNodes(
+  dropScope = name => {
+    const getCachingNodesId = id => {
+      const aliveNodesId = get(this.getCache(id), 'aliveNodesId', [])
+
+      if (aliveNodesId.size > 0) {
+        return [id, [...aliveNodesId].map(getCachingNodesId)]
+      }
+
+      return [id, ...aliveNodesId]
+    }
+
+    return this.dropNodes(
       flatten(
-        this.getCachingNodesByName(name).map(({ id }) => [
-          id,
-          ...get(this.getCache(id), 'aliveNodesId', [])
-        ])
+        this.getCachingNodesByName(name).map(({ id }) => getCachingNodesId(id))
       )
     )
+  }
 
   dropNodes = nodesId =>
     new Promise(resolve => {
@@ -84,7 +92,7 @@ export default class AliveScope extends Component {
       })
     })
 
-  clear = () => this.dropNodes(this.getCachingNodes())
+  clear = () => this.dropNodes(this.getCachingNodes().map(({ id }) => id))
 
   getCache = id => this.store.get(id)
   getCachingNodes = () => [...this.nodes.values()]
@@ -103,15 +111,22 @@ export default class AliveScope extends Component {
   render() {
     const { children } = this.props
 
+    console.log('AliveScope render')
+
+    const content = <Fragment>{children}</Fragment>
+
     return (
       <AliveScopeProvider value={this.helpers}>
-        {children}
+        {content}
         <div>
-          {[...this.nodes.values()].map(({ children, ...props }) => (
-            <Keeper key={props.id} {...props} store={this.store}>
-              {children}
-            </Keeper>
-          ))}
+          {
+            (console.log(this.nodes),
+            [...this.nodes.values()].map(({ children, ...props }) => (
+              <Keeper key={props.id} {...props} store={this.store}>
+                {children}
+              </Keeper>
+            )))
+          }
         </div>
       </AliveScopeProvider>
     )

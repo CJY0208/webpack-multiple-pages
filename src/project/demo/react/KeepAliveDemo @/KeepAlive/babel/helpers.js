@@ -1,3 +1,5 @@
+// https://github.com/CJY0208/babel-plugin-tester 开发
+
 const crypto = require('crypto')
 
 function getMap() {
@@ -80,6 +82,7 @@ module.exports = function({ types: t, template }) {
 
           // 不允许自定义 _ka 属性
           // TODO: 使用 key 属性替换，需考虑不覆盖 array 结构中的 key 属性，array 结构中保持 _ka 属性
+          // 可参考：https://github.com/yannickcr/eslint-plugin-react/blob/master/lib/rules/jsx-key.js
           const attributes = path.node.attributes.filter(attr => {
             try {
               return attr.type !== 'JSXAttribute' || attr.name.name !== '_ka'
@@ -112,9 +115,18 @@ module.exports = function({ types: t, template }) {
             'filehash'
           )
 
-          const filehashTemplate = template(`
-              const ${filehashIdentifier.name} = '${hash}';
-            `)()
+          let filehashTemplate
+
+          try {
+            filehashTemplate = template(`const %%filehash%% = %%hashString%%;`)(
+              {
+                filehash: filehashIdentifier,
+                hashString: t.stringLiteral(hash)
+              }
+            )
+          } catch (error) {
+            filehashTemplate = template(`const ${filehashIdentifier.name} = '${hash}';`)()
+          }
 
           const imports = path.node.body.filter(node =>
             t.isImportDeclaration(node)

@@ -112,9 +112,20 @@ module.exports = function({ types: t, template }) {
             'filehash'
           )
 
-          const filehashTemplate = template(`
+          let filehashTemplate
+
+          try {
+            filehashTemplate = template(`const %%filehash%% = %%hashString%%;`)(
+              {
+                filehash: filehashIdentifier,
+                hashString: t.stringLiteral(hash)
+              }
+            )
+          } catch (error) {
+            filehashTemplate = filehashTemplate = template(`
               const ${filehashIdentifier.name} = '${hash}';
             `)()
+          }
 
           const imports = path.node.body.filter(node =>
             t.isImportDeclaration(node)

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { run } from '@helpers'
+import { run } from '../helpers'
 
 import getKeyByFiberNode from './getKeyByFiberNode'
 
