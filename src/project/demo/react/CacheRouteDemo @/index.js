@@ -1,10 +1,17 @@
 import React from 'react'
 import { render } from 'react-dom'
 import { HashRouter, Link, Route } from 'react-router-dom'
-import CacheRoute, { CacheSwitch } from 'react-router-cache-route'
+import CacheRoute, {
+  CacheSwitch,
+  getCachingComponents,
+  dropByCacheKey
+} from 'react-router-cache-route'
 
 window.React = React
 console.log('React Version', React.version)
+
+window.getCachingComponents = getCachingComponents
+window.dropByCacheKey = dropByCacheKey
 
 const List = () => (
   <div
@@ -91,11 +98,12 @@ const App = () => (
       <Test
         exact
         path="/"
+        cacheKey="Test"
         component={List}
         when="always"
         keepAlive
-        // unmount
-        // saveScrollPosition
+        unmount
+        saveScrollPosition
       />
       <Route exact path="/item" component={Item} />
     </CacheSwitch>

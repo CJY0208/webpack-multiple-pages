@@ -8048,10 +8048,10 @@ react-redux@^5.0.7:
     loose-envify "^1.1.0"
     prop-types "^15.6.0"
 
-react-router-cache-route@^1.6.0:
-  version "1.6.0"
-  resolved "https://registry.npmjs.org/react-router-cache-route/-/react-router-cache-route-1.6.0.tgz#72012afa42042022c43e6c1ae0710bd1973cf633"
-  integrity sha512-Qhzp/RkreWSNCP9OeENlk7tk4lp08RNYDN/5RvhtQKCrfXSDcib3cE8w83sWRNWwinEBb105MBvOhfwhmh2goQ==
+react-router-cache-route@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.npmjs.org/react-router-cache-route/-/react-router-cache-route-1.7.0.tgz#001b32b3c328e19b55cfafb0bb472b46b6ca7b6c"
+  integrity sha512-2Bp+DiUFIxaEL6uMUyksP/paigZubKBqOzEiGfsLtSRkObVmK508DilNL+6K/1G45P55uRh3XDwXcIMXVmCJ+A==
 
 react-router-dom@^5.0.1:
   version "5.0.1"
