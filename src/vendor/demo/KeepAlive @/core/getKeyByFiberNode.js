@@ -1,6 +1,5 @@
 import { get, isObject } from '../helpers'
 
-let count = 0
 let uuid = 1
 const typeIdMap = new Map()
 
@@ -33,7 +32,7 @@ const genRenderPath = node => {
   return res
 }
 
-// 使用节点下标或其 key 作为 Y 坐标
+// 使用节点 _ka 属性或下标与其 key 作为 Y 坐标
 const getNodeId = fiberNode =>
   `${get(fiberNode, 'pendingProps._ka', fiberNode.index)}:${fiberNode.key ||
     ''}`

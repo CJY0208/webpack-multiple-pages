@@ -125,7 +125,9 @@ module.exports = function({ types: t, template }) {
               }
             )
           } catch (error) {
-            filehashTemplate = template(`const ${filehashIdentifier.name} = '${hash}';`)()
+            filehashTemplate = template(
+              `const ${filehashIdentifier.name} = '${hash}';`
+            )()
           }
 
           const imports = path.node.body.filter(node =>

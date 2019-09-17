@@ -7,7 +7,7 @@ import KeepAlive, {
   withActivation,
   useActivate,
   useUnactivate
-} from '../KeepAlive'
+} from '@KeepAlive'
 import './style.scss'
 
 @withActivation

@@ -1,6 +1,14 @@
 import React, { Component } from 'react'
 
-import { get, run, globalThis as root, isFunction, debounce } from '../helpers'
+import {
+  get,
+  run,
+  globalThis as root,
+  nextTick,
+  isFunction,
+  isArray,
+  debounce
+} from '../helpers'
 
 import { expandKeepAlive } from './withAliveScope'
 import {
@@ -16,6 +24,14 @@ const getErrorTips = name =>
   }/>  瞬时更新次数过多，可能遇到了更新的死循环，已强制暂停更新
 您现在可见的更新结果存在严重的性能问题
 可能遇到了隐含的 bug，请不要使用 KeepAlive 并联系作者解决`
+
+const parseWhenResult = res => {
+  if (isArray(res)) {
+    return res
+  }
+
+  return [res]
+}
 
 class KeepAlive extends Component {
   // 本段为 KeepAlive 更新隐患检测，通过检测 KeepAlive 瞬时更新次数来判断是否进入死循环，并在 update 中强制阻止更新
@@ -47,13 +63,15 @@ class KeepAlive extends Component {
     this.id = props.id
     this.init()
 
-    console.log('KeepAlive constructor')
-
     // 继承响应父级 KeepAlive 的生命周期
     ;[LIFECYCLE_ACTIVATE, LIFECYCLE_UNACTIVATE].forEach(lifecycleName => {
       this[lifecycleName] = () => {
         const { id, _helpers } = this.props
         const cache = _helpers.getCache(id)
+        const node = _helpers.getNode(id)
+        if (node) {
+          node.updateTime = Date.now()
+        }
 
         // 若组件即将卸载则不再触发缓存生命周期
         if (!cache || cache.willDrop) {
@@ -133,29 +151,29 @@ class KeepAlive extends Component {
     }
   }
 
-  cache = null
-  init = async () => {
-    const { _helpers, id, children, ctx$$, name } = this.props
+  init = () => {
+    const { _helpers, id, children, ...rest } = this.props
 
     // 将 children 渲染至 AliveScopeProvider 中
-    const cache = await _helpers.keep(id, {
-      name,
-      children,
-      ctx$$
-    })
+    _helpers
+      .keep(id, {
+        children,
+        getInstance: () => this,
+        ...rest
+      })
+      .then(cache => {
+        this.inject()
 
-    this.inject()
-
-    // 触发 didActivate 生命周期
-    if (cache.inited) {
-      run(this, LIFECYCLE_ACTIVATE)
-    } else {
-      cache.inited = true
-    }
-    cache.keepAliveInstance = this
+        // 触发 didActivate 生命周期
+        if (cache.inited) {
+          run(this, LIFECYCLE_ACTIVATE)
+        } else {
+          cache.inited = true
+        }
+      })
   }
 
-  update = ({ _helpers, id, children, ctx$$, name }) => {
+  update = ({ _helpers, id, name, ...rest }) => {
     if (this.needForceStopUpdate(name)) {
       return
     }
@@ -166,39 +184,56 @@ class KeepAlive extends Component {
     // this.eject(false)
     _helpers.update(id, {
       name,
-      children,
-      ctx$$
+      getInstance: () => this,
+      ...rest
     })
     // this.inject(false)
   }
 
   // 利用 shouldComponentUpdate 提前触发组件更新
   shouldComponentUpdate(nextProps) {
-    // console.log(nextProps)
-    // nextTick(() => this.update(nextProps))
     this.update(nextProps)
 
     return false
   }
 
-  // 组件卸载时将
+  // 组件卸载时重置 dom 状态，保证 react dom 操作正常进行，并触发 unactivate 生命周期
   componentWillUnmount() {
-    const { id, _helpers } = this.props
+    const { id, _helpers, when: calcWhen = true } = this.props
+    const cache = _helpers.getCache(id)
+    const [when, isScope] = parseWhenResult(run(calcWhen))
+
+    if (!cache) {
+      return
+    }
+
     this.eject()
+    delete cache.getInstance
+
+    if (!when) {
+      if (isScope) {
+        const needToDrop = [
+          cache,
+          ..._helpers.getScopeIds([id]).map(id => _helpers.getCache(id))
+        ]
+
+        needToDrop.forEach(cache => {
+          cache.cached = true
+          cache.willDrop = true
+        })
+        nextTick(() => _helpers.dropScopeByIds([id]))
+      } else {
+        cache.cached = true
+        cache.willDrop = true
+        nextTick(() => _helpers.dropById(id))
+      }
+    }
 
     // 触发 willUnactivate 生命周期
     run(this, LIFECYCLE_UNACTIVATE)
-    const cache = _helpers.getCache(id)
-    delete cache.keepAliveInstance
   }
 
   render() {
-    if (this.catchError) {
-      throw this.catchError
-    }
-
-    console.log('KeepAlive render')
-
     return (
       <div
         key="keep-alive-placeholder"
