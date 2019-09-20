@@ -6,4 +6,4 @@ import SuspenseApp from './Suspense'
 import RouterApp from './Router'
 import App from './Main'
 
-render(<App />, document.getElementById('root'))
+render(<SuspenseApp />, document.getElementById('root'))

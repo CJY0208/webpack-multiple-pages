@@ -7957,10 +7957,10 @@ re-modulex@^1.0.3:
   dependencies:
     hoist-non-react-statics "^2.5.0"
 
-react-activation@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.npmjs.org/react-activation/-/react-activation-0.0.2.tgz#a2264144c9f5cbd2070c3f06006af4e29f9546ad"
-  integrity sha512-YSaY2XoC46Z1NAY2ZSB4XzLDaEN5VPZ64ZY5aSsE8l407atSiAUCoHxhE+NtAfB6J1y4quocfv/9jdbXkYwBGg==
+react-activation@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.npmjs.org/react-activation/-/react-activation-0.1.1.tgz#1540e86a2d785a807f59b13df12a9bad01a12e13"
+  integrity sha512-iWMuCrpXzgx6omSyxdFV5SIInVJPkLdyxf2oH7hAJZIsWKJcq/3bQ8yOoFPbUgcw/4DwCv5k8FUO3TgSevLPig==
   dependencies:
     create-react-context "^0.3.0"
     hoist-non-react-statics "^3.3.0"

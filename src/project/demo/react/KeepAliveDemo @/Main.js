@@ -229,7 +229,7 @@ const Main = React.memo(function Main() {
         {/* <Consumer>
           {contextValue => ( */}
         {showTest2 && (
-          <KeepAlive>
+          <KeepAlive name="Test">
             {/* <div>random2</div> */}
             {!showTest && <div>random2</div>}
             {/* <Test {...contextValue} /> */}
@@ -286,7 +286,7 @@ const Main = React.memo(function Main() {
         </button>
         <button
           onClick={() => {
-            drop('Test')
+            drop(/Test/)
           }}
         >
           drop Test
