@@ -1,6 +1,6 @@
 import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
-import KeepAlive from 'react-activation'
+import KeepAlive from '@KeepAlive'
 
 import KeepingTabs from './components/KeepingTabs'
 import List from './views/List'
@@ -19,7 +19,7 @@ function AliveItem(props) {
       <Item {...props} />
     </KeepAlive>
   ) : (
-    <KeepAlive name={`Item${id}`} key={id}>
+    <KeepAlive name={`Item${id}`} id={id}>
       <Item {...props} />
     </KeepAlive>
   )

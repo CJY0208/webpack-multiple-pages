@@ -51,7 +51,7 @@ function RouterConfig() {
                 // 此处不能使用 location.key
                 // 因为 KeepAlive 会根据渲染路径中各个节点是否之前的节点来确定是否同一份缓存
                 // location.key 每一次都会变化，故 KeepAlive 失效，需要使用可控的 key 值
-                key={location.pathname}
+                key={Math.random()}
                 classNames={{
                   enter: 'animated',
                   enterActive: 'fadeInDown',

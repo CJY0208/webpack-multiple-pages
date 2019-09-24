@@ -1,5 +1,5 @@
 import React from 'react'
-import { useAliveController } from 'react-activation'
+import { useAliveController } from '@KeepAlive'
 
 import './KeepingTabs.css'
 

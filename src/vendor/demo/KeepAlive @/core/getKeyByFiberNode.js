@@ -1,20 +1,13 @@
-import { get, isObject, isString } from '../helpers'
+import { get, isObject, isString, getKey2Id } from '../helpers'
 
 let uuid = 1
 const typeIdMap = new Map()
 const isArrReg = /^iAr/
 
 // 对每种 NodeType 做编号处理
-export const getTypeId = type => {
-  let typeId = typeIdMap.get(type)
 
-  if (!typeId) {
-    typeId = (++uuid).toString(32)
-    typeIdMap.set(type, typeId)
-  }
+const key2Id = getKey2Id()
 
-  return typeId
-}
 // 获取节点的渲染路径，作为节点的 X 坐标
 const genRenderPath = node =>
   node.return ? [node, ...genRenderPath(node.return)] : [node]
@@ -33,7 +26,7 @@ const getNodeId = fiberNode => {
 const getKeyByCoord = nodes =>
   nodes
     .map(node => {
-      const x = getTypeId(get(node, 'type.$$typeof', node.type))
+      const x = key2Id(get(node, 'type.$$typeof', node.type))
       const y = getNodeId(node)
 
       return `${x},${y}`
@@ -43,7 +36,7 @@ const getKeyByCoord = nodes =>
 const getKeyByFiberNode = fiberNode => {
   const key = getKeyByCoord(genRenderPath(fiberNode))
 
-  return getTypeId(key)
+  return key2Id(key)
 }
 
 export default getKeyByFiberNode
