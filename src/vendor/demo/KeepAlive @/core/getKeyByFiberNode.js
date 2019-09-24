@@ -1,11 +1,8 @@
 import { get, isObject, isString, getKey2Id } from '../helpers'
 
-let uuid = 1
-const typeIdMap = new Map()
 const isArrReg = /^iAr/
 
 // 对每种 NodeType 做编号处理
-
 const key2Id = getKey2Id()
 
 // 获取节点的渲染路径，作为节点的 X 坐标
