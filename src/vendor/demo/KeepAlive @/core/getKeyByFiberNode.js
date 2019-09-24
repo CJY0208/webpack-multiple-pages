@@ -12,14 +12,14 @@ const key2Id = getKey2Id()
 const genRenderPath = node =>
   node.return ? [node, ...genRenderPath(node.return)] : [node]
 
-// 使用节点 _ka 属性或下标与其 key 作为 Y 坐标
-// FIXME: 使用 index 作为 Y 坐标是十分不可靠的行为，待想出更好的法子替代
+// 使用节点 _ka 属性或下标与其 key/index 作为 Y 坐标
 const getNodeId = fiberNode => {
-  const _ka = get(fiberNode, 'pendingProps._ka')
-  const isArray = isString(_ka) && isArrReg.test(_ka)
-  const key = get(fiberNode, 'key', '')
+  // FIXME: 使用 index 作为 Y 坐标是十分不可靠的行为，待想出更好的法子替代
+  const id = get(fiberNode, 'key') || fiberNode.index
+  const ka = get(fiberNode, 'pendingProps._ka')
+  const isArray = isString(ka) && isArrReg.test(ka)
 
-  return isArray ? `${_ka}.${key}` : _ka || key || fiberNode.index
+  return isArray ? `${ka}.${id}` : ka || id
 }
 
 // 根据 X,Y 坐标生成 Key

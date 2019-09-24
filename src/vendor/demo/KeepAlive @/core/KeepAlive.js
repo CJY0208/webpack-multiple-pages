@@ -218,12 +218,10 @@ class KeepAlive extends Component {
         ]
 
         needToDrop.forEach(cache => {
-          cache.cached = true
           cache.willDrop = true
         })
         nextTick(() => _helpers.dropScopeByIds([id]))
       } else {
-        cache.cached = true
         cache.willDrop = true
         nextTick(() => _helpers.dropById(id))
       }
