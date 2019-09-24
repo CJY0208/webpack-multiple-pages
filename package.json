@@ -65,7 +65,7 @@
     "rc-form": "^2.4.5",
     "re-modulex": "^1.0.3",
     "react": "^16.8.6",
-    "react-activation": "^0.0.2",
+    "react-activation": "^0.1.1",
     "react-dom": "^16.8.6",
     "react-redux": "^5.0.7",
     "react-router": "^5.0.1",

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Suspense } from 'react'
 import ReactDOM from 'react-dom'
-import KeepAlive, { AliveScope } from '@KeepAlive'
+import KeepAlive, { AliveScope } from 'react-activation'
 // import Loadable from 'react-loadable'
 import Test from './Test'
 

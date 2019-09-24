@@ -1,0 +1,25 @@
+
+.keeing-tab {
+  display: inline-block;
+
+  margin-right: 6px;
+  padding: 2px;
+  background: #f5f5f5;
+  border: solid 1px #e6e6e6;
+  font-size: 12px;
+  color: #999;  
+}
+
+.keeing-tab button {
+  background: #ccc;
+  margin-left: 4px;
+  padding: 2px 4px;
+  color: #fff;
+  font-size: 12px;
+  transform: scale(1);
+  transition: transform .5s;
+}
+
+.keeing-tab button:active {
+  transform: scale(.6);
+}
