@@ -16,19 +16,19 @@ export const expandKeepAlive = KeepAlive => {
     </Acceptor>
   )
 
-  function HookExpand(props) {
+  function HookExpand({ id: idPrefix, ...props }) {
     const helpers = useContext(aliveScopeContext)
 
     return (
-      <AliveIdProvider>
+      <AliveIdProvider prefix={idPrefix}>
         {id => renderContent({ id, helpers, props })}
       </AliveIdProvider>
     )
   }
 
-  function WithExpand(props) {
+  function WithExpand({ id: idPrefix, ...props }) {
     return (
-      <AliveIdProvider>
+      <AliveIdProvider prefix={idPrefix}>
         {id => (
           <AliveScopeConsumer>
             {helpers => renderContent({ id, helpers, props })}

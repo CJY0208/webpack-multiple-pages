@@ -47,7 +47,7 @@
     },
     "development": {
       "plugins": [
-        "react-activation/babel",
+        "./src/vendor/demo/KeepAlive @/babel/helpers.js",
         ["jsx-css-modules", {
           "styleFileReg": [
             "\\.m\\.(css|scss|sass)$"

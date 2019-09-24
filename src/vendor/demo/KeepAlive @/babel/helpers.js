@@ -1,6 +1,7 @@
 // https://github.com/CJY0208/babel-plugin-tester 开发
 
 const crypto = require('crypto')
+const jsxHelpers = require('jsx-ast-utils')
 
 function getMap() {
   let uuid = 0
@@ -28,31 +29,35 @@ module.exports = function({ types: t, template }) {
     t.jSXExpressionContainer || t.jsxExpressionContainer
   ).bind(t)
 
-  function getVisitor(filehashIdentifier) {
+  function getElementVisitor(filehashIdentifier) {
     const KATypeCountMap = new Map()
     // 对每种 NodeType 做编号处理
     const getTypeId = getMap()
 
-    function genKAValue(openingElementNode) {
+    function genUUID(openingElementNode) {
       try {
         const typeId = getTypeId(openingElementNode.name.name)
 
         const count = KATypeCountMap.get(typeId) || 0
         const kaValue = count + 1
+
         KATypeCountMap.set(typeId, kaValue)
+
         const nodeId = `${typeId}${kaValue.toString(32)}`
+        const isArrayElement = openingElementNode.__isArrayElement
+        const rawStart = isArrayElement ? 'iAr' : ''
 
         return jSXExpressionContainer(
           t.templateLiteral(
             [
-              t.templateElement({ raw: '', cooked: '' }),
+              t.templateElement({ raw: rawStart, cooked: rawStart }),
               t.templateElement({ raw: nodeId, cooked: nodeId }, true)
             ],
             [filehashIdentifier]
           )
         )
-        // return t.stringLiteral(`${typeId}${kaValue.toString(32)}`)
       } catch (error) {
+        debugger
         return t.stringLiteral(`error`)
       }
     }
@@ -60,41 +65,102 @@ module.exports = function({ types: t, template }) {
     return {
       JSXOpeningElement: {
         enter(path) {
+          const { node } = path
           // 排除 Fragment
           // TODO: 考虑 Fragment 重命名情况
-          if (path.node.name.name.includes('Fragment')) {
+          if (jsxHelpers.elementType(node).includes('Fragment')) {
             return
           }
 
+          const hasKey = jsxHelpers.hasProp(node.attributes, 'key')
+          const keyAttr = jsxHelpers.getProp(node.attributes, 'key')
+          const keyAttrValue = hasKey && keyAttr.value && keyAttr.value.value
+
           // 排除 key 为以下的项，保证 SSR 时两端结果一致
-          const keyAttr = path.node.attributes.find(
-            attr => attr.type === 'JSXAttribute' && attr.name.name === 'key'
-          )
           if (
-            keyAttr &&
-            keyAttr.value &&
+            hasKey &&
             ['keep-alive-placeholder', 'keeper-container'].includes(
-              keyAttr.value.value
+              keyAttrValue
             )
           ) {
             return
           }
 
+          const isArrayElement = node.__isArrayElement
+
           // 不允许自定义 _ka 属性
-          // TODO: 使用 key 属性替换，需考虑不覆盖 array 结构中的 key 属性，array 结构中保持 _ka 属性
+          // DONE: 使用 key 属性替换，需考虑不覆盖 array 结构中的 key 属性，array 结构中保持 _ka 属性
           // 可参考：https://github.com/yannickcr/eslint-plugin-react/blob/master/lib/rules/jsx-key.js
-          const attributes = path.node.attributes.filter(attr => {
+          const attributes = node.attributes.filter(attr => {
             try {
-              return attr.type !== 'JSXAttribute' || attr.name.name !== '_ka'
+              return (
+                attr.type !== 'JSXAttribute' ||
+                jsxHelpers.propName(attr) !== '_ka'
+              )
             } catch (error) {
               return true
             }
           })
 
-          path.node.attributes = [
+          const uuidName =
+            process.env.NODE_ENV !== 'production' || isArrayElement || hasKey
+              ? '_ka'
+              : 'key'
+
+          node.attributes = [
             ...attributes,
-            jSXAttribute(jSXIdentifier('_ka'), genKAValue(path.node))
+            jSXAttribute(jSXIdentifier(uuidName), genUUID(node))
           ]
+        }
+      }
+    }
+  }
+
+  function markIsArrayElement(node) {
+    if (node) {
+      node.__isArrayElement = true
+    }
+  }
+
+  function getReturnStatement(body) {
+    return body.filter(item => item.type === 'ReturnStatement')[0]
+  }
+
+  // 参考 eslint-plugin-react 对数组 key 的校验过程，来标记数组元素
+  // https://github.com/yannickcr/eslint-plugin-react/blob/master/lib/rules/jsx-key.js#L93
+  const callExpressionVisitor = {
+    // Array.prototype.map
+    CallExpression(path) {
+      const { node } = path
+      if (node.callee && node.callee.type !== 'MemberExpression') {
+        return
+      }
+
+      if (
+        node.callee &&
+        node.callee.property &&
+        node.callee.property.name !== 'map'
+      ) {
+        return
+      }
+
+      const fn = node.arguments[0]
+      const isFn = fn && fn.type === 'FunctionExpression'
+      const isArrFn = fn && fn.type === 'ArrowFunctionExpression'
+
+      if (
+        isArrFn &&
+        (fn.body.type === 'JSXElement' || fn.body.type === 'JSXFragment')
+      ) {
+        markIsArrayElement(fn.body.openingElement)
+      }
+
+      if (isFn || isArrFn) {
+        if (fn.body.type === 'BlockStatement') {
+          const returnStatement = getReturnStatement(fn.body.body)
+          if (returnStatement && returnStatement.argument) {
+            markIsArrayElement(returnStatement.argument.openingElement)
+          }
         }
       }
     }
@@ -146,8 +212,8 @@ module.exports = function({ types: t, template }) {
               insertPlacePath.insertBefore(filehashTemplate)
             }
           }
-
-          path.traverse(getVisitor(filehashIdentifier))
+          path.traverse(callExpressionVisitor)
+          path.traverse(getElementVisitor(filehashIdentifier))
         }
       }
     }

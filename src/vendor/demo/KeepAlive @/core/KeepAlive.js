@@ -108,7 +108,7 @@ class KeepAlive extends Component {
         run(cache.revertScrollPos)
       }
     } catch (error) {
-      console.error(error)
+      // console.error(error)
     }
   }
 
@@ -147,7 +147,7 @@ class KeepAlive extends Component {
         }
       })
     } catch (error) {
-      console.error(error)
+      // console.error(error)
     }
   }
 

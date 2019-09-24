@@ -1,7 +1,8 @@
-import { get, isObject } from '../helpers'
+import { get, isObject, isString } from '../helpers'
 
 let uuid = 1
 const typeIdMap = new Map()
+const isArrReg = /^iAr/
 
 // 对每种 NodeType 做编号处理
 export const getTypeId = type => {
@@ -15,27 +16,18 @@ export const getTypeId = type => {
   return typeId
 }
 // 获取节点的渲染路径，作为节点的 X 坐标
-const genRenderPath = node => {
-  const cache = get(node, 'stateNode.__cachedRenderPath')
-
-  if (cache) {
-    return cache
-  }
-
-  const res = node.return ? [node, ...genRenderPath(node.return)] : [node]
-
-  // 对路径计算结果做缓存，节约查询性能
-  if (isObject(node.stateNode)) {
-    node.stateNode.__cachedRenderPath = res
-  }
-
-  return res
-}
+const genRenderPath = node =>
+  node.return ? [node, ...genRenderPath(node.return)] : [node]
 
 // 使用节点 _ka 属性或下标与其 key 作为 Y 坐标
-const getNodeId = fiberNode =>
-  `${get(fiberNode, 'pendingProps._ka', fiberNode.index)}:${fiberNode.key ||
-    ''}`
+// FIXME: 使用 index 作为 Y 坐标是十分不可靠的行为，待想出更好的法子替代
+const getNodeId = fiberNode => {
+  const _ka = get(fiberNode, 'pendingProps._ka')
+  const isArray = isString(_ka) && isArrReg.test(_ka)
+  const key = get(fiberNode, 'key', '')
+
+  return isArray ? `${_ka}.${key}` : _ka || key || fiberNode.index
+}
 
 // 根据 X,Y 坐标生成 Key
 const getKeyByCoord = nodes =>
