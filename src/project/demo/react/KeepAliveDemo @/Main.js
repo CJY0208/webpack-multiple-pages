@@ -203,10 +203,15 @@ const Main = React.memo(function Main() {
   const [count, setCount] = useState(0)
   const [showTest, setShowTest] = useState(true)
   const [showTest2, setShowTest2] = useState(true)
-  const { drop, dropScope, clear, getCachingNodes } = useAliveController()
+  const controller = useAliveController()
+  const { drop, dropScope, clear, getCachingNodes } = controller
 
   useEffect(() => {
-    console.log(getCachingNodes())
+    const cachingNodes = getCachingNodes()
+
+    const promise = drop(Promise)
+
+    console.log(controller, getCachingNodes())
     // setInterval(() => {
     //   setShowTest(Math.random() > 0.5)
     // }, 1000)

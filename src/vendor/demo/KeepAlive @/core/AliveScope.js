@@ -71,7 +71,7 @@ export default class AliveScope extends Component {
 
   dropNodes = nodesId =>
     new Promise(resolve => {
-      nodesId.forEach(id => {
+      const willDropNodes = nodesId.filter(id => {
         const cache = this.store.get(id)
         const canDrop = get(cache, 'cached') || get(cache, 'willDrop')
 
@@ -80,10 +80,17 @@ export default class AliveScope extends Component {
           cache.willDrop = true
           this.nodes.delete(id)
         }
+
+        return canDrop
       })
 
+      if (willDropNodes.length === 0) {
+        resolve(false)
+        return
+      }
+
       this.helpers = { ...this.helpers }
-      this.forceUpdate(resolve)
+      this.forceUpdate(() => resolve(true))
     })
 
   clear = () => this.dropNodes(this.getCachingNodes().map(({ id }) => id))
