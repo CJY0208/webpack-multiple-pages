@@ -38,73 +38,65 @@ class CacheSwitch extends Switch {
 
     let __matchedAlready = false
 
-    return (
-      <Updatable when={isMatch(contextMatch)}>
-        {() => (
-          <SwitchFragment>
-            {React.Children.map(children, element => {
-              if (!React.isValidElement(element)) {
-                return null
+    return React.Children.map(children, element => {
+      if (!React.isValidElement(element)) {
+        return null
+      }
+
+      const path = element.props.path || element.props.from
+      const match = __matchedAlready
+        ? null
+        : path
+          ? matchPath(
+              location.pathname,
+              {
+                ...element.props,
+                path
+              },
+              contextMatch
+            )
+          : contextMatch
+
+      let child
+
+      if (which(element)) {
+        child = React.cloneElement(element, {
+          location,
+          computedMatch: match,
+          /**
+           * https://github.com/ReactTraining/react-router/blob/master/packages/react-router/modules/Route.js#L57
+           *
+           * Note:
+           * Route would use computedMatch as its next match state ONLY when computedMatch is a true value
+           * So here we have to do some trick to let the unmatch result pass Route's computedMatch check
+           *
+           * 注意：只有当 computedMatch 为真值时，Route 才会使用 computedMatch 作为其下一个匹配状态
+           * 所以这里我们必须做一些手脚，让 unmatch 结果通过 Route 的 computedMatch 检查
+           */
+          ...(isNull(match)
+            ? {
+                computedMatchForCacheRoute: {
+                  [COMPUTED_UNMATCH_KEY]: true
+                }
               }
+            : null)
+        })
+      } else {
+        child =
+          match && !__matchedAlready
+            ? React.cloneElement(element, {
+                location,
+                computedMatch: match
+              })
+            : null
+      }
 
-              const path = element.props.path || element.props.from
-              const match = __matchedAlready
-                ? null
-                : path
-                  ? matchPath(
-                      location.pathname,
-                      {
-                        ...element.props,
-                        path
-                      },
-                      contextMatch
-                    )
-                  : contextMatch
+      if (!__matchedAlready) {
+        __matchedAlready = !!match
+      }
 
-              let child
-
-              if (which(element)) {
-                child = React.cloneElement(element, {
-                  location,
-                  computedMatch: match,
-                  /**
-                   * https://github.com/ReactTraining/react-router/blob/master/packages/react-router/modules/Route.js#L57
-                   *
-                   * Note:
-                   * Route would use computedMatch as its next match state ONLY when computedMatch is a true value
-                   * So here we have to do some trick to let the unmatch result pass Route's computedMatch check
-                   *
-                   * 注意：只有当 computedMatch 为真值时，Route 才会使用 computedMatch 作为其下一个匹配状态
-                   * 所以这里我们必须做一些手脚，让 unmatch 结果通过 Route 的 computedMatch 检查
-                   */
-                  ...(isNull(match)
-                    ? {
-                        computedMatchForCacheRoute: {
-                          [COMPUTED_UNMATCH_KEY]: true
-                        }
-                      }
-                    : null)
-                })
-              } else {
-                child =
-                  match && !__matchedAlready
-                    ? React.cloneElement(element, {
-                        location,
-                        computedMatch: match
-                      })
-                    : null
-              }
-
-              if (!__matchedAlready) {
-                __matchedAlready = !!match
-              }
-
-              return child
-            })}
-          </SwitchFragment>
-        )}
-      </Updatable>
-    )
+      return child
+    })
   }
 }
 

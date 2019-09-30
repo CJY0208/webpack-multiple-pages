@@ -13,6 +13,8 @@ export const COMPUTED_UNMATCH_KEY = '__isComputedUnmatch'
 export const isMatch = match =>
   isExist(match) && get(match, COMPUTED_UNMATCH_KEY) !== true
 
+const Dropper = ({ forwardRef }) => <div ref={forwardRef}>dropper</div>
+
 const getDerivedStateFromProps = (nextProps, prevState) => {
   let { match: nextPropsMatch, when = 'forward' } = nextProps
 
@@ -167,18 +169,18 @@ export default class CacheComponent extends Component {
     }
 
     if (prevState.matched === true && this.state.matched === false) {
-      if (this.props.unmount) {
-        const parentNode = get(this.wrapper, 'parentNode')
-        this.__parentNode = parentNode
+      // if (this.props.unmount) {
+      //   const parentNode = get(this.wrapper, 'parentNode')
+      //   this.__parentNode = parentNode
 
-        run(
-          this.__parentNode,
-          'insertBefore',
-          this.__placeholderNode,
-          this.wrapper
-        )
-        run(this.__parentNode, 'removeChild', this.wrapper)
-      }
+      //   run(
+      //     this.__parentNode,
+      //     'insertBefore',
+      //     this.__placeholderNode,
+      //     this.wrapper
+      //   )
+      //   run(this.__parentNode, 'removeChild', this.wrapper)
+      // }
       this.__cacheUpdateTime = Date.now()
       return run(this, 'cacheLifecycles.__listener.didCache')
     }
@@ -208,6 +210,16 @@ export default class CacheComponent extends Component {
       } else {
         if (this.props.saveScrollPosition) {
           this.__revertScrollPos = saveScrollPosition(this.wrapper)
+          const parentNode = get(this.wrapper, 'parentNode')
+          this.__parentNode = parentNode
+
+          run(
+            this.__parentNode,
+            'insertBefore',
+            this.__placeholderNode,
+            this.wrapper
+          )
+          run(this.__parentNode, 'removeChild', this.wrapper)
         }
       }
     }
@@ -229,16 +241,19 @@ export default class CacheComponent extends Component {
     const className = run(`${propsClassName} ${behaviorClassName}`, 'trim')
     const hasClassName = className !== ''
 
-    return cached ? (
-      <div
-        className={hasClassName ? className : undefined}
-        {...behaviorProps}
-        ref={wrapper => {
-          this.wrapper = wrapper
-        }}
-      >
-        {run(children, undefined, this.cacheLifecycles)}
-      </div>
-    ) : null
+    return matched ? run(children, undefined, this.cacheLifecycles) : null
+
+    // return cached ? (
+    //   <div
+    //     className={hasClassName ? className : undefined}
+    //     {...behaviorProps}
+    //     ref={wrapper => {
+    //       this.wrapper = wrapper
+    //     }}
+    //   >
+    //     {run(children, undefined, this.cacheLifecycles)}
+    //     {matched && <Dropper  />}
+    //   </div>
+    // ) : null
   }
 }

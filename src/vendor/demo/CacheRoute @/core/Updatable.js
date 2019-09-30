@@ -9,5 +9,5 @@ export default class Updatable extends Component {
   }
 
   render = () => run(this.props, 'children')
-  shouldComponentUpdate = ({ when }) => when
+  shouldComponentUpdate = ({ when }) => true //when
 }
