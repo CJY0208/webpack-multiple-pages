@@ -6,16 +6,11 @@ import getKeyByFiberNode from './getKeyByFiberNode'
 
 // 根据 FiberNode 所处位置来确定 KeepAlive ID
 export default class AliveIdProvider extends Component {
-  id = null
-  genId = () => {
-    const { prefix = '' } = this.props
-    this.id = `${prefix}${getKeyByFiberNode(this._reactInternalFiber)}`
-    return this.id
-  }
+  genId = () => getKeyByFiberNode(this._reactInternalFiber)
 
   render() {
-    const { children } = this.props
+    const { children, prefix = '' } = this.props
 
-    return run(children, undefined, this.id || this.genId())
+    return run(children, undefined, `${prefix}${this.genId()}`)
   }
 }

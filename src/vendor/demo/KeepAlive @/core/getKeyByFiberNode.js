@@ -11,7 +11,7 @@ const genRenderPath = node =>
 
 // 使用节点 _ka 属性或下标与其 key/index 作为 Y 坐标
 const getNodeId = fiberNode => {
-  // FIXME: 使用 index 作为 Y 坐标是十分不可靠的行为，待想出更好的法子替代
+  // FIXME: 使用 index 作为 Y 坐标不是可靠的行为，待想出更好的法子替代
   const id = get(fiberNode, 'key') || fiberNode.index
   const ka = get(fiberNode, 'pendingProps._ka')
   const isArray = isString(ka) && isArrReg.test(ka)
