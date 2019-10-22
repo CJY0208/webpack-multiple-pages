@@ -2,9 +2,20 @@
 
 const crypto = require('crypto')
 const jsxHelpers = require('jsx-ast-utils')
-const { get, getKey2Id, callExpressionVisitor } = require('./helpers')
+const {
+  get,
+  getKey2Id,
+  isFunction,
+  callExpressionVisitor
+} = require('./helpers')
 
-module.exports = function({ types: t, template }) {
+module.exports = function({ types: t, template, env: getEnv }) {
+  // 7.x https://github.com/babel/babel/blob/master/babel.config.js#L4
+  // 6.x https://github.com/babel/babel/blob/6.x/packages/babel-core/src/transformation/file/options/build-config-chain.js#L165
+  // 尝试从 env 函数或 process 中获取当前 babel 环境
+  const env = isFunction(getEnv)
+    ? getEnv()
+    : process.env.BABEL_ENV || process.env.NODE_ENV || 'development'
   const jSXAttribute = (t.jSXAttribute || t.jsxAttribute).bind(t)
   const jSXIdentifier = (t.jSXIdentifier || t.jsxIdentifier).bind(t)
   const jSXExpressionContainer = (
@@ -84,9 +95,7 @@ module.exports = function({ types: t, template }) {
           })
 
           const uuidName =
-            process.env.NODE_ENV !== 'production' || isArrayElement || hasKey
-              ? '_ka'
-              : 'key'
+            env !== 'production' || isArrayElement || hasKey ? '_ka' : 'key'
 
           node.attributes = [
             ...attributes,

@@ -8027,10 +8027,10 @@ re-modulex@^1.0.3:
   dependencies:
     hoist-non-react-statics "^2.5.0"
 
-react-activation@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.npmjs.org/react-activation/-/react-activation-0.2.2.tgz#d18d99cdd4e3a75f84a96995ab055d941b8f149d"
-  integrity sha512-Ss8scakKE417UHUT3gahwn4ZF0xN86OxF1X0qnRD4Fn7Zy2eEH5U31gWX587nJb+2gTvoj/6GvzjsIChjI4Y8g==
+react-activation@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.npmjs.org/react-activation/-/react-activation-0.3.0.tgz#338e85239a2401a4fa55a888eea62a877c5166e5"
+  integrity sha512-FkCbXgJStT+5w1nVO0Wo0AzjUkwucpgOFrijutSTB/M4V8NgWjAyK8NzvMhh+tCJky8jB747jaVt0hne2B50rg==
   dependencies:
     create-react-context "^0.3.0"
     hoist-non-react-statics "^3.3.0"

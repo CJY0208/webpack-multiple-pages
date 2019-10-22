@@ -3,6 +3,7 @@ const isNull = val => val === null
 const isString = val => typeof val === 'string'
 const isExist = val => !(isUndefined(val) || isNull(val))
 const isNumber = val => typeof val === 'number' && !isNaN(val)
+const isFunction = val => typeof val === 'function'
 const get = (obj, keys = [], defaultValue) => {
   try {
     if (isNumber(keys)) {
@@ -80,6 +81,7 @@ const callExpressionVisitor = {
 
 module.exports = {
   get,
+  isFunction,
   callExpressionVisitor,
   getKey2Id
 }

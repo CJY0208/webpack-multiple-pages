@@ -8,4 +8,4 @@ import RouterApp from './Router'
 import Router2App from './Router/router2'
 import App from './Main'
 
-render(<Router2App />, document.getElementById('root'))
+render(<RouterApp />, document.getElementById('root'))

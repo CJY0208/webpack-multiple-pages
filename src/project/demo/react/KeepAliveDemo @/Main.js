@@ -77,7 +77,7 @@ class Deep extends Component {
     return (
       <div>
         I am Deep
-        <KeepAlive>
+        <KeepAlive when={true}>
           <DeepDeep
             ref={ref => {
               this.deepdeep = ref
