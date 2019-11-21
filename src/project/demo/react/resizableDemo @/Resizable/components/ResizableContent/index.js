@@ -2,14 +2,9 @@ import React from 'react'
 
 import './style.m.scss'
 
-function ResizableContent({ children, width }) {
+function ResizableContent({ children, style }) {
   return (
-    <div
-      className="content"
-      style={{
-        flex: width
-      }}
-    >
+    <div className="content" style={style}>
       {children}
     </div>
   )
