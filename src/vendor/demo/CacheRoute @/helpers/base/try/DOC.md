@@ -21,48 +21,6 @@ get(obj, 'c.b') // undefined
 get(obj, 'c.b', 1) // 1
 ```
 
-## set 安全赋值（无副作用）
-
-```javascript
-var obj
-
-obj = set(obj, 'a.b.c', 1)
-
-console.log(obj) 
-/**
- *  {
- *    a: {
- *      b: {
- *        c: 1
- *      }
- *    } 
- *  }
- * /
-```
-
-注：此方法为纯函数，无副作用
-
-```javascript
-// DEMO 1: set函数的结果需要被使用
-var obj
-
-set(obj, 'a', 1) // {a: 1}
-
-console.log(obj) // undefined 
-
-// DEMO 2：set函数会生成操作对象和其属性的新副本
-var obj = {
-  a: {
-    b: 1
-  }
-}
-
-var obj2 = set(obj, 'a.b', 2)
-
-console.log(obj === obj2) // false
-console.log(obj.a === obj2.a) // false
-```
-
 ## run 安全运行（可保护上下文）
 
 ```javascript

@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import { run, get } from '../helpers/try'
+import { run, get } from '../helpers'
 
 export default class Updatable extends Component {
   static propsTypes = {
@@ -9,5 +9,5 @@ export default class Updatable extends Component {
   }
 
   render = () => run(this.props, 'children')
-  shouldComponentUpdate = ({ when }) => true //when
+  shouldComponentUpdate = ({ when }) => when
 }

@@ -2,13 +2,16 @@ import React, { useEffect } from 'react'
 import { render } from 'react-dom'
 import { HashRouter, Link, Route, Switch } from 'react-router-dom'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
+import Test from './Test'
+import './style.scss'
 
 import 'animate.css/animate.min.css'
 
 import CacheRoute, {
   CacheSwitch,
   getCachingComponents,
-  dropByCacheKey
+  dropByCacheKey,
+  getCachingKeys
 } from '@CacheRoute'
 
 window.React = React
@@ -16,6 +19,11 @@ console.log('React Version', React.version)
 
 window.getCachingComponents = getCachingComponents
 window.dropByCacheKey = dropByCacheKey
+
+const keys = getCachingKeys()
+const components = getCachingComponents()
+
+const component = components['test']
 
 const List = () => {
   // useEffect(() => {
@@ -26,18 +34,30 @@ const List = () => {
   // })
   return (
     <div
-    // style={{
-    //   height: '100vh',
-    //   overflow: 'auto'
-    // }}
+      style={{
+        height: '100vh',
+        overflow: 'auto'
+      }}
     >
       <ul>
-        {/* {Array(50).fill('').map((item, idx) => (
-        <li key={idx}>{idx}</li>
-      ))} */}
-        <li>
-          <Link to="item">To Detail</Link>
-        </li>
+        {Array(25)
+          .fill('')
+          .map((item, idx) => (
+            <li key={idx}>
+              <Link to={`/item/${idx}`}>To Detail {idx}</Link>
+            </li>
+          ))}
+        <div style={{ overflow: 'auto', width: '100vw' }}>
+          123133333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+        </div>
+
+        {Array(25)
+          .fill('')
+          .map((item, idx) => (
+            <li key={idx + 25}>
+              <Link to={`/item/${idx + 25}`}>To Detail {idx + 25}</Link>
+            </li>
+          ))}
       </ul>
     </div>
   )
@@ -45,9 +65,10 @@ const List = () => {
 
 const Item = ({ history }) => (
   <div>
+    <Test />
     <button
       onClick={() => {
-        history.push('/')
+        history.goBack()
       }}
     >
       Go Back
@@ -57,7 +78,7 @@ const Item = ({ history }) => (
 
 const App = () => (
   <HashRouter>
-    <Route
+    {/* <Route
       render={({ location }) => {
         console.log(location)
 
@@ -88,18 +109,26 @@ const App = () => (
           </TransitionGroup>
         )
       }}
-    />
+    /> */}
 
-    {/* <CacheSwitch>
+    <CacheSwitch>
       <CacheRoute
         exact
         path="/"
         cacheKey="Test"
         component={List}
         when="always"
+        // unmount
       />
-      <Route exact path="/item" component={Item} />
-    </CacheSwitch> */}
+      <CacheRoute
+        exact
+        cacheKey="Item"
+        path="/item/:id?"
+        component={Item}
+        when="always"
+        multiple
+      />
+    </CacheSwitch>
   </HashRouter>
 )
 

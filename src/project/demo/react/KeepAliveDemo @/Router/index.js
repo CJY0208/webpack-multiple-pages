@@ -7,7 +7,7 @@ import KeepAlive, {
   withActivation,
   useActivate,
   useUnactivate
-} from '@KeepAlive'
+} from 'react-activation'
 import './style.scss'
 
 @withActivation
@@ -116,7 +116,7 @@ const RouterApp = () => (
           exact
           path="/"
           render={props => (
-            <KeepAlive name="List">
+            <KeepAlive name="List" saveScrollPosition="screen">
               <Test />
               <List {...props} />
             </KeepAlive>
