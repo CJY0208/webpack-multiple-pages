@@ -1,0 +1,15 @@
+
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  border: solid 2px blue;
+  padding: 20px;
+}
+
+.bar {
+  height: 100%;
+  width: 20px;
+  position: absolute;
+  top: 20px;
+  cursor: col-resize;
+}

@@ -1,0 +1,8 @@
+
+.content {
+  border: solid 2px;
+}
+
+.content + .content {
+  margin-left: 20px;
+}
