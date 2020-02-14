@@ -152,7 +152,7 @@
     "webpack-parallel-uglify-plugin": "^1.0.2",
     "webpack-plugin-hash-output": "^1.3.0",
     "yargs": "^11.0.0",
-    "yarn": "^1.12.3"
+    "yarn": "^1.22.0"
   },
   "_moduleAliases": {
     "@helpers": "src/vendor/helpers @"
