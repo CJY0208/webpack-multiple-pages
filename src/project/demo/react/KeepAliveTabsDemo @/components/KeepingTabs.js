@@ -1,10 +1,17 @@
 import React from 'react'
-import { useAliveController } from '@KeepAlive'
+import { withRouter } from 'react-router-dom'
+
+import { useAliveController } from 'react-activation'
 
 import './KeepingTabs.css'
 
-export default function KeepingTabs() {
-  const { getCachingNodes, drop } = useAliveController()
+export default withRouter(function KeepingTabs({ history }) {
+  const {
+    getCachingNodes = () => [],
+    drop,
+    dropScope,
+    refresh
+  } = useAliveController()
   const cachingNodes = getCachingNodes()
 
   return (
@@ -12,9 +19,29 @@ export default function KeepingTabs() {
       {cachingNodes.map(node => (
         <li key={node.id} className="keeing-tab">
           {node.name}
-          <button onClick={() => drop(node.name)}>X</button>
+          <button
+            onClick={() => {
+              // if (node.name.includes('Item')) {
+              //   history.go(-1)
+              // }
+              drop(node.name)
+            }}
+          >
+            X
+          </button>
+          <button
+            onClick={() => {
+              // if (node.name.includes('Item')) {
+              //   history.go(-1)
+              // }
+              console.log('refresh')
+              refresh(node.name)
+            }}
+          >
+            R
+          </button>
         </li>
       ))}
     </ul>
   )
-}
+})

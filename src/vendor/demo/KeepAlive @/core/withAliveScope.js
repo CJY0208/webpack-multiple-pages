@@ -4,12 +4,21 @@ import hoistStatics from 'hoist-non-react-statics'
 import { get, isFunction, isUndefined } from '../helpers'
 
 import { Acceptor } from './Bridge'
-import AliveIdProvider from './AliveIdProvider'
+import NodeKey from './NodeKey'
 import { AliveScopeConsumer, aliveScopeContext } from './context'
 
 function controllerCherryPick(controller) {
-  const { drop, dropScope, clear, getCachingNodes } = controller
-  return { drop, dropScope, clear, getCachingNodes }
+  const {
+    drop,
+    dropScope,
+    refresh,
+    refreshScope,
+    clear,
+    getCachingNodes
+  } = controller
+
+  console.log('controller', controller)
+  return { drop, dropScope, refresh, refreshScope, clear, getCachingNodes }
 }
 
 export const expandKeepAlive = KeepAlive => {
@@ -23,7 +32,7 @@ export const expandKeepAlive = KeepAlive => {
     return isOutsideAliveScope ? (
       get(props, 'children', null)
     ) : (
-      <AliveIdProvider prefix={idPrefix} key={props._ka}>
+      <NodeKey prefix={idPrefix} key={props._ka}>
         {id => (
           <Acceptor id={id}>
             {bridgeProps => (
@@ -37,7 +46,7 @@ export const expandKeepAlive = KeepAlive => {
             )}
           </Acceptor>
         )}
-      </AliveIdProvider>
+      </NodeKey>
     )
   }
   const HookExpand = ({ id: idPrefix, ...props }) =>
@@ -57,26 +66,30 @@ const withAliveScope = WrappedComponent => {
     <WrappedComponent {...props} {...helpers} ref={forwardedRef} />
   )
 
-  const HookStore = ({ forwardedRef, ...props }) =>
-    renderContent({
+  const HookScope = ({ forwardedRef, ...props }) => {
+    console.log(useContext(aliveScopeContext))
+
+    return renderContent({
       helpers: controllerCherryPick(useContext(aliveScopeContext) || {}),
       props,
       forwardedRef
     })
+  }
 
-  const WithStore = ({ forwardedRef, ...props }) => (
+  const WithScope = ({ forwardedRef, ...props }) => (
     <AliveScopeConsumer>
-      {(controller = {}) =>
-        renderContent({
+      {(controller = {}) => {
+        console.log(controller)
+        return renderContent({
           helpers: controllerCherryPick(controller),
           props,
           forwardedRef
         })
-      }
+      }}
     </AliveScopeConsumer>
   )
 
-  const HOCWithAliveScope = isFunction(useContext) ? HookStore : WithStore
+  const HOCWithAliveScope = isFunction(useContext) ? HookScope : WithScope
 
   if (isFunction(forwardRef)) {
     const ForwardedRefHOC = forwardRef((props, ref) => (

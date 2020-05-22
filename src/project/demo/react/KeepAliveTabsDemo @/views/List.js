@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { useAliveController } from '@KeepAlive'
+import { useAliveController } from 'react-activation'
 
 import Counter from '../components/Counter'
 

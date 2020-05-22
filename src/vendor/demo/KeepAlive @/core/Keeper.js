@@ -9,6 +9,17 @@ import { LIFECYCLE_ACTIVATE, LIFECYCLE_UNACTIVATE } from './lifecycles'
 export default class Keeper extends Component {
   listeners = new Map()
   wrapper = null
+
+  constructor(props, ...rest) {
+    super(props, ...rest)
+
+    this.state = {
+      children: props.children,
+      bridgeProps: props.bridgeProps,
+      key: Math.random()
+    }
+  }
+
   componentDidMount() {
     const { store, id } = this.props
     const listeners = this.listeners
@@ -32,7 +43,7 @@ export default class Keeper extends Component {
   }
 
   componentWillUnmount() {
-    const { store, id } = this.props
+    const { store, keepers, id } = this.props
     // 卸载前尝试归位 DOM 节点
     try {
       const cache = store.get(id)
@@ -43,6 +54,7 @@ export default class Keeper extends Component {
       // console.error(error) // do nothing
     }
     store.delete(id)
+    keepers.delete(id)
   }
 
   [LIFECYCLE_ACTIVATE]() {
@@ -104,8 +116,17 @@ export default class Keeper extends Component {
     attach: this.attach
   }
 
+  refresh = cb =>
+    this.setState(
+      {
+        key: Math.random()
+      },
+      cb
+    )
+
   render() {
-    const { id, children, bridgeProps, ...props } = this.props
+    const { id, ...props } = this.props
+    const { children, bridgeProps, key } = this.state
 
     return (
       <div
@@ -113,10 +134,12 @@ export default class Keeper extends Component {
           this.wrapper = node
         }}
       >
-        <div key="keeper-container">
+        <div key="keeper-container" nodeKeyIgnore className="ka-content">
           <Bridge id={id} bridgeProps={bridgeProps}>
             <AliveNodeProvider value={this.contextValue}>
-              {children}
+              {React.cloneElement(children, {
+                key: `${children.key}:${key}`
+              })}
             </AliveNodeProvider>
           </Bridge>
         </div>

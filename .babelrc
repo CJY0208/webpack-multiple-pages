@@ -3,56 +3,61 @@
     "parser": "babylon" // babylon 固定在 6.13.0 版本以支持 pipeline 语法
   },
   "presets": [
-    ["env", {
-      /**
-       * 由于 Tree Shaking 特性可能对缓存功能有较大影响，此处关闭此特性
-       */
-      // "modules": false // Tree Shaking 特性要求使用 es6 模块语法才能分析无效引用，所以此处要关闭 babel 对 import 语法的转义
-    }],
+    [
+      "env",
+      {
+        /**
+         * 由于 Tree Shaking 特性可能对缓存功能有较大影响，此处关闭此特性
+         */
+        // "modules": false // Tree Shaking 特性要求使用 es6 模块语法才能分析无效引用，所以此处要关闭 babel 对 import 语法的转义
+      }
+    ],
     "stage-2",
     "react"
   ],
-  
+
   "env": {
     "production": {
       "plugins": [
         "react-activation/babel",
-        ["jsx-css-modules", {
-          "styleFileReg": [
-            "\\.m\\.(css|scss|sass)$"
-          ]
-        }],
+        [
+          "jsx-css-modules",
+          {
+            "styleFileReg": ["\\.m\\.(css|scss|sass)$"]
+          }
+        ],
         "transform-pipeline",
         "syntax-dynamic-import",
         "transform-decorators-legacy",
         "transform-async-functions",
-        "transform-export-extensions",        
+        "transform-export-extensions",
 
         /**
-        * babel-plugin-import 实现 antd-mobile 按需加载配置，文档：https://github.com/ant-design/babel-plugin-import
-        */
+         * babel-plugin-import 实现 antd-mobile 按需加载配置，文档：https://github.com/ant-design/babel-plugin-import
+         */
         ["import", { "libraryName": "antd-mobile", "style": true }],
 
         /**
-        * babel-plugin-component 实现 mint-ui 按需加载配置，文档：https://github.com/ElementUI/babel-plugin-component
-        */
+         * babel-plugin-component 实现 mint-ui 按需加载配置，文档：https://github.com/ElementUI/babel-plugin-component
+         */
         ["component", { "libraryName": "mint-ui", "style": true }]
 
         /**
-        * 让 vue 支持 jsx 语法，文档：https://github.com/vuejs/babel-plugin-transform-vue-jsx
-        * 由于与 react jsx 语法编译互斥，停止使用
-        */
+         * 让 vue 支持 jsx 语法，文档：https://github.com/vuejs/babel-plugin-transform-vue-jsx
+         * 由于与 react jsx 语法编译互斥，停止使用
+         */
         // "transform-vue-jsx"
-      ],
+      ]
     },
     "development": {
       "plugins": [
         "react-activation/babel",
-        ["jsx-css-modules", {
-          "styleFileReg": [
-            "\\.m\\.(css|scss|sass)$"
-          ]
-        }],
+        [
+          "jsx-css-modules",
+          {
+            "styleFileReg": ["\\.m\\.(css|scss|sass)$"]
+          }
+        ],
         "transform-pipeline",
         "react-hot-loader/babel",
         "syntax-dynamic-import",

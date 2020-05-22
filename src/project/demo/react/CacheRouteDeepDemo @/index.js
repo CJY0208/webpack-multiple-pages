@@ -1,18 +1,18 @@
 import React, { useEffect } from 'react'
 import { render } from 'react-dom'
 import { HashRouter, Link, Route, Switch } from 'react-router-dom'
-import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import Test from './Test'
 import './style.scss'
 
-import 'animate.css/animate.min.css'
-
-import CacheRoute, {
+import {
+  CacheRoute,
   CacheSwitch,
   getCachingComponents,
   dropByCacheKey,
   getCachingKeys
 } from '@CacheRoute'
+
+window.__CacheRoute = CacheRoute
 
 window.React = React
 console.log('React Version', React.version)
@@ -78,48 +78,8 @@ const Item = ({ history }) => (
 
 const App = () => (
   <HashRouter>
-    {/* <Route
-      render={({ location }) => {
-        console.log(location)
-
-        return (
-          <TransitionGroup>
-            <CSSTransition
-              // 此处不能使用 location.key
-              // 因为 KeepAlive 会根据渲染路径中各个节点是否之前的节点来确定是否同一份缓存
-              // location.key 每一次都会变化，故 KeepAlive 失效，需要使用可控的 key 值A
-              key={location.pathname}
-              classNames={{
-                enter: 'animated',
-                enterActive: 'fadeInDown',
-                exit: 'animated',
-                exitActive: 'fadeOutDown'
-              }}
-              timeout={10000}
-              mountOnEnter={true}
-              unmountOnExit={true}
-            >
-              <div className="lalala">
-                <Switch location={location} which={() => false}>
-                  <Route exact path="/" component={List} unmount />
-                  <Route exact path="/item" component={Item} />
-                </Switch>
-              </div>
-            </CSSTransition>
-          </TransitionGroup>
-        )
-      }}
-    /> */}
-
     <CacheSwitch>
-      <CacheRoute
-        exact
-        path="/"
-        cacheKey="Test.test"
-        component={List}
-        when="always"
-        // unmount
-      />
+      <CacheRoute exact path="/" component={List} when="always" />
       <CacheRoute
         exact
         cacheKey="Item"
@@ -128,6 +88,23 @@ const App = () => (
         when="always"
         multiple
       />
+      {/* <CacheRoute path="/item" when="always">
+        <CacheRoute path="/item" when="always">
+          <CacheSwitch>
+            <Route exact path="/item/test">
+              Test
+            </Route>
+            <CacheRoute
+              exact
+              cacheKey="Item"
+              path="/item/:id?"
+              component={Item}
+              when="always"
+              multiple
+            />
+          </CacheSwitch>
+        </CacheRoute>
+      </CacheRoute> */}
     </CacheSwitch>
   </HashRouter>
 )

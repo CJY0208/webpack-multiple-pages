@@ -10,7 +10,7 @@ import {
 import { COMPUTED_UNMATCH_KEY, isMatch } from '../core/CacheComponent'
 import Updatable from '../core/Updatable'
 import SwitchFragment from './SwitchFragment'
-import { get, value, isNull, isExist } from '../helpers'
+import { get, isNull, isExist } from '../helpers'
 
 const isUsingNewContext = isExist(__RouterContext)
 
@@ -25,7 +25,7 @@ class CacheSwitch extends Switch {
       const location = this.props.location || route.location
 
       return {
-        location: this.props.location || route.location,
+        location,
         match: route.match
       }
     }
@@ -131,11 +131,7 @@ if (isUsingNewContext) {
 }
 
 CacheSwitch.defaultProps = {
-  which: element =>
-    value(
-      get(element, 'type.componentName'),
-      get(element, 'type.displayName')
-    ) === 'CacheRoute'
+  which: element => get(element, 'type.componentName') === 'CacheRoute'
 }
 
 export default CacheSwitch

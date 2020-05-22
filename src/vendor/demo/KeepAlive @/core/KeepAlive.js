@@ -45,9 +45,9 @@ class KeepAlive extends Component {
   }, 100)
   releaseUpdateTimes = debounce(() => {
     this.updateTimes = 0
-  }, 32)
+  }, 16)
   needForceStopUpdate = () => {
-    const needForceStopUpdate = this.updateTimes > 16
+    const needForceStopUpdate = this.updateTimes > 64
 
     if (needForceStopUpdate) {
       this.errorTips()
@@ -181,6 +181,11 @@ class KeepAlive extends Component {
         ...rest
       })
       .then(cache => {
+        // fix #22
+        if (!cache) {
+          return
+        }
+
         this.inject()
 
         // 触发 didActivate 生命周期
@@ -255,6 +260,8 @@ class KeepAlive extends Component {
     return (
       <div
         key="keep-alive-placeholder"
+        nodeKeyIgnore
+        className="ka-wrapper"
         ref={node => {
           this.placeholder = node
         }}
@@ -266,8 +273,10 @@ class KeepAlive extends Component {
 // 兼容 SSR 服务端渲染
 function SSRKeepAlive({ children }) {
   return (
-    <div key="keep-alive-placeholder">
-      <div key="keeper-container">{children}</div>
+    <div key="keep-alive-placeholder" nodeKeyIgnore className="ka-wrapper">
+      <div key="keeper-container" nodeKeyIgnore className="ka-content">
+        {children}
+      </div>
     </div>
   )
 }

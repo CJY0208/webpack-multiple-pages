@@ -8011,13 +8011,15 @@ re-modulex@^1.0.3:
   dependencies:
     hoist-non-react-statics "^2.5.0"
 
-react-activation@^0.3.2:
-  version "0.3.2"
-  resolved "https://registry.npmjs.org/react-activation/-/react-activation-0.3.2.tgz#e5a1eba72e7431aecd3254fcc42f803e3b9566da"
+react-activation@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.npmjs.org/react-activation/-/react-activation-0.5.0.tgz#3177bca439c12df45bf6ea8567fa93e4533b7d59"
+  integrity sha512-i4Z8etYHu8CUxwoCQvORmcS191ulPeM2siAkLZvHirEdKeo+YIpHvF+QzwDskhml0bFm56UCk+6qUm1Eyj3fWg==
   dependencies:
     create-react-context "^0.3.0"
     hoist-non-react-statics "^3.3.0"
     jsx-ast-utils "^2.2.1"
+    react-node-key "^0.0.4"
 
 react-dom@^16.8.6:
   version "16.8.6"
@@ -8089,6 +8091,13 @@ react-native-swipeout@^2.2.2:
     create-react-class "^15.6.0"
     prop-types "^15.5.10"
     react-tween-state "^0.1.5"
+
+react-node-key@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.npmjs.org/react-node-key/-/react-node-key-0.0.4.tgz#b65451e4a4643a8ff8adf306c3d8cfbeaabc1d31"
+  integrity sha512-DdiEv9BgKBEDnYjQP58wOd0Y2omVGq7QNFxL8wgjAJa/gMf9FKrD0JEAlAkC2IIhGwxdbNbFyF3vwuXKZ73WuQ==
+  dependencies:
+    jsx-ast-utils "^2.2.1"
 
 react-redux@^5.0.7:
   version "5.0.7"
