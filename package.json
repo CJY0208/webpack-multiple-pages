@@ -53,7 +53,7 @@
     "hoist-non-react-statics": "^2.5.0",
     "invariant": "^2.2.4",
     "js-bridge-adapter": "^0.0.2",
-    "lodash": "^4.17.5",
+    "lodash": "^4.17.19",
     "md5": "^2.2.1",
     "mint-ui": "^2.2.13",
     "mobx": "^3.5.1",
