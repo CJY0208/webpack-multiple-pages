@@ -125,7 +125,7 @@
     "mocha": "^5.0.5",
     "module-alias": "^2.2.0",
     "node-nightly": "^1.7.3",
-    "node-sass": "^4.10.0",
+    "node-sass": "^4.13.1",
     "postcss-combine-duplicated-selectors": "^4.0.2",
     "postcss-cssnext": "^3.1.0",
     "postcss-loader": "^2.1.0",
